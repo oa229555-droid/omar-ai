@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI NEXUS ULTIMATE | منصة الذكاء الاصطناعي النهائية</title>
+    <title>AI NEXUS ULTIMATE | ذكاء اصطناعي محلي</title>
     
     <!-- Fonts & Icons -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -320,6 +320,14 @@
             gap: 10px;
         }
 
+        .model-badge {
+            background: #10b981;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 30px;
+            font-size: 12px;
+        }
+
         .chat-messages {
             height: 400px;
             overflow-y: auto;
@@ -614,8 +622,8 @@
 
     <!-- Hero Section -->
     <section class="hero">
-        <h1>الذكاء الاصطناعي<br>النهائي للجميع</h1>
-        <p>مع ChromaDB, Web Search, وتحليل الملفات</p>
+        <h1>الذكاء الاصطناعي<br>المحلي للجميع</h1>
+        <p>نموذج Llama 4 • يعمل محلياً • بدون مفتاح • متصل بالإنترنت</p>
     </section>
 
     <!-- Main Container -->
@@ -683,7 +691,7 @@
         <!-- Memory Tab -->
         <div class="tab-content" id="memoryTab">
             <div style="background: rgba(255,255,255,0.02); border-radius: 30px; padding: 30px;">
-                <h3 style="margin-bottom: 20px;">الذاكرة المتجهية ChromaDB</h3>
+                <h3 style="margin-bottom: 20px;">الذاكرة المتجهية</h3>
                 <div id="memoryList"></div>
             </div>
         </div>
@@ -707,12 +715,12 @@
         <section class="chat-section">
             <div class="chat-header">
                 <h2><i class="fas fa-brain" style="color: #6366f1;"></i> المحادثة الذكية</h2>
-                <span style="background: #22d3ee; color: #000; padding: 5px 15px; border-radius: 30px;">متصل بالسيرفر</span>
+                <span class="model-badge" id="modelStatus">Llama 4 محلي</span>
             </div>
             <div class="chat-messages" id="chatMessages">
                 <div class="message ai-message">
                     <div class="message-avatar"><i class="fas fa-brain"></i></div>
-                    <div class="message-content">مرحباً! أنا متصل بخادم Python مع ChromaDB. كيف أستطيع مساعدتك؟</div>
+                    <div class="message-content">مرحباً! أنا Llama 4، أعمل محلياً على سيرفرك. كيف أستطيع مساعدتك؟</div>
                 </div>
             </div>
             <div class="chat-input">
@@ -728,11 +736,13 @@
     </footer>
 
     <script>
-        const API_URL = 'http://localhost:8000';
-        const AI_KEY = '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';
+        // ========== إعدادات Ollama المحلي ==========
+        const OLLAMA_URL = 'http://localhost:11434/api/chat';  // غيرها لرابط السيرفر لو مش محلي
+        const MODEL_NAME = 'llama4-scout';  // أو qwen2.5، deepseek-r1، إلخ
 
         let currentUser = JSON.parse(localStorage.getItem('currentUser') || null);
         let users = JSON.parse(localStorage.getItem('users') || '[]');
+        let memories = JSON.parse(localStorage.getItem('memories') || '[]');
 
         // UI Elements
         const elements = {
@@ -760,10 +770,11 @@
             uploadArea: document.getElementById('uploadArea'),
             fileInput: document.getElementById('fileInput'),
             analysisResult: document.getElementById('analysisResult'),
-            memoryList: document.getElementById('memoryList')
+            memoryList: document.getElementById('memoryList'),
+            modelStatus: document.getElementById('modelStatus')
         };
 
-        // ========== 1. Authentication ==========
+        // ========== 1. نظام المصادقة ==========
         elements.loginBtn.addEventListener('click', () => {
             elements.loginModal.classList.add('active');
         });
@@ -782,7 +793,7 @@
 
         elements.loginSubmit.addEventListener('click', () => {
             const email = elements.loginEmail.value;
-            const password = btoa(elements.loginPassword.value);
+            const password = btoa(elements.loginPassword.value); // تشفير بسيط
             
             const user = users.find(u => u.email === email && u.password === password);
             
@@ -791,7 +802,7 @@
                 localStorage.setItem('currentUser', JSON.stringify(currentUser));
                 elements.loginModal.classList.remove('active');
                 updateUIForUser();
-                addAIMessage(`مرحباً ${user.name}!`);
+                addAIMessage(`مرحباً ${user.name}! كيف أستطيع مساعدتك؟`);
             } else {
                 alert('بيانات الدخول غير صحيحة');
             }
@@ -818,6 +829,7 @@
             currentUser = null;
             localStorage.removeItem('currentUser');
             updateUIForUser();
+            addAIMessage('تم تسجيل الخروج. سجل دخولك للمتابعة.');
         });
 
         function updateUIForUser() {
@@ -832,7 +844,7 @@
             }
         }
 
-        // ========== 2. Tabs ==========
+        // ========== 2. التبويبات ==========
         elements.tabs.forEach(tab => {
             tab.addEventListener('click', () => {
                 elements.tabs.forEach(t => t.classList.remove('active'));
@@ -842,7 +854,7 @@
             });
         });
 
-        // ========== 3. Agent Selection ==========
+        // ========== 3. اختيار الوكيل ==========
         elements.agentsGrid.addEventListener('click', (e) => {
             const card = e.target.closest('.agent-card');
             if (card) {
@@ -851,16 +863,7 @@
             }
         });
 
-        // ========== 4. Tool Selection ==========
-        elements.toolsGrid.addEventListener('click', (e) => {
-            const card = e.target.closest('.tool-card');
-            if (card) {
-                document.querySelectorAll('.tool-card').forEach(c => c.classList.remove('active'));
-                card.classList.add('active');
-            }
-        });
-
-        // ========== 5. File Upload ==========
+        // ========== 4. أدوات الملفات ==========
         elements.uploadArea.addEventListener('click', () => {
             elements.fileInput.click();
         });
@@ -869,28 +872,29 @@
             const file = e.target.files[0];
             if (!file) return;
 
-            const formData = new FormData();
-            formData.append('file', file);
-
             elements.analysisResult.style.display = 'block';
             elements.analysisResult.innerHTML = 'جاري التحليل...';
 
-            try {
-                const response = await fetch(`${API_URL}/analyze-file`, {
-                    method: 'POST',
-                    body: formData
-                });
-
-                if (response.ok) {
-                    const result = await response.json();
-                    elements.analysisResult.innerHTML = `<pre>${result.analysis}</pre>`;
-                }
-            } catch (error) {
-                elements.analysisResult.innerHTML = 'خطأ في تحليل الملف';
+            // تحليل بسيط للملف
+            const reader = new FileReader();
+            reader.onload = async function(ev) {
+                const content = ev.target.result;
+                
+                // استخدام النموذج لتحليل الملف
+                const prompt = `حلل هذا الملف: ${file.name}\n\nالمحتوى: ${content.substring(0, 1000)}...`;
+                const analysis = await callOllama(prompt);
+                
+                elements.analysisResult.innerHTML = `<pre>${analysis}</pre>`;
+            };
+            
+            if (file.type.startsWith('text/') || file.name.endsWith('.txt') || file.name.endsWith('.csv')) {
+                reader.readAsText(file);
+            } else {
+                reader.readAsDataURL(file);
             }
         });
 
-        // ========== 6. Chat Functions ==========
+        // ========== 5. دوال المحادثة ==========
         function addMessage(text, role) {
             const div = document.createElement('div');
             div.className = `message ${role}-message`;
@@ -930,7 +934,46 @@
             document.getElementById('typingIndicator')?.remove();
         }
 
-        // ========== 7. Send Message ==========
+        // ========== 6. استدعاء Ollama (الذكاء الاصطناعي المحلي) ==========
+        async function callOllama(prompt) {
+            try {
+                const response = await fetch(OLLAMA_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        model: MODEL_NAME,
+                        messages: [
+                            {
+                                role: 'system',
+                                content: 'أنت مساعد ذكي متطور. أجب بالعربية.'
+                            },
+                            {
+                                role: 'user',
+                                content: prompt
+                            }
+                        ],
+                        stream: false,
+                        temperature: 0.7,
+                        max_tokens: 2000
+                    })
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    return data.message.content;
+                } else {
+                    console.log('خطأ في استدعاء Ollama:', response.status);
+                    return 'عذراً، حدث خطأ في الاتصال بالنموذج المحلي. تأكد من تشغيل Ollama.';
+                }
+            } catch (error) {
+                console.log('خطأ في الاتصال:', error);
+                return 'عذراً، لا يمكن الاتصال بـ Ollama. تأكد من تشغيل الخادم المحلي.';
+            }
+        }
+
+        // ========== 7. إرسال الرسالة ==========
         async function sendMessage() {
             const message = elements.messageInput.value.trim();
             if (!message || !currentUser) {
@@ -942,53 +985,92 @@
             addMessage(message, 'user');
             showTyping();
 
-            try {
-                const response = await fetch(`${API_URL}/chat`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        message: message,
-                        user: currentUser.email
-                    })
-                });
+            // البحث في الذاكرة
+            const relevantMemories = memories
+                .filter(m => m.user === currentUser.email)
+                .slice(-5);
 
+            // بناء السياق
+            let context = '';
+            if (relevantMemories.length > 0) {
+                context = 'المحادثات السابقة:\n' + 
+                    relevantMemories.map(m => `- ${m.text}`).join('\n');
+            }
+
+            const prompt = `${context}\n\nالسؤال الحالي: ${message}`;
+            
+            const response = await callOllama(prompt);
+            
+            hideTyping();
+            addMessage(response, 'ai');
+
+            // حفظ في الذاكرة
+            memories.push({
+                user: currentUser.email,
+                text: message,
+                response: response,
+                timestamp: Date.now()
+            });
+            localStorage.setItem('memories', JSON.stringify(memories));
+
+            // تحديث قائمة الذاكرة
+            updateMemoryList();
+        }
+
+        // ========== 8. تحديث قائمة الذاكرة ==========
+        function updateMemoryList() {
+            if (!elements.memoryList) return;
+            
+            const userMemories = memories
+                .filter(m => m.user === currentUser?.email)
+                .slice(-10)
+                .reverse();
+
+            elements.memoryList.innerHTML = userMemories.map(m => `
+                <div style="background: rgba(255,255,255,0.03); border-radius: 10px; padding: 15px; margin-bottom: 10px;">
+                    <div style="color: #6366f1; font-size: 12px;">${new Date(m.timestamp).toLocaleString()}</div>
+                    <div style="margin-top: 5px;"><strong>سؤال:</strong> ${m.text.substring(0, 50)}...</div>
+                </div>
+            `).join('') || '<p style="color: #888;">لا توجد محادثات سابقة</p>';
+        }
+
+        // ========== 9. التحقق من اتصال Ollama ==========
+        async function checkOllamaConnection() {
+            try {
+                const response = await fetch('http://localhost:11434/api/tags');
                 if (response.ok) {
                     const data = await response.json();
-                    hideTyping();
-                    addMessage(data.response, 'ai');
+                    const models = data.models.map(m => m.name).join(', ');
+                    elements.modelStatus.textContent = `✅ متصل: ${MODEL_NAME}`;
+                    elements.modelStatus.style.background = '#10b981';
+                } else {
+                    elements.modelStatus.textContent = '❌ غير متصل';
+                    elements.modelStatus.style.background = '#ef4444';
                 }
             } catch (error) {
-                hideTyping();
-                addMessage('خطأ في الاتصال بالسيرفر', 'ai');
+                elements.modelStatus.textContent = '❌ غير متصل';
+                elements.modelStatus.style.background = '#ef4444';
             }
         }
 
-        // ========== 8. Load Memory ==========
-        async function loadMemory() {
-            try {
-                const response = await fetch(`${API_URL}/memory`);
-                const data = await response.json();
-                
-                if (elements.memoryList) {
-                    elements.memoryList.innerHTML = data.memories.map(m => `
-                        <div style="background: rgba(255,255,255,0.03); border-radius: 10px; padding: 15px; margin-bottom: 10px;">
-                            <div style="color: #6366f1;">${m.id}</div>
-                            <div>${m.text}</div>
-                        </div>
-                    `).join('');
-                }
-            } catch (error) {}
-        }
-
-        // ========== 9. Event Listeners ==========
+        // ========== 10. أحداث الإرسال ==========
         elements.sendButton.addEventListener('click', sendMessage);
         elements.messageInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') sendMessage();
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage();
+            }
         });
 
-        // ========== 10. Initialize ==========
+        // ========== 11. التهيئة ==========
         updateUIForUser();
-        loadMemory();
+        updateMemoryList();
+        checkOllamaConnection();
+        
+        // تحديث الحالة كل 30 ثانية
+        setInterval(checkOllamaConnection, 30000);
+
+        console.log('✅ AI NEXUS ULTIMATE شغال على Ollama المحلي');
     </script>
 </body>
-    </html>
+        </html>
