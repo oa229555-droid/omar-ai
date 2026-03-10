@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI NEXUS | منصة الذكاء الاصطناعي الشاملة</title>
+    <title>AI NEXUS ULTIMATE | منصة الجيل القادم للذكاء الاصطناعي</title>
     
     <!-- Fonts & Icons -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -20,27 +20,29 @@
 
         body {
             font-family: 'Inter', sans-serif;
-            background: #0a0a0f;
+            background: #030014;
             color: #fff;
             line-height: 1.6;
+            overflow-x: hidden;
         }
 
-        /* خلفية متحركة */
+        /* خلفية متحركة متطورة */
         .background-gradient {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: radial-gradient(circle at 30% 30%, rgba(0, 122, 255, 0.15) 0%, transparent 50%),
-                        radial-gradient(circle at 70% 70%, rgba(0, 199, 190, 0.15) 0%, transparent 50%);
+            background: radial-gradient(circle at 20% 30%, rgba(99, 102, 241, 0.15) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 70%, rgba(236, 72, 153, 0.15) 0%, transparent 50%),
+                        radial-gradient(circle at 40% 80%, rgba(34, 211, 238, 0.1) 0%, transparent 70%);
             z-index: -2;
-            animation: gradientShift 20s ease infinite;
+            animation: gradientShift 25s ease infinite;
         }
 
         @keyframes gradientShift {
-            0%, 100% { opacity: 0.8; }
-            50% { opacity: 1; }
+            0%, 100% { opacity: 0.7; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.02); }
         }
 
         .grid-overlay {
@@ -50,15 +52,15 @@
             width: 100%;
             height: 100%;
             background-image: 
-                linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
-            background-size: 50px 50px;
+                linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
             z-index: -1;
         }
 
-        /* Navbar */
+        /* Navigation */
         .navbar {
-            background: rgba(10, 10, 20, 0.8);
+            background: rgba(3, 0, 20, 0.7);
             backdrop-filter: blur(20px);
             border-bottom: 1px solid rgba(255, 255, 255, 0.05);
             padding: 20px 40px;
@@ -81,82 +83,164 @@
         .logo-icon {
             width: 50px;
             height: 50px;
-            background: linear-gradient(135deg, #007AFF, #00C7BE, #FF2D55);
+            background: linear-gradient(135deg, #6366f1, #ec4899, #22d3ee);
             border-radius: 15px;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 24px;
             font-weight: bold;
+            transform: rotate(10deg);
+            transition: transform 0.3s;
+        }
+
+        .logo-icon:hover {
+            transform: rotate(0deg) scale(1.1);
         }
 
         .logo-text {
-            font-size: 24px;
-            font-weight: 700;
-            background: linear-gradient(135deg, #fff, #007AFF, #00C7BE);
+            font-size: 26px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #fff, #6366f1, #ec4899);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
-        .live-badge {
-            background: #FF2D55;
-            color: white;
-            padding: 5px 15px;
-            border-radius: 30px;
-            font-size: 12px;
+        .nav-links {
             display: flex;
+            gap: 40px;
             align-items: center;
-            gap: 5px;
         }
 
-        /* Developer Card */
-        .developer-card {
-            background: linear-gradient(135deg, rgba(0,122,255,0.2), rgba(0,199,190,0.2));
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 50px;
-            padding: 40px;
-            margin: 120px 40px 40px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            gap: 30px;
+        .nav-links a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 15px;
+            transition: all 0.3s;
+            position: relative;
         }
 
-        .dev-info {
-            display: flex;
-            align-items: center;
-            gap: 30px;
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #6366f1, #ec4899);
+            transition: width 0.3s;
         }
 
-        .dev-avatar {
-            width: 100px;
-            height: 100px;
-            background: linear-gradient(135deg, #007AFF, #00C7BE);
-            border-radius: 30px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 40px;
-            font-weight: 800;
-            color: white;
+        .nav-links a:hover::after,
+        .nav-links a.active::after {
+            width: 100%;
         }
 
-        .dev-details h2 {
-            font-size: 32px;
-            margin-bottom: 10px;
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: #fff;
         }
 
-        .dev-phone {
+        .auth-buttons {
             display: flex;
-            align-items: center;
             gap: 15px;
-            background: rgba(0,122,255,0.2);
-            border: 1px solid rgba(0,122,255,0.3);
-            border-radius: 50px;
-            padding: 15px 30px;
-            font-size: 24px;
-            color: #007AFF;
+        }
+
+        .login-btn {
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 12px 28px;
+            border-radius: 40px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .login-btn:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .signup-btn {
+            background: linear-gradient(135deg, #6366f1, #ec4899);
+            border: none;
+            color: white;
+            padding: 12px 28px;
+            border-radius: 40px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 10px 20px rgba(99, 102, 241, 0.3);
+        }
+
+        .signup-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 30px rgba(236, 72, 153, 0.4);
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 180px 40px 100px;
+            text-align: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .hero-badge {
+            background: rgba(99, 102, 241, 0.1);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            color: #6366f1;
+            padding: 8px 20px;
+            border-radius: 40px;
+            font-size: 14px;
+            font-weight: 600;
+            display: inline-block;
+            margin-bottom: 30px;
+            backdrop-filter: blur(10px);
+        }
+
+        .hero h1 {
+            font-size: 72px;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 30px;
+            background: linear-gradient(135deg, #fff, #6366f1, #ec4899, #22d3ee);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            font-size: 20px;
+            color: rgba(255, 255, 255, 0.6);
+            max-width: 800px;
+            margin: 0 auto 50px;
+        }
+
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 60px;
+            margin-top: 60px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 42px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #6366f1, #ec4899);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .stat-label {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 14px;
+            font-weight: 500;
         }
 
         /* Main Container */
@@ -166,178 +250,223 @@
             padding: 40px;
         }
 
-        /* Brain Features */
-        .brain-section {
-            background: rgba(255,255,255,0.02);
-            border: 1px solid rgba(255,255,255,0.05);
-            border-radius: 60px;
-            padding: 50px;
-            margin-bottom: 40px;
-        }
-
-        .brain-header {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-
-        .brain-icon {
-            width: 80px;
-            height: 80px;
-            background: linear-gradient(135deg, #007AFF, #00C7BE);
-            border-radius: 30px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 40px;
-            color: white;
-        }
-
-        .brain-features {
+        /* Features Grid */
+        .features-grid {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-
-        .brain-feature {
-            background: rgba(0,122,255,0.05);
-            border: 1px solid rgba(0,122,255,0.1);
-            border-radius: 30px;
-            padding: 20px;
-            text-align: center;
-        }
-
-        .brain-feature i {
-            font-size: 30px;
-            color: #007AFF;
-            margin-bottom: 10px;
-        }
-
-        .brain-feature h4 {
-            font-size: 16px;
-        }
-
-        .brain-feature p {
-            color: #00C7BE;
-            font-size: 12px;
-        }
-
-        /* Analysis Grid */
-        .analysis-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
+            grid-template-columns: repeat(3, 1fr);
             gap: 30px;
-            margin-bottom: 40px;
+            margin-bottom: 60px;
         }
 
-        .analysis-card {
-            background: rgba(255,255,255,0.02);
-            border: 1px solid rgba(255,255,255,0.05);
+        .feature-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
             border-radius: 40px;
-            padding: 30px;
-            cursor: pointer;
-        }
-
-        .analysis-card.active {
-            border-color: #007AFF;
-            background: rgba(0,122,255,0.05);
-        }
-
-        .card-header {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            margin-bottom: 20px;
-        }
-
-        .card-icon {
-            width: 60px;
-            height: 60px;
-            background: linear-gradient(135deg, rgba(0,122,255,0.1), rgba(0,199,190,0.1));
-            border-radius: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 28px;
-            color: #007AFF;
-        }
-
-        .input-area {
-            background: rgba(255,255,255,0.02);
-            border: 1px solid rgba(255,255,255,0.05);
-            border-radius: 50px;
-            padding: 25px;
-            margin-bottom: 30px;
-        }
-
-        .input-area textarea {
-            width: 100%;
-            background: transparent;
-            border: none;
-            padding: 15px;
-            color: white;
-            font-size: 16px;
-            outline: none;
-            min-height: 100px;
-            resize: vertical;
-        }
-
-        .analyze-btn {
-            background: linear-gradient(135deg, #007AFF, #00C7BE);
-            border: none;
-            border-radius: 50px;
-            padding: 18px 40px;
-            color: white;
-            font-weight: 600;
-            font-size: 16px;
-            cursor: pointer;
-            width: 100%;
-            margin-bottom: 30px;
-        }
-
-        .analyze-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(0,122,255,0.3);
-        }
-
-        .result-area {
-            background: rgba(0,0,0,0.3);
-            border-radius: 30px;
-            padding: 30px;
-            display: none;
-        }
-
-        .result-area.show {
-            display: block;
-        }
-
-        .chat-section {
-            background: rgba(255,255,255,0.02);
-            border: 1px solid rgba(255,255,255,0.05);
-            border-radius: 60px;
+            padding: 40px 30px;
+            transition: all 0.4s;
+            position: relative;
             overflow: hidden;
         }
 
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.1), transparent 70%);
+            opacity: 0;
+            transition: opacity 0.4s;
+        }
+
+        .feature-card:hover::before {
+            opacity: 1;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            border-color: #6366f1;
+            box-shadow: 0 30px 50px rgba(99, 102, 241, 0.1);
+        }
+
+        .feature-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(236, 72, 153, 0.1));
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 25px;
+            font-size: 40px;
+            color: #6366f1;
+        }
+
+        .feature-card h3 {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+
+        .feature-card p {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 15px;
+            line-height: 1.8;
+        }
+
+        /* AI Core Section */
+        .ai-core-section {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 60px;
+            padding: 60px;
+            margin-bottom: 60px;
+        }
+
+        .core-header {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+
+        .core-icon {
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(135deg, #6366f1, #ec4899, #22d3ee);
+            border-radius: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 60px;
+            color: white;
+            animation: corePulse 3s infinite;
+        }
+
+        @keyframes corePulse {
+            0%, 100% { transform: scale(1); filter: brightness(1); }
+            50% { transform: scale(1.05); filter: brightness(1.2); }
+        }
+
+        .core-header h2 {
+            font-size: 42px;
+            font-weight: 800;
+        }
+
+        .core-header p {
+            color: #6366f1;
+            font-size: 18px;
+        }
+
+        .agents-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+            margin-bottom: 50px;
+        }
+
+        .agent-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 30px;
+            padding: 25px;
+            transition: all 0.3s;
+        }
+
+        .agent-card:hover {
+            border-color: #6366f1;
+            transform: translateY(-5px);
+        }
+
+        .agent-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .agent-icon {
+            width: 50px;
+            height: 50px;
+            background: rgba(99, 102, 241, 0.1);
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: #6366f1;
+        }
+
+        .agent-header h3 {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .agent-status {
+            display: inline-block;
+            padding: 4px 12px;
+            background: rgba(34, 211, 238, 0.1);
+            border: 1px solid rgba(34, 211, 238, 0.2);
+            border-radius: 30px;
+            color: #22d3ee;
+            font-size: 12px;
+        }
+
+        /* Chat Section */
+        .chat-section {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 60px;
+            overflow: hidden;
+            margin-bottom: 60px;
+        }
+
         .chat-header {
-            background: rgba(0,0,0,0.3);
+            background: rgba(0, 0, 0, 0.3);
             padding: 25px 35px;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
+        .chat-header h2 {
+            font-size: 24px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .agent-badge {
+            display: flex;
+            gap: 10px;
+        }
+
+        .agent-badge span {
+            background: rgba(99, 102, 241, 0.1);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            padding: 5px 12px;
+            border-radius: 30px;
+            font-size: 12px;
+            color: #6366f1;
+        }
+
         .chat-messages {
-            height: 400px;
+            height: 450px;
             overflow-y: auto;
             padding: 35px;
         }
 
         .message {
             display: flex;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .user-message {
@@ -348,36 +477,84 @@
             justify-content: flex-end;
         }
 
+        .message-avatar {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, #6366f1, #ec4899);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: 15px;
+            font-size: 20px;
+        }
+
         .message-content {
             max-width: 70%;
-            padding: 15px 25px;
+            padding: 18px 25px;
             border-radius: 25px;
+            font-size: 15px;
+            line-height: 1.6;
         }
 
         .user-message .message-content {
-            background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(255,255,255,0.1);
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
         }
 
         .ai-message .message-content {
-            background: linear-gradient(135deg, #007AFF, #00C7BE);
+            background: linear-gradient(135deg, #6366f1, #ec4899);
+            color: white;
+        }
+
+        .typing .message-content {
+            background: rgba(255, 255, 255, 0.05) !important;
+        }
+
+        .typing-dots {
+            display: flex;
+            gap: 5px;
+        }
+
+        .typing-dots span {
+            width: 8px;
+            height: 8px;
+            background: #fff;
+            border-radius: 50%;
+            animation: bounce 1.4s infinite;
+        }
+
+        .typing-dots span:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dots span:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes bounce {
+            0%, 60%, 100% { transform: translateY(0); }
+            30% { transform: translateY(-10px); }
         }
 
         .chat-input {
             display: flex;
             padding: 25px 35px;
-            background: rgba(0,0,0,0.3);
-            border-top: 1px solid rgba(255,255,255,0.05);
+            background: rgba(0, 0, 0, 0.3);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
         }
 
         .chat-input input {
             flex: 1;
-            background: rgba(255,255,255,0.03);
-            border: 1px solid rgba(255,255,255,0.1);
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 50px;
             padding: 18px 25px;
             color: white;
+            font-size: 16px;
+            outline: none;
             margin-left: 15px;
+        }
+
+        .chat-input input:focus {
+            border-color: #6366f1;
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
         }
 
         .chat-input button {
@@ -385,26 +562,228 @@
             height: 65px;
             border: none;
             border-radius: 50%;
-            background: linear-gradient(135deg, #007AFF, #00C7BE);
+            background: linear-gradient(135deg, #6366f1, #ec4899);
             color: white;
             font-size: 22px;
             cursor: pointer;
+            transition: all 0.3s;
         }
 
-        .footer {
-            background: rgba(10,10,20,0.8);
-            border-top: 1px solid rgba(255,255,255,0.05);
-            padding: 60px 40px 30px;
-            margin-top: 60px;
+        .chat-input button:hover:not(:disabled) {
+            transform: scale(1.1) rotate(10deg);
+            box-shadow: 0 10px 30px rgba(236, 72, 153, 0.4);
+        }
+
+        .chat-input button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Developer Section */
+        .developer-section {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(236, 72, 153, 0.1), rgba(34, 211, 238, 0.1));
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 60px;
+            padding: 60px;
+            margin-bottom: 60px;
             text-align: center;
         }
 
+        .developer-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50px;
+            padding: 50px;
+            display: inline-flex;
+            align-items: center;
+            gap: 50px;
+            backdrop-filter: blur(10px);
+        }
+
+        .developer-avatar {
+            width: 150px;
+            height: 150px;
+            background: linear-gradient(135deg, #6366f1, #ec4899, #22d3ee);
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 60px;
+            font-weight: 800;
+            color: white;
+            box-shadow: 0 30px 50px rgba(99, 102, 241, 0.3);
+        }
+
+        .developer-info {
+            text-align: right;
+        }
+
+        .developer-info h2 {
+            font-size: 48px;
+            font-weight: 800;
+            margin-bottom: 15px;
+        }
+
+        .developer-phone {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            background: rgba(99, 102, 241, 0.2);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 60px;
+            padding: 20px 40px;
+            font-size: 32px;
+            font-weight: 700;
+            color: #6366f1;
+        }
+
+        .developer-phone i {
+            font-size: 36px;
+        }
+
+        .support-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        .support-button {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50px;
+            padding: 15px 35px;
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .support-button:hover {
+            background: #6366f1;
+            transform: translateY(-3px);
+        }
+
+        /* Footer */
+        .footer {
+            background: rgba(3, 0, 20, 0.8);
+            backdrop-filter: blur(10px);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 80px 40px 40px;
+        }
+
+        .footer-grid {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr repeat(4, 1fr);
+            gap: 60px;
+            margin-bottom: 60px;
+        }
+
+        .footer-col h4 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 25px;
+        }
+
+        .footer-col ul {
+            list-style: none;
+        }
+
+        .footer-col li {
+            margin-bottom: 15px;
+        }
+
+        .footer-col a {
+            color: rgba(255, 255, 255, 0.5);
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.3s;
+        }
+
+        .footer-col a:hover {
+            color: #6366f1;
+        }
+
+        .footer-bottom {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding-top: 40px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: rgba(255, 255, 255, 0.3);
+            font-size: 14px;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 20px;
+        }
+
+        .social-links a {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 20px;
+            transition: all 0.3s;
+        }
+
+        .social-links a:hover {
+            color: #6366f1;
+            transform: translateY(-3px);
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .features-grid,
+            .agents-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .footer-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
         @media (max-width: 768px) {
-            .brain-features {
+            .hero h1 {
+                font-size: 48px;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            .features-grid,
+            .agents-grid {
                 grid-template-columns: 1fr;
             }
-            .analysis-grid {
+            
+            .developer-card {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .footer-grid {
                 grid-template-columns: 1fr;
+            }
+            
+            .footer-bottom {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            .chat-input {
+                flex-direction: column;
+            }
+            
+            .chat-input input {
+                margin-left: 0;
+                margin-bottom: 15px;
             }
         }
     </style>
@@ -413,193 +792,385 @@
     <div class="background-gradient"></div>
     <div class="grid-overlay"></div>
 
+    <!-- Navigation -->
     <nav class="navbar">
         <div class="logo">
             <div class="logo-icon">🧠</div>
-            <span class="logo-text">AI NEXUS</span>
+            <span class="logo-text">AI NEXUS ULTIMATE</span>
         </div>
-        <div class="live-badge">
-            <i class="fas fa-circle"></i> مباشر
+        <div class="nav-links">
+            <a href="#" class="active">الرئيسية</a>
+            <a href="#">الذكاء الاصطناعي</a>
+            <a href="#">الوكلاء</a>
+            <a href="#">الأدوات</a>
+            <a href="#">لوحة التحكم</a>
+            <a href="#">التوثيق</a>
+        </div>
+        <div class="auth-buttons">
+            <button class="login-btn">تسجيل دخول</button>
+            <button class="signup-btn">حساب جديد</button>
         </div>
     </nav>
 
-    <div class="developer-card">
-        <div class="dev-info">
-            <div class="dev-avatar">O</div>
-            <div class="dev-details">
-                <h2>Omar Abdo</h2>
-                <p style="color: rgba(255,255,255,0.7);">مطور المنصة</p>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-badge">
+            <i class="fas fa-bolt"></i>
+            الجيل القادم من الذكاء الاصطناعي
+        </div>
+        <h1>منصة الذكاء الاصطناعي<br>الأكثر تطوراً في العالم</h1>
+        <p>نظام متكامل من الوكلاء الذكيين، ذاكرة متعددة الطبقات، تعلم مستمر، وبحث مباشر على الإنترنت</p>
+        
+        <div class="hero-stats">
+            <div class="stat-item">
+                <div class="stat-number">100B+</div>
+                <div class="stat-label">خلايا عصبية</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">24/7</div>
+                <div class="stat-label">تعلم مستمر</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">6</div>
+                <div class="stat-label">وكلاء متخصصون</div>
             </div>
         </div>
-        <div class="dev-phone">
-            <i class="fas fa-phone-alt"></i> 01289411976
-        </div>
-    </div>
+    </section>
 
+    <!-- Main Container -->
     <div class="main-container">
-        <section class="brain-section">
-            <div class="brain-header">
-                <div class="brain-icon"><i class="fas fa-brain"></i></div>
+        <!-- Features Grid -->
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fas fa-brain"></i></div>
+                <h3>Central AI Core</h3>
+                <p>قلب النظام الذي يدير جميع الوكلاء وينسق المهام المعقدة</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fas fa-robot"></i></div>
+                <h3>Multi-Agent System</h3>
+                <p>شبكة من الوكلاء المتخصصين يعملون معاً لحل المشكلات</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fas fa-diagram-project"></i></div>
+                <h3>Reasoning Engine</h3>
+                <p>محرك تفكير منطقي متطور للتخطيط واتخاذ القرارات</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fas fa-database"></i></div>
+                <h3>Knowledge System</h3>
+                <p>نظام معرفي متكامل مع قواعد معرفية ومتجهات ذاكرة</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fas fa-memory"></i></div>
+                <h3>Memory System</h3>
+                <p>ذاكرة متعددة الطبقات (قصيرة/طويلة المدى، محادثات، معرفة)</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fas fa-chart-line"></i></div>
+                <h3>Self-Improvement</h3>
+                <p>نظام تحسين ذاتي مستمر من خلال تحليل الأداء والتغذية الراجعة</p>
+            </div>
+        </div>
+
+        <!-- AI Core Section -->
+        <section class="ai-core-section">
+            <div class="core-header">
+                <div class="core-icon">
+                    <i class="fas fa-microchip"></i>
+                </div>
                 <div>
-                    <h2>العقل الخارق | 100B+ خلية</h2>
-                    <p style="color: #00C7BE;">مرتبط بالإنترنت • تحديث لحظي</p>
+                    <h2>القلب الذكي | AI Core</h2>
+                    <p>نظام متعدد الوكلاء مع تعلم مستمر وذاكرة متطورة</p>
                 </div>
             </div>
 
-            <div class="brain-features">
-                <div class="brain-feature">
-                    <i class="fas fa-network-wired"></i>
-                    <h4>Graph Neural Networks</h4>
-                    <p>تحليل العلاقات المعقدة</p>
-                </div>
-                <div class="brain-feature">
-                    <i class="fas fa-sync-alt"></i>
-                    <h4>Dynamic Learning</h4>
-                    <p>تعلم تكيفي مع البيانات</p>
-                </div>
-                <div class="brain-feature">
-                    <i class="fas fa-link"></i>
-                    <h4>LLM Integration</h4>
-                    <p>دمج مع نماذج اللغة</p>
-                </div>
-                <div class="brain-feature">
-                    <i class="fas fa-clock"></i>
-                    <h4>Real-time Updates</h4>
-                    <p>تحديث كل ثانية</p>
-                </div>
-            </div>
-
-            <div class="analysis-grid" id="analysisGrid">
-                <div class="analysis-card active" data-type="general">
-                    <div class="card-header">
-                        <div class="card-icon"><i class="fas fa-globe"></i></div>
-                        <h3>بحث عام + إنترنت</h3>
+            <div class="agents-grid">
+                <div class="agent-card">
+                    <div class="agent-header">
+                        <div class="agent-icon"><i class="fas fa-search"></i></div>
+                        <h3>Research Agent</h3>
                     </div>
+                    <p style="color: rgba(255,255,255,0.5); font-size: 14px; margin-bottom: 10px;">يبحث ويحلل المعلومات من الإنترنت</p>
+                    <span class="agent-status">نشط</span>
                 </div>
-                <div class="analysis-card" data-type="analyze">
-                    <div class="card-header">
-                        <div class="card-icon"><i class="fas fa-microscope"></i></div>
-                        <h3>تحليل متقدم</h3>
+                <div class="agent-card">
+                    <div class="agent-header">
+                        <div class="agent-icon"><i class="fas fa-code"></i></div>
+                        <h3>Coding Agent</h3>
                     </div>
+                    <p style="color: rgba(255,255,255,0.5); font-size: 14px; margin-bottom: 10px;">يكتب ويصحح الأكواد البرمجية</p>
+                    <span class="agent-status">نشط</span>
                 </div>
-            </div>
-
-            <div class="input-area">
-                <textarea id="brainInput" placeholder="اكتب سؤالك..."></textarea>
-            </div>
-
-            <button class="analyze-btn" id="analyzeBtn">
-                <i class="fas fa-brain"></i> شغل العقل الخارق
-            </button>
-
-            <div class="result-area" id="resultArea">
-                <h3>النتيجة:</h3>
-                <div class="result-content" id="resultContent"></div>
+                <div class="agent-card">
+                    <div class="agent-header">
+                        <div class="agent-icon"><i class="fas fa-chart-simple"></i></div>
+                        <h3>Data Analysis Agent</h3>
+                    </div>
+                    <p style="color: rgba(255,255,255,0.5); font-size: 14px; margin-bottom: 10px;">يحلل البيانات ويستخرج الأنماط</p>
+                    <span class="agent-status">نشط</span>
+                </div>
+                <div class="agent-card">
+                    <div class="agent-header">
+                        <div class="agent-icon"><i class="fas fa-chess"></i></div>
+                        <h3>Strategy Agent</h3>
+                    </div>
+                    <p style="color: rgba(255,255,255,0.5); font-size: 14px; margin-bottom: 10px;">يخطط الاستراتيجيات ويحسن القرارات</p>
+                    <span class="agent-status">نشط</span>
+                </div>
+                <div class="agent-card">
+                    <div class="agent-header">
+                        <div class="agent-icon"><i class="fas fa-shield"></i></div>
+                        <h3>Security Agent</h3>
+                    </div>
+                    <p style="color: rgba(255,255,255,0.5); font-size: 14px; margin-bottom: 10px;">يراقب الأمان ويكشف الثغرات</p>
+                    <span class="agent-status">نشط</span>
+                </div>
+                <div class="agent-card">
+                    <div class="agent-header">
+                        <div class="agent-icon"><i class="fas fa-gears"></i></div>
+                        <h3>Automation Agent</h3>
+                    </div>
+                    <p style="color: rgba(255,255,255,0.5); font-size: 14px; margin-bottom: 10px;">ينفذ المهام المتكررة تلقائياً</p>
+                    <span class="agent-status">نشط</span>
+                </div>
             </div>
         </section>
 
+        <!-- Chat Section -->
         <section class="chat-section">
             <div class="chat-header">
-                <h2><i class="fas fa-robot"></i> المساعد الذكي</h2>
-                <span style="background:#00C7BE; color:#000; padding:5px 15px; border-radius:30px;">مباشر</span>
+                <h2>
+                    <i class="fas fa-robot" style="color: #6366f1;"></i>
+                    المساعد الذكي المتطور
+                </h2>
+                <div class="agent-badge">
+                    <span>6 وكلاء نشطين</span>
+                    <span style="color: #22d3ee; border-color: #22d3ee;">مرتبط بالإنترنت</span>
+                </div>
             </div>
             <div class="chat-messages" id="chatMessages">
                 <div class="message ai-message">
-                    <div class="message-content">مرحباً! أنا العقل الخارق.</div>
+                    <div class="message-avatar">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <div class="message-content">
+                        مرحباً! أنا العقل المركزي المتطور. لدي 6 وكلاء متخصصين تحت إمرتي. كيف أستطيع مساعدتك اليوم؟
+                    </div>
                 </div>
             </div>
             <div class="chat-input">
-                <input type="text" id="messageInput" placeholder="اسألني...">
+                <input type="text" id="messageInput" placeholder="اكتب سؤالك... سأقوم بتفعيل الوكلاء المناسبين">
                 <button id="sendButton"><i class="fas fa-paper-plane"></i></button>
+            </div>
+        </section>
+
+        <!-- Developer Section -->
+        <section class="developer-section">
+            <div class="developer-card">
+                <div class="developer-avatar">O</div>
+                <div class="developer-info">
+                    <h2>Omar Abdo</h2>
+                    <div class="developer-phone">
+                        <i class="fas fa-phone-alt"></i>
+                        01289411976
+                    </div>
+                </div>
+            </div>
+            <div class="support-buttons">
+                <a href="#" class="support-button"><i class="fab fa-whatsapp"></i> واتساب</a>
+                <a href="#" class="support-button"><i class="fab fa-telegram"></i> تيليجرام</a>
+                <a href="#" class="support-button"><i class="fas fa-envelope"></i> بريد إلكتروني</a>
             </div>
         </section>
     </div>
 
+    <!-- Footer -->
     <footer class="footer">
-        <p>© 2026 AI NEXUS. جميع الحقوق محفوظة. تصميم: Omar Abdo - 01289411976</p>
+        <div class="footer-grid">
+            <div class="footer-col">
+                <div class="logo" style="margin-bottom: 25px;">
+                    <div class="logo-icon">🧠</div>
+                    <span class="logo-text">AI NEXUS</span>
+                </div>
+                <p style="color: rgba(255,255,255,0.5); font-size: 14px;">
+                    أقوى منصة ذكاء اصطناعي متعدد الوكلاء في العالم العربي.
+                </p>
+            </div>
+            <div class="footer-col">
+                <h4>المنصة</h4>
+                <ul>
+                    <li><a href="#">الرئيسية</a></li>
+                    <li><a href="#">المميزات</a></li>
+                    <li><a href="#">الوكلاء</a></li>
+                    <li><a href="#">التسعير</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>الدعم</h4>
+                <ul>
+                    <li><a href="#">المساعدة</a></li>
+                    <li><a href="#">التوثيق</a></li>
+                    <li><a href="#">API</a></li>
+                    <li><a href="#">المجتمع</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>القانوني</h4>
+                <ul>
+                    <li><a href="#">الخصوصية</a></li>
+                    <li><a href="#">الشروط</a></li>
+                    <li><a href="#">الأمان</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>تواصل</h4>
+                <ul>
+                    <li><a href="#">فيسبوك</a></li>
+                    <li><a href="#">تويتر</a></li>
+                    <li><a href="#">لينكد إن</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div>© 2026 AI NEXUS ULTIMATE. جميع الحقوق محفوظة. تصميم: Omar Abdo</div>
+            <div class="social-links">
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-linkedin"></i></a>
+                <a href="#"><i class="fab fa-github"></i></a>
+            </div>
+        </div>
     </footer>
 
     <script>
+        // ===== مفتاح الذكاء الاصطناعي =====
         const AI_KEY = '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';
         
+        // ===== عناصر DOM =====
         const elements = {
-            analysisCards: document.querySelectorAll('.analysis-card'),
-            brainInput: document.getElementById('brainInput'),
-            analyzeBtn: document.getElementById('analyzeBtn'),
-            resultArea: document.getElementById('resultArea'),
-            resultContent: document.getElementById('resultContent'),
             chatMessages: document.getElementById('chatMessages'),
             messageInput: document.getElementById('messageInput'),
             sendButton: document.getElementById('sendButton')
         };
 
-        let currentType = 'general';
-        let isWaiting = false;
-        let conversation = [{ role: 'system', content: 'أنت عقل خارق محدث حتى 2026. أجب بالعربية.' }];
+        // ===== حالة التطبيق =====
+        const state = {
+            isWaiting: false,
+            conversation: [
+                { role: 'system', content: 'أنت عقل خارق متطور. لديك 6 وكلاء متخصصين: Research Agent (بحث)، Coding Agent (برمجة)، Data Analysis Agent (تحليل بيانات)، Strategy Agent (استراتيجية)، Security Agent (أمن)، Automation Agent (أتمتة). أنت مرتبط بالإنترنت وتقدم أحدث المعلومات حتى 2026. أجب بالعربية.' }
+            ]
+        };
 
-        elements.analysisCards.forEach(card => {
-            card.addEventListener('click', () => {
-                elements.analysisCards.forEach(c => c.classList.remove('active'));
-                card.classList.add('active');
-                currentType = card.dataset.type;
-            });
-        });
+        // ===== دوال المساعد =====
+        function addMessage(text, role) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${role === 'user' ? 'user-message' : 'ai-message'}`;
+            
+            if (role === 'ai') {
+                const avatarDiv = document.createElement('div');
+                avatarDiv.className = 'message-avatar';
+                avatarDiv.innerHTML = '<i class="fas fa-brain"></i>';
+                messageDiv.appendChild(avatarDiv);
+            }
+            
+            const contentDiv = document.createElement('div');
+            contentDiv.className = 'message-content';
+            contentDiv.textContent = text;
+            messageDiv.appendChild(contentDiv);
+            
+            elements.chatMessages.appendChild(messageDiv);
+            elements.chatMessages.scrollTop = elements.chatMessages.scrollHeight;
+            
+            state.conversation.push({ role: role === 'user' ? 'user' : 'assistant', content: text });
+        }
 
-        async function callAI(prompt) {
+        function showTyping() {
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'message ai-message typing';
+            typingDiv.id = 'typingIndicator';
+            typingDiv.innerHTML = `
+                <div class="message-avatar">
+                    <i class="fas fa-brain"></i>
+                </div>
+                <div class="message-content">
+                    <div class="typing-dots">
+                        <span></span><span></span><span></span>
+                    </div>
+                </div>
+            `;
+            elements.chatMessages.appendChild(typingDiv);
+            elements.chatMessages.scrollTop = elements.chatMessages.scrollHeight;
+        }
+
+        function hideTyping() {
+            document.getElementById('typingIndicator')?.remove();
+        }
+
+        // ===== الاتصال بالذكاء الاصطناعي =====
+        async function callAI(message) {
+            state.conversation.push({ role: 'user', content: message });
+            
             try {
                 const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
                     method: 'POST',
                     headers: {
                         'Authorization': `Bearer ${AI_KEY}`,
                         'Content-Type': 'application/json',
+                        'HTTP-Referer': window.location.origin,
                     },
                     body: JSON.stringify({
                         model: 'openai/gpt-4-turbo',
-                        messages: [{ role: 'user', content: prompt }],
-                        max_tokens: 1000
+                        messages: state.conversation,
+                        max_tokens: 1000,
+                        temperature: 0.7
                     })
                 });
-                const data = await response.json();
-                return data.choices[0].message.content;
-            } catch {
-                return 'حدث خطأ في الاتصال.';
+
+                if (response.ok) {
+                    const data = await response.json();
+                    const aiResponse = data.choices[0].message.content;
+                    state.conversation.push({ role: 'assistant', content: aiResponse });
+                    return aiResponse;
+                }
+            } catch (error) {
+                console.log('خطأ في الاتصال');
             }
+            
+            return 'عذراً، حدث خطأ في الاتصال. جاري إعادة المحاولة...';
         }
 
-        elements.analyzeBtn.addEventListener('click', async () => {
-            const input = elements.brainInput.value.trim();
-            if (!input) return;
-
-            elements.analyzeBtn.disabled = true;
-            elements.analyzeBtn.innerHTML = 'جاري التحليل...';
-            
-            const response = await callAI(input);
-            
-            elements.resultContent.textContent = response;
-            elements.resultArea.classList.add('show');
-            elements.analyzeBtn.disabled = false;
-            elements.analyzeBtn.innerHTML = '<i class="fas fa-brain"></i> شغل العقل الخارق';
-        });
-
-        function addMessage(text, role) {
-            const div = document.createElement('div');
-            div.className = `message ${role === 'user' ? 'user-message' : 'ai-message'}`;
-            div.innerHTML = `<div class="message-content">${text}</div>`;
-            elements.chatMessages.appendChild(div);
-        }
-
-        elements.sendButton.addEventListener('click', async () => {
-            const msg = elements.messageInput.value.trim();
-            if (!msg || isWaiting) return;
+        // ===== إرسال رسالة =====
+        async function sendMessage() {
+            const message = elements.messageInput.value.trim();
+            if (!message || state.isWaiting) return;
 
             elements.messageInput.value = '';
-            addMessage(msg, 'user');
-            
-            isWaiting = true;
-            const response = await callAI(msg);
+            state.isWaiting = true;
+            elements.sendButton.disabled = true;
+
+            addMessage(message, 'user');
+            showTyping();
+
+            const response = await callAI(message);
+
+            hideTyping();
             addMessage(response, 'ai');
-            isWaiting = false;
+
+            state.isWaiting = false;
+            elements.sendButton.disabled = false;
+        }
+
+        // ===== ربط الأحداث =====
+        elements.sendButton.addEventListener('click', sendMessage);
+        
+        elements.messageInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage();
+            }
         });
+
+        console.log('✅ AI NEXUS ULTIMATE شغال - 6 وكلاء متخصصين - مرتبط بالإنترنت');
     </script>
 </body>
-                    </html>
+    </html>
