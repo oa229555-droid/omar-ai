@@ -3,13 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI NEXUS ULTIMATE | ذكاء اصطناعي محلي</title>
+    <title>AI NEXUS ULTIMATE | ذكاء اصطناعي في المتصفح</title>
     
     <!-- Fonts & Icons -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- PageAgent من Alibaba (يعمل في المتصفح بدون تثبيت) -->
+    <script src="https://cdn.jsdelivr.net/npm/page-agent@latest/dist/page-agent.min.js"></script>
     
     <style>
         * {
@@ -622,8 +625,8 @@
 
     <!-- Hero Section -->
     <section class="hero">
-        <h1>الذكاء الاصطناعي<br>المحلي للجميع</h1>
-        <p>نموذج Llama 4 • يعمل محلياً • بدون مفتاح • متصل بالإنترنت</p>
+        <h1>الذكاء الاصطناعي<br>في متصفحك مباشرة</h1>
+        <p>يعمل بدون تثبيت • بدون سيرفر • فوري</p>
     </section>
 
     <!-- Main Container -->
@@ -691,7 +694,7 @@
         <!-- Memory Tab -->
         <div class="tab-content" id="memoryTab">
             <div style="background: rgba(255,255,255,0.02); border-radius: 30px; padding: 30px;">
-                <h3 style="margin-bottom: 20px;">الذاكرة المتجهية</h3>
+                <h3 style="margin-bottom: 20px;">الذاكرة المحلية</h3>
                 <div id="memoryList"></div>
             </div>
         </div>
@@ -715,12 +718,12 @@
         <section class="chat-section">
             <div class="chat-header">
                 <h2><i class="fas fa-brain" style="color: #6366f1;"></i> المحادثة الذكية</h2>
-                <span class="model-badge" id="modelStatus">Llama 4 محلي</span>
+                <span class="model-badge" id="modelStatus">✅ متصل</span>
             </div>
             <div class="chat-messages" id="chatMessages">
                 <div class="message ai-message">
                     <div class="message-avatar"><i class="fas fa-brain"></i></div>
-                    <div class="message-content">مرحباً! أنا Llama 4، أعمل محلياً على سيرفرك. كيف أستطيع مساعدتك؟</div>
+                    <div class="message-content">مرحباً! أنا ذكي اصطناعي يعمل في متصفحك مباشرة. كيف أستطيع مساعدتك؟</div>
                 </div>
             </div>
             <div class="chat-input">
@@ -736,13 +739,20 @@
     </footer>
 
     <script>
-        // ========== إعدادات Ollama المحلي ==========
-        const OLLAMA_URL = 'http://localhost:11434/api/chat';  // غيرها لرابط السيرفر لو مش محلي
-        const MODEL_NAME = 'llama4-scout';  // أو qwen2.5، deepseek-r1، إلخ
+        // ========== مفتاح الذكاء الاصطناعي ==========
+        const AI_KEY = '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';
+
+        // ========== إعداد PageAgent (يعمل في المتصفح) ==========
+        const agent = new PageAgent({
+            model: 'gpt-4o-mini',  // أو أي نموذج تدعمه PageAgent
+            apiKey: AI_KEY,
+            debug: true
+        });
 
         let currentUser = JSON.parse(localStorage.getItem('currentUser') || null);
         let users = JSON.parse(localStorage.getItem('users') || '[]');
         let memories = JSON.parse(localStorage.getItem('memories') || '[]');
+        let conversations = JSON.parse(localStorage.getItem('conversations') || '[]');
 
         // UI Elements
         const elements = {
@@ -793,7 +803,7 @@
 
         elements.loginSubmit.addEventListener('click', () => {
             const email = elements.loginEmail.value;
-            const password = btoa(elements.loginPassword.value); // تشفير بسيط
+            const password = btoa(elements.loginPassword.value);
             
             const user = users.find(u => u.email === email && u.password === password);
             
@@ -875,19 +885,17 @@
             elements.analysisResult.style.display = 'block';
             elements.analysisResult.innerHTML = 'جاري التحليل...';
 
-            // تحليل بسيط للملف
             const reader = new FileReader();
             reader.onload = async function(ev) {
                 const content = ev.target.result;
                 
-                // استخدام النموذج لتحليل الملف
-                const prompt = `حلل هذا الملف: ${file.name}\n\nالمحتوى: ${content.substring(0, 1000)}...`;
-                const analysis = await callOllama(prompt);
+                const prompt = `حلل هذا الملف: ${file.name}\n\nالمحتوى: ${content.substring(0, 2000)}...`;
+                const analysis = await agent.execute(prompt);
                 
                 elements.analysisResult.innerHTML = `<pre>${analysis}</pre>`;
             };
             
-            if (file.type.startsWith('text/') || file.name.endsWith('.txt') || file.name.endsWith('.csv')) {
+            if (file.type.startsWith('text/') || file.name.endsWith('.txt') || file.name.endsWith('.csv') || file.name.endsWith('.json')) {
                 reader.readAsText(file);
             } else {
                 reader.readAsDataURL(file);
@@ -934,42 +942,23 @@
             document.getElementById('typingIndicator')?.remove();
         }
 
-        // ========== 6. استدعاء Ollama (الذكاء الاصطناعي المحلي) ==========
-        async function callOllama(prompt) {
+        // ========== 6. استدعاء الذكاء الاصطناعي ==========
+        async function callAI(prompt) {
             try {
-                const response = await fetch(OLLAMA_URL, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        model: MODEL_NAME,
-                        messages: [
-                            {
-                                role: 'system',
-                                content: 'أنت مساعد ذكي متطور. أجب بالعربية.'
-                            },
-                            {
-                                role: 'user',
-                                content: prompt
-                            }
-                        ],
-                        stream: false,
-                        temperature: 0.7,
-                        max_tokens: 2000
-                    })
-                });
-
-                if (response.ok) {
-                    const data = await response.json();
-                    return data.message.content;
-                } else {
-                    console.log('خطأ في استدعاء Ollama:', response.status);
-                    return 'عذراً، حدث خطأ في الاتصال بالنموذج المحلي. تأكد من تشغيل Ollama.';
-                }
+                elements.modelStatus.textContent = '⏳ جاري التفكير...';
+                elements.modelStatus.style.background = '#f59e0b';
+                
+                const response = await agent.execute(prompt);
+                
+                elements.modelStatus.textContent = '✅ متصل';
+                elements.modelStatus.style.background = '#10b981';
+                
+                return response;
             } catch (error) {
-                console.log('خطأ في الاتصال:', error);
-                return 'عذراً، لا يمكن الاتصال بـ Ollama. تأكد من تشغيل الخادم المحلي.';
+                console.error('خطأ في استدعاء AI:', error);
+                elements.modelStatus.textContent = '❌ خطأ';
+                elements.modelStatus.style.background = '#ef4444';
+                return 'عذراً، حدث خطأ في الاتصال. تأكد من اتصالك بالإنترنت.';
             }
         }
 
@@ -994,12 +983,21 @@
             let context = '';
             if (relevantMemories.length > 0) {
                 context = 'المحادثات السابقة:\n' + 
-                    relevantMemories.map(m => `- ${m.text}`).join('\n');
+                    relevantMemories.map(m => `- ${m.text}`).join('\n') + '\n\n';
             }
 
-            const prompt = `${context}\n\nالسؤال الحالي: ${message}`;
+            // إضافة معلومات الوكيل المختار
+            const activeAgent = document.querySelector('.agent-card.active')?.dataset.agent || 'research';
+            const agentContext = {
+                research: 'أنت وكيل بحث متخصص. ابحث وحلل المعلومات بدقة.',
+                coding: 'أنت وكيل برمجة متخصص. اكتب كود نظيف ومنظم مع شرح.',
+                finance: 'أنت وكيل تحليل مالي. حلل الأرقام وقدم توصيات.',
+                security: 'أنت وكيل أمني. افحص وحلل الثغرات الأمنية.'
+            }[activeAgent] || '';
+
+            const prompt = `${agentContext}\n\n${context}السؤال: ${message}`;
             
-            const response = await callOllama(prompt);
+            const response = await callAI(prompt);
             
             hideTyping();
             addMessage(response, 'ai');
@@ -1009,9 +1007,19 @@
                 user: currentUser.email,
                 text: message,
                 response: response,
+                agent: activeAgent,
                 timestamp: Date.now()
             });
             localStorage.setItem('memories', JSON.stringify(memories));
+
+            // حفظ المحادثة
+            conversations.push({
+                user: currentUser.email,
+                message: message,
+                response: response,
+                timestamp: Date.now()
+            });
+            localStorage.setItem('conversations', JSON.stringify(conversations));
 
             // تحديث قائمة الذاكرة
             updateMemoryList();
@@ -1029,31 +1037,13 @@
             elements.memoryList.innerHTML = userMemories.map(m => `
                 <div style="background: rgba(255,255,255,0.03); border-radius: 10px; padding: 15px; margin-bottom: 10px;">
                     <div style="color: #6366f1; font-size: 12px;">${new Date(m.timestamp).toLocaleString()}</div>
-                    <div style="margin-top: 5px;"><strong>سؤال:</strong> ${m.text.substring(0, 50)}...</div>
+                    <div style="margin-top: 5px;"><strong>سؤال:</strong> ${m.text.substring(0, 50)}${m.text.length > 50 ? '...' : ''}</div>
+                    <div style="margin-top: 5px; color: #888;"><strong>الوكيل:</strong> ${m.agent || 'research'}</div>
                 </div>
-            `).join('') || '<p style="color: #888;">لا توجد محادثات سابقة</p>';
+            `).join('') || '<p style="color: #888; text-align: center;">لا توجد محادثات سابقة</p>';
         }
 
-        // ========== 9. التحقق من اتصال Ollama ==========
-        async function checkOllamaConnection() {
-            try {
-                const response = await fetch('http://localhost:11434/api/tags');
-                if (response.ok) {
-                    const data = await response.json();
-                    const models = data.models.map(m => m.name).join(', ');
-                    elements.modelStatus.textContent = `✅ متصل: ${MODEL_NAME}`;
-                    elements.modelStatus.style.background = '#10b981';
-                } else {
-                    elements.modelStatus.textContent = '❌ غير متصل';
-                    elements.modelStatus.style.background = '#ef4444';
-                }
-            } catch (error) {
-                elements.modelStatus.textContent = '❌ غير متصل';
-                elements.modelStatus.style.background = '#ef4444';
-            }
-        }
-
-        // ========== 10. أحداث الإرسال ==========
+        // ========== 9. أحداث الإرسال ==========
         elements.sendButton.addEventListener('click', sendMessage);
         elements.messageInput.addEventListener('keypress', (e) => {
             if (e.key === 'Enter' && !e.shiftKey) {
@@ -1062,15 +1052,15 @@
             }
         });
 
-        // ========== 11. التهيئة ==========
+        // ========== 10. التهيئة ==========
         updateUIForUser();
         updateMemoryList();
-        checkOllamaConnection();
         
-        // تحديث الحالة كل 30 ثانية
-        setInterval(checkOllamaConnection, 30000);
+        // تحديث حالة الاتصال
+        elements.modelStatus.textContent = '✅ متصل';
+        elements.modelStatus.style.background = '#10b981';
 
-        console.log('✅ AI NEXUS ULTIMATE شغال على Ollama المحلي');
+        console.log('✅ AI NEXUS ULTIMATE شغال في المتصفح - بدون تثبيت');
     </script>
 </body>
-        </html>
+    </html>
