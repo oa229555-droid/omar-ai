@@ -1,125 +1,124 @@
+// ========== الملف الوحيد لتشغيل الذكاء الاصطناعي ==========
+// ضع هذا الملف في: api/proxy.js
+
 export default async function handler(req, res) {
-  // السماح بالطلبات من أي مصدر (CORS)
+  // 1. نسمح لأي موقع يتكلم مع السيرفر (حل مشكلة الأمان)
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
   
-  // لو طلب OPTIONS (قبل الطلب الحقيقي)
+  // 2. لو طلب فحص مبدئي، نرجعه على طول
   if (req.method === 'OPTIONS') {
     return res.status(200).end();
   }
   
-  // استقبال الطلب
-  if (req.method === 'POST') {
-    try {
-      const { prompt, keyIndex, allKeys, smartMode } = req.body;
-      
-      // المفاتيح الأربعة (مخزنة بأمان هنا)
-      const AI_KEYS = [
-        { 
-          name: 'OpenAI',
-          key: 'sk-443779874ed2417d9c9f0bf2b60f34ed',
-          url: 'https://api.openai.com/v1/chat/completions',
-          model: 'gpt-4'
-        },
-        { 
-          name: 'OpenRouter',
-          key: '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',
-          url: 'https://openrouter.ai/api/v1/chat/completions',
-          model: 'openai/gpt-4o-mini'
-        },
-        { 
-          name: 'Groq',
-          key: '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',
-          url: 'https://api.groq.com/openai/v1/chat/completions',
-          model: 'mixtral-8x7b-32768'
-        },
-        { 
-          name: 'DeepSeek',
-          key: 'uVK0GgeWuuuK7fT2MXOpxensk9rKY6ST',
-          url: 'https://api.deepseek.com/v1/chat/completions',
-          model: 'deepseek-chat'
-        }
-      ];
+  // 3. نتأكد إن الطلب من النوع POST
+  if (req.method !== 'POST') {
+    return res.status(405).json({ error: 'الطريقة غير مسموحة' });
+  }
 
-      // استدعاء كل المفاتيح
-      const results = [];
-      
-      for (let i = 0; i < AI_KEYS.length; i++) {
-        const config = AI_KEYS[i];
-        const startTime = Date.now();
-        
-        try {
-          // تجهيز الهيدرات
-          const headers = {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${config.key}`
-          };
-          
-          // إضافة HTTP-Referer لـ OpenRouter
-          if (config.name === 'OpenRouter') {
-            headers['HTTP-Referer'] = 'https://omar-ai-seven.vercel.app';
-          }
-          
-          // استدعاء API
-          const response = await fetch(config.url, {
-            method: 'POST',
-            headers: headers,
-            body: JSON.stringify({
-              model: config.model,
-              messages: [{ role: 'user', content: prompt }],
-              temperature: 0.7,
-              max_tokens: 1000
-            })
-          });
+  try {
+    const { prompt } = req.body;
+    
+    if (!prompt) {
+      return res.status(400).json({ error: 'السؤال مطلوب' });
+    }
 
-          const responseTime = Date.now() - startTime;
+    console.log('🤖 تم استلام سؤال:', prompt.substring(0, 50));
 
-          if (response.ok) {
-            const data = await response.json();
-            const content = data.choices[0].message.content;
-            
-            results.push({
-              success: true,
-              keyIndex: i,
-              keyName: config.name,
-              content: content,
-              responseTime: responseTime
-            });
-          } else {
-            results.push({
-              success: false,
-              keyIndex: i,
-              keyName: config.name,
-              error: `API Error: ${response.status}`,
-              responseTime: responseTime
-            });
-          }
-        } catch (error) {
-          results.push({
-            success: false,
-            keyIndex: i,
-            keyName: config.name,
-            error: error.message
-          });
-        }
+    // 4. المفاتيح الأربعة السحرية
+    const AI_KEYS = [
+      { 
+        name: 'OpenAI',
+        key: 'sk-443779874ed2417d9c9f0bf2b60f34ed',
+        url: 'https://api.openai.com/v1/chat/completions',
+        model: 'gpt-4'
+      },
+      { 
+        name: 'OpenRouter',
+        key: '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',
+        url: 'https://openrouter.ai/api/v1/chat/completions',
+        model: 'openai/gpt-4o-mini'
+      },
+      { 
+        name: 'Groq',
+        key: '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',
+        url: 'https://api.groq.com/openai/v1/chat/completions',
+        model: 'mixtral-8x7b-32768'
+      },
+      { 
+        name: 'DeepSeek',
+        key: 'uVK0GgeWuuuK7fT2MXOpxensk9rKY6ST',
+        url: 'https://api.deepseek.com/v1/chat/completions',
+        model: 'deepseek-chat'
       }
+    ];
 
-      // نرجع النتائج للمتصفح
-      return res.status(200).json({ 
-        success: true, 
-        results: results,
-        timestamp: Date.now()
-      });
+    // 5. نجرب كل مفتاح على حدة لحد ما واحد ينجح
+    let finalAnswer = null;
+    let workingKey = null;
+
+    for (let i = 0; i < AI_KEYS.length; i++) {
+      const config = AI_KEYS[i];
       
-    } catch (error) {
-      return res.status(500).json({ 
-        success: false, 
-        error: error.message 
+      try {
+        console.log(`🔄 تجربة المفتاح: ${config.name}`);
+        
+        const headers = {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${config.key}`
+        };
+
+        // مفتاح OpenRouter محتاج رأس إضافي
+        if (config.name === 'OpenRouter') {
+          headers['HTTP-Referer'] = 'https://omar-ai-seven.vercel.app';
+        }
+        
+        const response = await fetch(config.url, {
+          method: 'POST',
+          headers: headers,
+          body: JSON.stringify({
+            model: config.model,
+            messages: [{ role: 'user', content: prompt }],
+            temperature: 0.7,
+            max_tokens: 1000
+          })
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          finalAnswer = data.choices[0].message.content;
+          workingKey = config.name;
+          console.log(`✅ نجح المفتاح: ${config.name}`);
+          break; // وجدنا مفتاح يعمل، نخرج من الحلقة
+        } else {
+          console.log(`❌ فشل المفتاح ${config.name}: ${response.status}`);
+        }
+      } catch (error) {
+        console.log(`❌ خطأ في المفتاح ${config.name}:`, error.message);
+      }
+    }
+
+    // 6. نرسل الرد للمستخدم
+    if (finalAnswer) {
+      return res.status(200).json({
+        success: true,
+        content: finalAnswer,
+        keyUsed: workingKey
+      });
+    } else {
+      return res.status(200).json({
+        success: false,
+        content: "عذراً، جميع المفاتيح غير متاحة حالياً. حاول مرة أخرى لاحقاً.",
+        keyUsed: null
       });
     }
+
+  } catch (error) {
+    console.error('🔥 خطأ في السيرفر:', error);
+    return res.status(500).json({
+      success: false,
+      content: "حدث خطأ داخلي في السيرفر"
+    });
   }
-  
-  // لو مش POST
-  return res.status(405).json({ error: 'Method not allowed' });
 }
