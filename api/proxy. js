@@ -1,16 +1,20 @@
 export default async function handler(req, res) {
+  // السماح بالطلبات من أي مصدر (CORS)
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
   
+  // لو طلب OPTIONS (قبل الطلب الحقيقي)
   if (req.method === 'OPTIONS') {
     return res.status(200).end();
   }
   
+  // استقبال الطلب
   if (req.method === 'POST') {
     try {
       const { prompt, keyIndex, allKeys, smartMode } = req.body;
       
+      // المفاتيح الأربعة (مخزنة بأمان هنا)
       const AI_KEYS = [
         { 
           name: 'OpenAI',
@@ -38,6 +42,7 @@ export default async function handler(req, res) {
         }
       ];
 
+      // استدعاء كل المفاتيح
       const results = [];
       
       for (let i = 0; i < AI_KEYS.length; i++) {
@@ -45,15 +50,18 @@ export default async function handler(req, res) {
         const startTime = Date.now();
         
         try {
+          // تجهيز الهيدرات
           const headers = {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${config.key}`
           };
           
+          // إضافة HTTP-Referer لـ OpenRouter
           if (config.name === 'OpenRouter') {
             headers['HTTP-Referer'] = 'https://omar-ai-seven.vercel.app';
           }
           
+          // استدعاء API
           const response = await fetch(config.url, {
             method: 'POST',
             headers: headers,
@@ -97,12 +105,21 @@ export default async function handler(req, res) {
         }
       }
 
-      return res.status(200).json({ success: true, results: results });
+      // نرجع النتائج للمتصفح
+      return res.status(200).json({ 
+        success: true, 
+        results: results,
+        timestamp: Date.now()
+      });
       
     } catch (error) {
-      return res.status(500).json({ success: false, error: error.message });
+      return res.status(500).json({ 
+        success: false, 
+        error: error.message 
+      });
     }
   }
   
+  // لو مش POST
   return res.status(405).json({ error: 'Method not allowed' });
 }
