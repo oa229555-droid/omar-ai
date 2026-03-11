@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        /* نفس الـ Styles السابقة مع إضافة بعض التحسينات */
+        /* جميع الـ Styles كما هي بدون تغيير */
         * {
             margin: 0;
             padding: 0;
@@ -27,7 +27,6 @@
             overflow-x: hidden;
         }
 
-        /* خلفية متحركة */
         .background-gradient {
             position: fixed;
             top: 0;
@@ -59,7 +58,6 @@
             z-index: -1;
         }
 
-        /* Navigation */
         .navbar {
             background: rgba(3, 0, 20, 0.7);
             backdrop-filter: blur(20px);
@@ -132,7 +130,6 @@
             cursor: pointer;
         }
 
-        /* Hero Section */
         .hero {
             padding: 180px 40px 100px;
             text-align: center;
@@ -157,7 +154,6 @@
             margin: 0 auto 50px;
         }
 
-        /* Key Status Bar */
         .key-status-bar {
             display: flex;
             gap: 10px;
@@ -218,7 +214,6 @@
             50% { opacity: 0.5; }
         }
 
-        /* Parallel Response Grid */
         .parallel-responses {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -253,7 +248,6 @@
             overflow-y: auto;
         }
 
-        /* باقي الـ Styles كما هي */
         .main-container {
             max-width: 1400px;
             margin: 0 auto;
@@ -824,7 +818,7 @@
             </div>
         </div>
 
-        <!-- Parallel Tab (جديد) -->
+        <!-- Parallel Tab -->
         <div class="tab-content" id="parallelTab">
             <div style="background: rgba(255,255,255,0.02); border-radius: 30px; padding: 30px;">
                 <h3 style="margin-bottom: 20px;">الاستجابة المتوازية من 4 مفاتيح</h3>
@@ -861,7 +855,7 @@
             <div class="chat-header">
                 <h2><i class="fas fa-brain" style="color: #6366f1;"></i> المحادثة الذكية</h2>
                 <div style="display: flex; gap: 10px; align-items: center;">
-                    <span class="model-badge" id="modelStatus">✅ 4 مفاتيح نشطة</span>
+                    <span class="model-badge" id="modelStatus">✅ Proxy نشط</span>
                     <button class="toggle-parallel" id="toggleParallelMode">
                         <i class="fas fa-sync-alt"></i>
                         <span>الوضع المتوازي</span>
@@ -871,7 +865,7 @@
             <div class="chat-messages" id="chatMessages">
                 <div class="message ai-message">
                     <div class="message-avatar"><i class="fas fa-brain"></i></div>
-                    <div class="message-content">مرحباً! أنا AI NEXUS، أعمل بأربعة مفاتيح احتياطية متوازية. كيف أستطيع مساعدتك؟</div>
+                    <div class="message-content">مرحباً! أنا AI NEXUS، أعمل بأربعة مفاتيح احتياطية متوازية عبر Proxy. كيف أستطيع مساعدتك؟</div>
                 </div>
             </div>
             <div class="chat-input">
@@ -883,73 +877,22 @@
 
     <!-- Footer -->
     <footer class="footer">
-        <p>© 2026 AI NEXUS ULTIMATE | يعمل بأربعة مفاتيح احتياطية | تصميم وبرمجة: Omar Abdo - 01289411976</p>
+        <p>© 2026 AI NEXUS ULTIMATE | يعمل بأربعة مفاتيح احتياطية عبر Proxy | تصميم وبرمجة: Omar Abdo - 01289411976</p>
     </footer>
 
     <script>
-        // ========== المفاتيح الأربعة في ملف منفصل ==========
-        // هذا هو ملف التكوين الرئيسي - يمكن فصله لملف config.js
-        const AI_KEYS_CONFIG = [
-            {
-                id: 1,
-                name: 'OpenAI Key',
-                key: 'sk-443779874ed2417d9c9f0bf2b60f34ed',
-                apiUrl: 'https://api.openai.com/v1/chat/completions',
-                model: 'gpt-4',
-                type: 'openai',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Bearer {KEY}'
-                }
-            },
-            {
-                id: 2,
-                name: 'OpenRouter Key',
-                key: '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',
-                apiUrl: 'https://openrouter.ai/api/v1/chat/completions',
-                model: 'openai/gpt-4o-mini',
-                type: 'openrouter',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Bearer {KEY}',
-                    'HTTP-Referer': window.location.origin
-                }
-            },
-            {
-                id: 3,
-                name: 'Groq Key',
-                key: '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',
-                apiUrl: 'https://api.groq.com/openai/v1/chat/completions',
-                model: 'mixtral-8x7b-32768',
-                type: 'groq',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Bearer {KEY}'
-                }
-            },
-            {
-                id: 4,
-                name: 'DeepSeek Key',
-                key: 'uVK0GgeWuuuK7fT2MXOpxensk9rKY6ST',
-                apiUrl: 'https://api.deepseek.com/v1/chat/completions',
-                model: 'deepseek-chat',
-                type: 'deepseek',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Bearer {KEY}'
-                }
-            }
+        // ========== حالة المفاتيح ==========
+        let keyStatus = [
+            { active: true, lastUsed: null, responseTime: null, errorCount: 0 },
+            { active: true, lastUsed: null, responseTime: null, errorCount: 0 },
+            { active: true, lastUsed: null, responseTime: null, errorCount: 0 },
+            { active: true, lastUsed: null, responseTime: null, errorCount: 0 }
         ];
 
-        // ========== حالة المفاتيح ==========
-        let keyStatus = AI_KEYS_CONFIG.map(() => ({
-            active: true,
-            lastUsed: null,
-            responseTime: null,
-            errorCount: 0
-        }));
-
         let parallelMode = false; // false = ذكي (يختار أفضل مفتاح), true = متوازي (يستخدم كل المفاتيح)
+
+        // ========== أسماء المفاتيح (للعرض فقط) ==========
+        const KEY_NAMES = ['OpenAI', 'OpenRouter', 'Groq', 'DeepSeek'];
 
         // ========== بيانات المستخدمين ==========
         let currentUser = JSON.parse(localStorage.getItem('currentUser') || null);
@@ -1020,7 +963,7 @@
                 localStorage.setItem('currentUser', JSON.stringify(currentUser));
                 elements.loginModal.classList.remove('active');
                 updateUIForUser();
-                addAIMessage(`مرحباً ${user.name}! أنا جاهز بأربعة مفاتيح احتياطية. كيف أستطيع مساعدتك؟`);
+                addAIMessage(`مرحباً ${user.name}! أنا جاهز بأربعة مفاتيح احتياطية عبر Proxy. كيف أستطيع مساعدتك؟`);
             } else {
                 alert('بيانات الدخول غير صحيحة');
             }
@@ -1067,14 +1010,14 @@
             if (!elements.keyStatusBar) return;
             
             let html = '';
-            AI_KEYS_CONFIG.forEach((config, index) => {
+            KEY_NAMES.forEach((name, index) => {
                 const status = keyStatus[index];
                 const statusClass = status.active ? 'active' : (status.errorCount > 0 ? 'error' : 'warning');
                 
                 html += `
-                    <div class="key-badge ${statusClass}" title="${config.name}">
+                    <div class="key-badge ${statusClass}" title="${name}">
                         <span class="key-indicator"></span>
-                        <span>مفتاح ${index + 1}</span>
+                        <span>${name}</span>
                         <span style="font-size: 10px; color: #888;">${status.responseTime ? status.responseTime + 'ms' : ''}</span>
                     </div>
                 `;
@@ -1131,12 +1074,13 @@
                 const prompt = `حلل هذا الملف: ${file.name}\n\nالمحتوى: ${content.substring(0, 2000)}...`;
                 
                 if (parallelMode) {
-                    const responses = await callAllKeysParallel(prompt);
+                    const results = await callAllKeysParallel(prompt);
                     let resultHtml = '<h4>نتائج التحليل من جميع المفاتيح:</h4>';
-                    responses.forEach((r, idx) => {
+                    results.forEach((r, idx) => {
+                        const keyName = r.keyName || KEY_NAMES[idx] || `مفتاح ${idx + 1}`;
                         resultHtml += `<div style="margin-top: 15px; padding: 10px; background: rgba(99,102,241,0.1); border-radius: 10px;">
-                            <strong>المفتاح ${idx + 1} (${AI_KEYS_CONFIG[idx].name}):</strong>
-                            <pre>${r.response || 'فشل'}</pre>
+                            <strong>${keyName}:</strong>
+                            <pre>${r.content || r.error || 'فشل'}</pre>
                         </div>`;
                     });
                     elements.analysisResult.innerHTML = resultHtml;
@@ -1193,103 +1137,68 @@
             document.getElementById('typingIndicator')?.remove();
         }
 
-        // ========== 8. استدعاء مفتاح واحد ==========
-        async function callSingleKey(keyConfig, prompt, keyIndex) {
+        // ========== 8. استدعاء المفتاح عن طريق Proxy ==========
+        async function callSingleKey(prompt, keyIndex) {
             const startTime = Date.now();
             
             try {
-                // تجهيز الهيدرات
-                const headers = {};
-                Object.keys(keyConfig.headers).forEach(h => {
-                    let value = keyConfig.headers[h];
-                    if (value.includes('{KEY}')) {
-                        value = value.replace('{KEY}', keyConfig.key);
-                    }
-                    headers[h] = value;
-                });
-
-                // تجهيز البودي حسب نوع API
-                let body = {};
+                console.log(`جاري الاتصال بالـ Proxy للمفتاح ${KEY_NAMES[keyIndex]}...`);
                 
-                if (keyConfig.type === 'openai') {
-                    body = {
-                        model: keyConfig.model,
-                        messages: [{ role: 'user', content: prompt }],
-                        temperature: 0.7,
-                        max_tokens: 1000
-                    };
-                } else if (keyConfig.type === 'openrouter') {
-                    body = {
-                        model: keyConfig.model,
-                        messages: [{ role: 'user', content: prompt }],
-                        temperature: 0.7,
-                        max_tokens: 1000
-                    };
-                } else if (keyConfig.type === 'groq') {
-                    body = {
-                        model: keyConfig.model,
-                        messages: [{ role: 'user', content: prompt }],
-                        temperature: 0.7,
-                        max_tokens: 1000
-                    };
-                } else if (keyConfig.type === 'deepseek') {
-                    body = {
-                        model: keyConfig.model,
-                        messages: [{ role: 'user', content: prompt }],
-                        temperature: 0.7,
-                        max_tokens: 1000
-                    };
-                }
-
-                console.log(`جرب المفتاح ${keyIndex + 1} (${keyConfig.name})...`);
-                
-                const response = await fetch(keyConfig.apiUrl, {
+                const response = await fetch('/api/proxy', {
                     method: 'POST',
-                    headers: headers,
-                    body: JSON.stringify(body)
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ 
+                        prompt: prompt,
+                        keyIndex: keyIndex 
+                    })
                 });
 
                 const responseTime = Date.now() - startTime;
+                const data = await response.json();
 
-                if (response.ok) {
-                    const data = await response.json();
-                    const content = data.choices?.[0]?.message?.content || 'لا يوجد رد';
+                if (data.success && data.results && data.results[keyIndex]) {
+                    const result = data.results[keyIndex];
                     
-                    // تحديث حالة المفتاح
-                    keyStatus[keyIndex] = {
-                        active: true,
-                        lastUsed: Date.now(),
-                        responseTime: responseTime,
-                        errorCount: 0
-                    };
-                    
-                    console.log(`✅ المفتاح ${keyIndex + 1} نجح في ${responseTime}ms`);
-                    
-                    return {
-                        success: true,
-                        content: content,
-                        responseTime: responseTime,
-                        keyIndex: keyIndex
-                    };
+                    if (result.success) {
+                        // تحديث حالة المفتاح
+                        keyStatus[keyIndex] = {
+                            active: true,
+                            lastUsed: Date.now(),
+                            responseTime: responseTime,
+                            errorCount: 0
+                        };
+                        
+                        console.log(`✅ ${KEY_NAMES[keyIndex]} نجح في ${responseTime}ms`);
+                        
+                        return {
+                            success: true,
+                            content: result.content,
+                            responseTime: responseTime,
+                            keyIndex: keyIndex,
+                            keyName: result.keyName || KEY_NAMES[keyIndex]
+                        };
+                    } else {
+                        keyStatus[keyIndex] = {
+                            active: false,
+                            lastUsed: Date.now(),
+                            responseTime: responseTime,
+                            errorCount: (keyStatus[keyIndex]?.errorCount || 0) + 1
+                        };
+                        
+                        return {
+                            success: false,
+                            error: result.error || 'فشل الاتصال',
+                            keyIndex: keyIndex,
+                            keyName: KEY_NAMES[keyIndex]
+                        };
+                    }
                 } else {
-                    const error = await response.text();
-                    console.log(`❌ المفتاح ${keyIndex + 1} فشل:`, error);
-                    
-                    keyStatus[keyIndex] = {
-                        active: false,
-                        lastUsed: Date.now(),
-                        responseTime: responseTime,
-                        errorCount: (keyStatus[keyIndex]?.errorCount || 0) + 1
-                    };
-                    
-                    return {
-                        success: false,
-                        error: error,
-                        keyIndex: keyIndex
-                    };
+                    throw new Error('استجابة غير صالحة من Proxy');
                 }
             } catch (error) {
-                console.log(`❌ خطأ مع المفتاح ${keyIndex + 1}:`, error);
+                console.log(`❌ خطأ مع ${KEY_NAMES[keyIndex]}:`, error);
                 
                 keyStatus[keyIndex] = {
                     active: false,
@@ -1301,60 +1210,128 @@
                 return {
                     success: false,
                     error: error.message,
-                    keyIndex: keyIndex
+                    keyIndex: keyIndex,
+                    keyName: KEY_NAMES[keyIndex]
                 };
             } finally {
                 updateKeyStatusBar();
             }
         }
 
-        // ========== 9. استدعاء جميع المفاتيح بالتوازي ==========
+        // ========== 9. استدعاء جميع المفاتيح بالتوازي عن طريق Proxy ==========
         async function callAllKeysParallel(prompt) {
-            elements.modelStatus.textContent = '⏳ جاري استدعاء 4 مفاتيح...';
+            elements.modelStatus.textContent = '⏳ جاري استدعاء 4 مفاتيح عبر Proxy...';
             elements.modelStatus.style.background = '#f59e0b';
             
-            const promises = AI_KEYS_CONFIG.map((config, index) => 
-                callSingleKey(config, prompt, index)
-            );
-            
-            const results = await Promise.all(promises);
-            
-            const successCount = results.filter(r => r.success).length;
-            elements.modelStatus.textContent = `✅ ${successCount}/4 مفاتيح نشطة`;
-            elements.modelStatus.style.background = successCount > 0 ? '#10b981' : '#ef4444';
-            
-            return results;
+            // استدعاء الـ Proxy مرة واحدة وهو هيدير كل المفاتيح
+            try {
+                const response = await fetch('/api/proxy', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ 
+                        prompt: prompt,
+                        allKeys: true // Indicator to try all keys
+                    })
+                });
+
+                const data = await response.json();
+                
+                if (data.success && data.results) {
+                    // تحديث حالة كل مفتاح
+                    data.results.forEach((result, index) => {
+                        if (result.success) {
+                            keyStatus[index] = {
+                                active: true,
+                                lastUsed: Date.now(),
+                                responseTime: result.responseTime || 0,
+                                errorCount: 0
+                            };
+                        } else {
+                            keyStatus[index] = {
+                                active: false,
+                                lastUsed: Date.now(),
+                                responseTime: 0,
+                                errorCount: (keyStatus[index]?.errorCount || 0) + 1
+                            };
+                        }
+                    });
+                    
+                    const successCount = data.results.filter(r => r.success).length;
+                    elements.modelStatus.textContent = `✅ ${successCount}/4 مفاتيح نشطة عبر Proxy`;
+                    elements.modelStatus.style.background = successCount > 0 ? '#10b981' : '#ef4444';
+                    
+                    updateKeyStatusBar();
+                    return data.results;
+                } else {
+                    throw new Error('فشل الاتصال بالـ Proxy');
+                }
+            } catch (error) {
+                console.error('Proxy error:', error);
+                elements.modelStatus.textContent = '⚠️ خطأ في Proxy';
+                elements.modelStatus.style.background = '#ef4444';
+                
+                // Return fake results for UI
+                return KEY_NAMES.map((name, i) => ({
+                    success: false,
+                    error: 'فشل الاتصال بالخادم',
+                    keyIndex: i,
+                    keyName: name
+                }));
+            }
         }
 
-        // ========== 10. استدعاء ذكي (أسرع مفتاح) ==========
+        // ========== 10. استدعاء ذكي عن طريق Proxy ==========
         async function callAISmart(prompt) {
-            // جرب كل المفاتيح بالترتيب وخذ أسرع واحد
-            const startTime = Date.now();
-            
-            const promises = AI_KEYS_CONFIG.map((config, index) => 
-                callSingleKey(config, prompt, index)
-            );
-            
-            const results = await Promise.allSettled(promises);
-            
-            // خذ أول نتيجة ناجحة
-            for (const result of results) {
-                if (result.status === 'fulfilled' && result.value.success) {
-                    const responseTime = Date.now() - startTime;
-                    console.log(`✨ أسرع استجابة من المفتاح ${result.value.keyIndex + 1} في ${responseTime}ms`);
-                    return result.value.content;
+            try {
+                const response = await fetch('/api/proxy', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ 
+                        prompt: prompt,
+                        smartMode: true // Use smart mode on server
+                    })
+                });
+
+                const data = await response.json();
+                
+                if (data.success && data.results) {
+                    // Update key statuses
+                    data.results.forEach((result, index) => {
+                        if (result.success) {
+                            keyStatus[index] = {
+                                active: true,
+                                lastUsed: Date.now(),
+                                responseTime: result.responseTime || 0,
+                                errorCount: 0
+                            };
+                        }
+                    });
+                    
+                    updateKeyStatusBar();
+                    
+                    // Find first successful response
+                    const successfulKey = data.results.find(r => r.success);
+                    if (successfulKey) {
+                        return successfulKey.content;
+                    }
                 }
+                
+                throw new Error('No successful responses');
+            } catch (error) {
+                console.error('Smart mode error:', error);
+                elements.modelStatus.textContent = '⚠️ خطأ في Proxy';
+                elements.modelStatus.style.background = '#ef4444';
+                
+                if (currentUser) {
+                    return `عذراً، جميع المفاتيح الأربعة غير متاحة حالياً. الرجاء المحاولة لاحقاً.`;
+                }
+                
+                return 'عذراً، حدث خطأ في الاتصال. الرجاء تسجيل الدخول والمحاولة مرة أخرى.';
             }
-            
-            // كل المفاتيح فشلت
-            elements.modelStatus.textContent = '⚠️ لا يوجد مفتاح نشط';
-            elements.modelStatus.style.background = '#ef4444';
-            
-            if (currentUser) {
-                return `عذراً، جميع المفاتيح الأربعة غير متاحة حالياً. الرجاء المحاولة لاحقاً.`;
-            }
-            
-            return 'عذراً، حدث خطأ في الاتصال. الرجاء تسجيل الدخول والمحاولة مرة أخرى.';
         }
 
         // ========== 11. إرسال الرسالة ==========
@@ -1438,19 +1415,21 @@
             
             let html = '';
             results.forEach((result, index) => {
+                const keyName = result.keyName || KEY_NAMES[index] || `مفتاح ${index + 1}`;
+                
                 if (result.success) {
                     html += `
                         <div class="response-card">
                             <h4>
                                 <i class="fas fa-${index === 0 ? 'crown' : 'microchip'}" 
                                    style="color: ${index === 0 ? '#f59e0b' : '#6366f1'}"></i>
-                                المفتاح ${index + 1} - ${AI_KEYS_CONFIG[index].name}
+                                ${keyName}
                                 <span style="font-size: 10px; color: #888; margin-right: auto;">
-                                    ${result.responseTime}ms
+                                    ${result.responseTime || 0}ms
                                 </span>
                             </h4>
                             <div class="response-content">
-                                ${result.content.substring(0, 300)}${result.content.length > 300 ? '...' : ''}
+                                ${(result.content || '').substring(0, 300)}${result.content && result.content.length > 300 ? '...' : ''}
                             </div>
                         </div>
                     `;
@@ -1459,10 +1438,10 @@
                         <div class="response-card" style="opacity: 0.5;">
                             <h4>
                                 <i class="fas fa-times-circle" style="color: #ef4444;"></i>
-                                المفتاح ${index + 1} - ${AI_KEYS_CONFIG[index].name}
+                                ${keyName}
                             </h4>
                             <div class="response-content" style="color: #ef4444;">
-                                فشل الاتصال
+                                ${result.error || 'فشل الاتصال'}
                             </div>
                         </div>
                     `;
@@ -1525,15 +1504,39 @@
         updateUIForUser();
         updateMemoryList();
         updateKeyStatusBar();
-        
-        // اختبار المفاتيح عند التحميل
+
+        // اختبار الاتصال بالـ Proxy عند التحميل
         setTimeout(async () => {
             if (currentUser) {
-                console.log('🧪 اختبار المفاتيح الأربعة...');
-                await callAllKeysParallel('مرحباً، هل أنت جاهز؟ أرسل كلمة "نعم" فقط.');
+                console.log('🧪 اختبار الاتصال بالـ Proxy...');
+                try {
+                    const response = await fetch('/api/proxy', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ 
+                            prompt: 'ping',
+                            test: true 
+                        })
+                    });
+                    
+                    if (response.ok) {
+                        console.log('✅ Proxy متصل بنجاح');
+                        elements.modelStatus.textContent = '✅ Proxy نشط';
+                    } else {
+                        console.log('❌ Proxy غير متصل');
+                        elements.modelStatus.textContent = '⚠️ Proxy غير متصل';
+                        elements.modelStatus.style.background = '#ef4444';
+                    }
+                } catch (error) {
+                    console.error('Proxy test failed:', error);
+                    elements.modelStatus.textContent = '⚠️ Proxy غير متصل';
+                    elements.modelStatus.style.background = '#ef4444';
+                }
             }
         }, 2000);
-        
+
         // تحديث حالة المفاتيح كل دقيقة
         setInterval(() => {
             if (currentUser) {
@@ -1548,7 +1551,7 @@
             }
         }, 60000);
 
-        console.log('✅ AI NEXUS ULTIMATE شغال بأربعة مفاتيح احتياطية متوازية');
+        console.log('✅ AI NEXUS ULTIMATE - وضع Proxy نشط');
     </script>
 </body>
-    </html>
+        </html>
