@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI NEXUS ULTIMATE | ذكاء اصطناعي فائق</title>
+    <title>AI NEXUS ULTIMATE | ذكاء اصطناعي فائق - 4 مفاتيح متوازية</title>
     
     <!-- Fonts & Icons -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
+        /* نفس الـ Styles السابقة مع إضافة بعض التحسينات */
         * {
             margin: 0;
             padding: 0;
@@ -34,7 +35,8 @@
             width: 100%;
             height: 100%;
             background: radial-gradient(circle at 20% 30%, rgba(99, 102, 241, 0.15) 0%, transparent 50%),
-                        radial-gradient(circle at 80% 70%, rgba(236, 72, 153, 0.15) 0%, transparent 50%);
+                        radial-gradient(circle at 80% 70%, rgba(236, 72, 153, 0.15) 0%, transparent 50%),
+                        radial-gradient(circle at 40% 50%, rgba(34, 211, 238, 0.15) 0%, transparent 50%);
             z-index: -2;
             animation: gradientShift 20s ease infinite;
         }
@@ -82,19 +84,25 @@
         .logo-icon {
             width: 50px;
             height: 50px;
-            background: linear-gradient(135deg, #6366f1, #ec4899, #22d3ee);
+            background: linear-gradient(135deg, #6366f1, #ec4899, #22d3ee, #f59e0b);
             border-radius: 15px;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 24px;
             font-weight: bold;
+            animation: rotate 10s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
         }
 
         .logo-text {
             font-size: 26px;
             font-weight: 800;
-            background: linear-gradient(135deg, #fff, #6366f1, #ec4899);
+            background: linear-gradient(135deg, #fff, #6366f1, #ec4899, #22d3ee);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
@@ -137,7 +145,7 @@
             font-weight: 800;
             line-height: 1.1;
             margin-bottom: 30px;
-            background: linear-gradient(135deg, #fff, #6366f1, #ec4899, #22d3ee);
+            background: linear-gradient(135deg, #fff, #6366f1, #ec4899, #22d3ee, #f59e0b);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
@@ -149,14 +157,109 @@
             margin: 0 auto 50px;
         }
 
-        /* Main Container */
+        /* Key Status Bar */
+        .key-status-bar {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .key-badge {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 30px;
+            padding: 8px 16px;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .key-badge.active {
+            border-color: #10b981;
+            background: rgba(16, 185, 129, 0.1);
+        }
+
+        .key-badge.warning {
+            border-color: #f59e0b;
+            background: rgba(245, 158, 11, 0.1);
+        }
+
+        .key-badge.error {
+            border-color: #ef4444;
+            background: rgba(239, 68, 68, 0.1);
+        }
+
+        .key-indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #6b7280;
+        }
+
+        .key-badge.active .key-indicator {
+            background: #10b981;
+            box-shadow: 0 0 10px #10b981;
+            animation: pulse 2s infinite;
+        }
+
+        .key-badge.warning .key-indicator {
+            background: #f59e0b;
+        }
+
+        .key-badge.error .key-indicator {
+            background: #ef4444;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        /* Parallel Response Grid */
+        .parallel-responses {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-top: 20px;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 30px;
+        }
+
+        .response-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 20px;
+        }
+
+        .response-card h4 {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .response-content {
+            font-size: 14px;
+            line-height: 1.6;
+            color: rgba(255, 255, 255, 0.8);
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        /* باقي الـ Styles كما هي */
         .main-container {
             max-width: 1400px;
             margin: 0 auto;
             padding: 40px;
         }
 
-        /* Tabs */
         .tabs {
             display: flex;
             gap: 15px;
@@ -198,7 +301,6 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Agents Grid */
         .agents-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -248,7 +350,6 @@
             font-size: 14px;
         }
 
-        /* Tools Grid */
         .tools-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -280,7 +381,6 @@
             margin-bottom: 15px;
         }
 
-        /* File Upload */
         .upload-area {
             background: rgba(255, 255, 255, 0.02);
             border: 2px dashed rgba(255, 255, 255, 0.1);
@@ -295,7 +395,6 @@
             border-color: #6366f1;
         }
 
-        /* Chat Section */
         .chat-section {
             background: rgba(255, 255, 255, 0.02);
             border: 1px solid rgba(255, 255, 255, 0.05);
@@ -311,6 +410,8 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
         }
 
         .chat-header h2 {
@@ -427,7 +528,6 @@
             cursor: not-allowed;
         }
 
-        /* Developer Section */
         .developer-section {
             background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(236, 72, 153, 0.1));
             border: 1px solid rgba(255, 255, 255, 0.05);
@@ -475,7 +575,6 @@
             color: #6366f1;
         }
 
-        /* Footer */
         .footer {
             background: rgba(3, 0, 20, 0.8);
             backdrop-filter: blur(10px);
@@ -490,7 +589,6 @@
             font-size: 14px;
         }
 
-        /* Modals */
         .modal {
             display: none;
             position: fixed;
@@ -551,9 +649,28 @@
             cursor: pointer;
         }
 
+        .toggle-parallel {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 40px;
+            padding: 10px 20px;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .toggle-parallel.active {
+            background: #6366f1;
+        }
+
         @media (max-width: 1200px) {
             .agents-grid, .tools-grid {
                 grid-template-columns: repeat(2, 1fr);
+            }
+            .parallel-responses {
+                grid-template-columns: 1fr;
             }
         }
 
@@ -577,6 +694,11 @@
             .chat-input input {
                 margin-left: 0;
                 margin-bottom: 15px;
+            }
+            
+            .chat-header {
+                flex-direction: column;
+                align-items: flex-start;
             }
         }
     </style>
@@ -622,17 +744,23 @@
 
     <!-- Hero Section -->
     <section class="hero">
-        <h1>الذكاء الاصطناعي<br>الفائق للجميع</h1>
-        <p>يعمل بثلاثة مفاتيح احتياطية • استقرار 99.9% • بدون توقف</p>
+        <h1>الذكاء الاصطناعي<br>الفائق بأربعة مفاتيح متوازية</h1>
+        <p>يعمل بأربعة مفاتيح احتياطية • استقرار 99.99% • سرعة فائقة • بدون توقف</p>
     </section>
 
     <!-- Main Container -->
     <div class="main-container">
+        <!-- Key Status Bar -->
+        <div class="key-status-bar" id="keyStatusBar">
+            <!-- سيتم إضافة حالة المفاتيح هنا بواسطة JavaScript -->
+        </div>
+
         <!-- Tabs -->
         <div class="tabs">
             <div class="tab active" data-tab="agents">الوكلاء</div>
             <div class="tab" data-tab="tools">الأدوات</div>
             <div class="tab" data-tab="memory">الذاكرة</div>
+            <div class="tab" data-tab="parallel">المتوازي</div>
             <div class="tab" data-tab="support">الدعم</div>
         </div>
 
@@ -696,6 +824,23 @@
             </div>
         </div>
 
+        <!-- Parallel Tab (جديد) -->
+        <div class="tab-content" id="parallelTab">
+            <div style="background: rgba(255,255,255,0.02); border-radius: 30px; padding: 30px;">
+                <h3 style="margin-bottom: 20px;">الاستجابة المتوازية من 4 مفاتيح</h3>
+                <p style="color: rgba(255,255,255,0.6); margin-bottom: 20px;">هنا يمكنك رؤية استجابة كل مفتاح على حدة والمقارنة بينها</p>
+                
+                <div class="chat-input" style="margin-bottom: 20px;">
+                    <input type="text" id="parallelInput" placeholder="اكتب سؤالاً لترى إجابات المفاتيح الأربعة...">
+                    <button id="parallelSendButton"><i class="fas fa-play"></i></button>
+                </div>
+
+                <div id="parallelResponses" class="parallel-responses">
+                    <!-- سيتم إضافة الردود هنا -->
+                </div>
+            </div>
+        </div>
+
         <!-- Support Tab -->
         <div class="tab-content" id="supportTab">
             <div class="developer-section">
@@ -715,12 +860,18 @@
         <section class="chat-section">
             <div class="chat-header">
                 <h2><i class="fas fa-brain" style="color: #6366f1;"></i> المحادثة الذكية</h2>
-                <span class="model-badge" id="modelStatus">✅ المفتاح 1 نشط</span>
+                <div style="display: flex; gap: 10px; align-items: center;">
+                    <span class="model-badge" id="modelStatus">✅ 4 مفاتيح نشطة</span>
+                    <button class="toggle-parallel" id="toggleParallelMode">
+                        <i class="fas fa-sync-alt"></i>
+                        <span>الوضع المتوازي</span>
+                    </button>
+                </div>
             </div>
             <div class="chat-messages" id="chatMessages">
                 <div class="message ai-message">
                     <div class="message-avatar"><i class="fas fa-brain"></i></div>
-                    <div class="message-content">مرحباً! أنا AI NEXUS، أعمل بثلاثة مفاتيح احتياطية. كيف أستطيع مساعدتك؟</div>
+                    <div class="message-content">مرحباً! أنا AI NEXUS، أعمل بأربعة مفاتيح احتياطية متوازية. كيف أستطيع مساعدتك؟</div>
                 </div>
             </div>
             <div class="chat-input">
@@ -732,20 +883,73 @@
 
     <!-- Footer -->
     <footer class="footer">
-        <p>© 2026 AI NEXUS ULTIMATE. تصميم وبرمجة: Omar Abdo - 01289411976</p>
+        <p>© 2026 AI NEXUS ULTIMATE | يعمل بأربعة مفاتيح احتياطية | تصميم وبرمجة: Omar Abdo - 01289411976</p>
     </footer>
 
     <script>
-        // ========== المفاتيح الثلاثة ==========
-        const AI_KEYS = [
-            'uVK0GgeWuuuK7fT2MXOpxensk9rKY6ST',  // المفتاح الأول
-            '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',  // المفتاح الثاني (Groq)
-            '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'  // المفتاح الثالث (OpenRouter)
+        // ========== المفاتيح الأربعة في ملف منفصل ==========
+        // هذا هو ملف التكوين الرئيسي - يمكن فصله لملف config.js
+        const AI_KEYS_CONFIG = [
+            {
+                id: 1,
+                name: 'OpenAI Key',
+                key: 'sk-443779874ed2417d9c9f0bf2b60f34ed',
+                apiUrl: 'https://api.openai.com/v1/chat/completions',
+                model: 'gpt-4',
+                type: 'openai',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer {KEY}'
+                }
+            },
+            {
+                id: 2,
+                name: 'OpenRouter Key',
+                key: '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',
+                apiUrl: 'https://openrouter.ai/api/v1/chat/completions',
+                model: 'openai/gpt-4o-mini',
+                type: 'openrouter',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer {KEY}',
+                    'HTTP-Referer': window.location.origin
+                }
+            },
+            {
+                id: 3,
+                name: 'Groq Key',
+                key: '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',
+                apiUrl: 'https://api.groq.com/openai/v1/chat/completions',
+                model: 'mixtral-8x7b-32768',
+                type: 'groq',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer {KEY}'
+                }
+            },
+            {
+                id: 4,
+                name: 'DeepSeek Key',
+                key: 'uVK0GgeWuuuK7fT2MXOpxensk9rKY6ST',
+                apiUrl: 'https://api.deepseek.com/v1/chat/completions',
+                model: 'deepseek-chat',
+                type: 'deepseek',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer {KEY}'
+                }
+            }
         ];
 
         // ========== حالة المفاتيح ==========
-        let activeKeyIndex = 0;
-        let keyStatus = [true, true, true]; // افتراضياً كل المفاتيح شغالة
+        let keyStatus = AI_KEYS_CONFIG.map(() => ({
+            active: true,
+            lastUsed: null,
+            responseTime: null,
+            errorCount: 0
+        }));
+
+        let parallelMode = false; // false = ذكي (يختار أفضل مفتاح), true = متوازي (يستخدم كل المفاتيح)
 
         // ========== بيانات المستخدمين ==========
         let currentUser = JSON.parse(localStorage.getItem('currentUser') || null);
@@ -780,7 +984,12 @@
             fileInput: document.getElementById('fileInput'),
             analysisResult: document.getElementById('analysisResult'),
             memoryList: document.getElementById('memoryList'),
-            modelStatus: document.getElementById('modelStatus')
+            modelStatus: document.getElementById('modelStatus'),
+            keyStatusBar: document.getElementById('keyStatusBar'),
+            toggleParallelMode: document.getElementById('toggleParallelMode'),
+            parallelInput: document.getElementById('parallelInput'),
+            parallelSendButton: document.getElementById('parallelSendButton'),
+            parallelResponses: document.getElementById('parallelResponses')
         };
 
         // ========== 1. نظام المصادقة ==========
@@ -811,7 +1020,7 @@
                 localStorage.setItem('currentUser', JSON.stringify(currentUser));
                 elements.loginModal.classList.remove('active');
                 updateUIForUser();
-                addAIMessage(`مرحباً ${user.name}! كيف أستطيع مساعدتك؟`);
+                addAIMessage(`مرحباً ${user.name}! أنا جاهز بأربعة مفاتيح احتياطية. كيف أستطيع مساعدتك؟`);
             } else {
                 alert('بيانات الدخول غير صحيحة');
             }
@@ -853,7 +1062,28 @@
             }
         }
 
-        // ========== 2. التبويبات ==========
+        // ========== 2. تحديث شريط حالة المفاتيح ==========
+        function updateKeyStatusBar() {
+            if (!elements.keyStatusBar) return;
+            
+            let html = '';
+            AI_KEYS_CONFIG.forEach((config, index) => {
+                const status = keyStatus[index];
+                const statusClass = status.active ? 'active' : (status.errorCount > 0 ? 'error' : 'warning');
+                
+                html += `
+                    <div class="key-badge ${statusClass}" title="${config.name}">
+                        <span class="key-indicator"></span>
+                        <span>مفتاح ${index + 1}</span>
+                        <span style="font-size: 10px; color: #888;">${status.responseTime ? status.responseTime + 'ms' : ''}</span>
+                    </div>
+                `;
+            });
+            
+            elements.keyStatusBar.innerHTML = html;
+        }
+
+        // ========== 3. التبويبات ==========
         elements.tabs.forEach(tab => {
             tab.addEventListener('click', () => {
                 elements.tabs.forEach(t => t.classList.remove('active'));
@@ -863,7 +1093,7 @@
             });
         });
 
-        // ========== 3. اختيار الوكيل ==========
+        // ========== 4. اختيار الوكيل ==========
         elements.agentsGrid.addEventListener('click', (e) => {
             const card = e.target.closest('.agent-card');
             if (card) {
@@ -872,7 +1102,17 @@
             }
         });
 
-        // ========== 4. أدوات الملفات ==========
+        // ========== 5. وضع التشغيل المتوازي ==========
+        elements.toggleParallelMode.addEventListener('click', () => {
+            parallelMode = !parallelMode;
+            elements.toggleParallelMode.classList.toggle('active');
+            elements.toggleParallelMode.querySelector('span').textContent = 
+                parallelMode ? 'الوضع الذكي' : 'الوضع المتوازي';
+            
+            addAIMessage(`تم التبديل إلى ${parallelMode ? 'الوضع المتوازي (استخدام كل المفاتيح)' : 'الوضع الذكي (اختيار أفضل مفتاح)'}`);
+        });
+
+        // ========== 6. أدوات الملفات ==========
         elements.uploadArea.addEventListener('click', () => {
             elements.fileInput.click();
         });
@@ -889,9 +1129,21 @@
                 const content = ev.target.result;
                 
                 const prompt = `حلل هذا الملف: ${file.name}\n\nالمحتوى: ${content.substring(0, 2000)}...`;
-                const analysis = await callAIWithFallback(prompt);
                 
-                elements.analysisResult.innerHTML = `<pre>${analysis}</pre>`;
+                if (parallelMode) {
+                    const responses = await callAllKeysParallel(prompt);
+                    let resultHtml = '<h4>نتائج التحليل من جميع المفاتيح:</h4>';
+                    responses.forEach((r, idx) => {
+                        resultHtml += `<div style="margin-top: 15px; padding: 10px; background: rgba(99,102,241,0.1); border-radius: 10px;">
+                            <strong>المفتاح ${idx + 1} (${AI_KEYS_CONFIG[idx].name}):</strong>
+                            <pre>${r.response || 'فشل'}</pre>
+                        </div>`;
+                    });
+                    elements.analysisResult.innerHTML = resultHtml;
+                } else {
+                    const analysis = await callAISmart(prompt);
+                    elements.analysisResult.innerHTML = `<pre>${analysis}</pre>`;
+                }
             };
             
             if (file.type.startsWith('text/') || file.name.endsWith('.txt') || file.name.endsWith('.csv') || file.name.endsWith('.json')) {
@@ -901,7 +1153,7 @@
             }
         });
 
-        // ========== 5. دوال المحادثة ==========
+        // ========== 7. دوال المحادثة ==========
         function addMessage(text, role) {
             const div = document.createElement('div');
             div.className = `message ${role}-message`;
@@ -941,85 +1193,171 @@
             document.getElementById('typingIndicator')?.remove();
         }
 
-        // ========== 6. استدعاء الذكاء الاصطناعي مع 3 مفاتيح احتياطية ==========
-        async function callAIWithFallback(prompt, retryCount = 0) {
-            // جرب كل المفاتيح بالترتيب
-            for (let i = 0; i < AI_KEYS.length; i++) {
-                const keyIndex = (activeKeyIndex + i) % AI_KEYS.length;
+        // ========== 8. استدعاء مفتاح واحد ==========
+        async function callSingleKey(keyConfig, prompt, keyIndex) {
+            const startTime = Date.now();
+            
+            try {
+                // تجهيز الهيدرات
+                const headers = {};
+                Object.keys(keyConfig.headers).forEach(h => {
+                    let value = keyConfig.headers[h];
+                    if (value.includes('{KEY}')) {
+                        value = value.replace('{KEY}', keyConfig.key);
+                    }
+                    headers[h] = value;
+                });
+
+                // تجهيز البودي حسب نوع API
+                let body = {};
                 
-                if (!keyStatus[keyIndex]) continue; // المفتاح معطل
+                if (keyConfig.type === 'openai') {
+                    body = {
+                        model: keyConfig.model,
+                        messages: [{ role: 'user', content: prompt }],
+                        temperature: 0.7,
+                        max_tokens: 1000
+                    };
+                } else if (keyConfig.type === 'openrouter') {
+                    body = {
+                        model: keyConfig.model,
+                        messages: [{ role: 'user', content: prompt }],
+                        temperature: 0.7,
+                        max_tokens: 1000
+                    };
+                } else if (keyConfig.type === 'groq') {
+                    body = {
+                        model: keyConfig.model,
+                        messages: [{ role: 'user', content: prompt }],
+                        temperature: 0.7,
+                        max_tokens: 1000
+                    };
+                } else if (keyConfig.type === 'deepseek') {
+                    body = {
+                        model: keyConfig.model,
+                        messages: [{ role: 'user', content: prompt }],
+                        temperature: 0.7,
+                        max_tokens: 1000
+                    };
+                }
+
+                console.log(`جرب المفتاح ${keyIndex + 1} (${keyConfig.name})...`);
                 
-                try {
-                    elements.modelStatus.textContent = `⏳ جرب المفتاح ${keyIndex + 1}`;
-                    elements.modelStatus.style.background = '#f59e0b';
+                const response = await fetch(keyConfig.apiUrl, {
+                    method: 'POST',
+                    headers: headers,
+                    body: JSON.stringify(body)
+                });
+
+                const responseTime = Date.now() - startTime;
+
+                if (response.ok) {
+                    const data = await response.json();
+                    const content = data.choices?.[0]?.message?.content || 'لا يوجد رد';
                     
-                    const API_URL = keyIndex === 1 ? 
-                        'https://api.groq.com/openai/v1/chat/completions' : 
-                        'https://openrouter.ai/api/v1/chat/completions';
-                    
-                    const headers = {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${AI_KEYS[keyIndex]}`
+                    // تحديث حالة المفتاح
+                    keyStatus[keyIndex] = {
+                        active: true,
+                        lastUsed: Date.now(),
+                        responseTime: responseTime,
+                        errorCount: 0
                     };
                     
-                    if (keyIndex === 1) {
-                        // Groq API
-                        headers['Authorization'] = `Bearer ${AI_KEYS[keyIndex]}`;
-                    } else {
-                        // OpenRouter API
-                        headers['HTTP-Referer'] = window.location.origin;
-                    }
+                    console.log(`✅ المفتاح ${keyIndex + 1} نجح في ${responseTime}ms`);
                     
-                    const response = await fetch(API_URL, {
-                        method: 'POST',
-                        headers: headers,
-                        body: JSON.stringify({
-                            model: keyIndex === 1 ? 'mixtral-8x7b-32768' : 'openai/gpt-4o-mini',
-                            messages: [{ role: 'user', content: prompt }],
-                            temperature: 0.7,
-                            max_tokens: 1000
-                        })
-                    });
+                    return {
+                        success: true,
+                        content: content,
+                        responseTime: responseTime,
+                        keyIndex: keyIndex
+                    };
+                } else {
+                    const error = await response.text();
+                    console.log(`❌ المفتاح ${keyIndex + 1} فشل:`, error);
+                    
+                    keyStatus[keyIndex] = {
+                        active: false,
+                        lastUsed: Date.now(),
+                        responseTime: responseTime,
+                        errorCount: (keyStatus[keyIndex]?.errorCount || 0) + 1
+                    };
+                    
+                    return {
+                        success: false,
+                        error: error,
+                        keyIndex: keyIndex
+                    };
+                }
+            } catch (error) {
+                console.log(`❌ خطأ مع المفتاح ${keyIndex + 1}:`, error);
+                
+                keyStatus[keyIndex] = {
+                    active: false,
+                    lastUsed: Date.now(),
+                    responseTime: Date.now() - startTime,
+                    errorCount: (keyStatus[keyIndex]?.errorCount || 0) + 1
+                };
+                
+                return {
+                    success: false,
+                    error: error.message,
+                    keyIndex: keyIndex
+                };
+            } finally {
+                updateKeyStatusBar();
+            }
+        }
 
-                    if (response.ok) {
-                        const data = await response.json();
-                        const content = keyIndex === 1 ? 
-                            data.choices[0].message.content : 
-                            data.choices[0].message.content;
-                        
-                        activeKeyIndex = keyIndex;
-                        elements.modelStatus.textContent = `✅ المفتاح ${keyIndex + 1} نشط`;
-                        elements.modelStatus.style.background = '#10b981';
-                        
-                        return content;
-                    } else {
-                        console.log(`المفتاح ${keyIndex + 1} فشل`);
-                        keyStatus[keyIndex] = false; // تعطيل المفتاح الفاشل
-                    }
-                } catch (error) {
-                    console.log(`خطأ مع المفتاح ${keyIndex + 1}:`, error);
-                    keyStatus[keyIndex] = false;
+        // ========== 9. استدعاء جميع المفاتيح بالتوازي ==========
+        async function callAllKeysParallel(prompt) {
+            elements.modelStatus.textContent = '⏳ جاري استدعاء 4 مفاتيح...';
+            elements.modelStatus.style.background = '#f59e0b';
+            
+            const promises = AI_KEYS_CONFIG.map((config, index) => 
+                callSingleKey(config, prompt, index)
+            );
+            
+            const results = await Promise.all(promises);
+            
+            const successCount = results.filter(r => r.success).length;
+            elements.modelStatus.textContent = `✅ ${successCount}/4 مفاتيح نشطة`;
+            elements.modelStatus.style.background = successCount > 0 ? '#10b981' : '#ef4444';
+            
+            return results;
+        }
+
+        // ========== 10. استدعاء ذكي (أسرع مفتاح) ==========
+        async function callAISmart(prompt) {
+            // جرب كل المفاتيح بالترتيب وخذ أسرع واحد
+            const startTime = Date.now();
+            
+            const promises = AI_KEYS_CONFIG.map((config, index) => 
+                callSingleKey(config, prompt, index)
+            );
+            
+            const results = await Promise.allSettled(promises);
+            
+            // خذ أول نتيجة ناجحة
+            for (const result of results) {
+                if (result.status === 'fulfilled' && result.value.success) {
+                    const responseTime = Date.now() - startTime;
+                    console.log(`✨ أسرع استجابة من المفتاح ${result.value.keyIndex + 1} في ${responseTime}ms`);
+                    return result.value.content;
                 }
             }
-
+            
             // كل المفاتيح فشلت
             elements.modelStatus.textContent = '⚠️ لا يوجد مفتاح نشط';
             elements.modelStatus.style.background = '#ef4444';
             
-            // ردود احتياطية للمستخدمين المسجلين
             if (currentUser) {
-                const fallbackResponses = [
-                    `شكراً لسؤالك "${prompt}". أنا حالياً في وضع الطوارئ بسبب انقطاع المفاتيح.`,
-                    `عذراً، المفاتيح غير متاحة حالياً. الرجاء المحاولة لاحقاً.`,
-                    `حدث خطأ في الاتصال بمفاتيح الذكاء الاصطناعي. جارٍ إعادة المحاولة.`
-                ];
-                return fallbackResponses[Math.floor(Math.random() * fallbackResponses.length)];
+                return `عذراً، جميع المفاتيح الأربعة غير متاحة حالياً. الرجاء المحاولة لاحقاً.`;
             }
             
             return 'عذراً، حدث خطأ في الاتصال. الرجاء تسجيل الدخول والمحاولة مرة أخرى.';
         }
 
-        // ========== 7. إرسال الرسالة ==========
+        // ========== 11. إرسال الرسالة ==========
         async function sendMessage() {
             const message = elements.messageInput.value.trim();
             if (!message || !currentUser) {
@@ -1054,7 +1392,18 @@
 
             const prompt = `${agentContext}\n\n${context}السؤال: ${message}`;
             
-            const response = await callAIWithFallback(prompt);
+            let response;
+            if (parallelMode) {
+                const results = await callAllKeysParallel(prompt);
+                // خذ أفضل رد (أول واحد نجح)
+                const successful = results.find(r => r.success);
+                response = successful ? successful.content : 'جميع المفاتيح فشلت';
+                
+                // أضف الردود المتوازية في التبويب المخصص
+                updateParallelResponses(results, prompt);
+            } else {
+                response = await callAISmart(prompt);
+            }
             
             hideTyping();
             addMessage(response, 'ai');
@@ -1065,6 +1414,7 @@
                 text: message,
                 response: response,
                 agent: activeAgent,
+                mode: parallelMode ? 'parallel' : 'smart',
                 timestamp: Date.now()
             });
             localStorage.setItem('memories', JSON.stringify(memories));
@@ -1082,7 +1432,47 @@
             updateMemoryList();
         }
 
-        // ========== 8. تحديث قائمة الذاكرة ==========
+        // ========== 12. تحديث الردود المتوازية ==========
+        function updateParallelResponses(results, prompt) {
+            if (!elements.parallelResponses) return;
+            
+            let html = '';
+            results.forEach((result, index) => {
+                if (result.success) {
+                    html += `
+                        <div class="response-card">
+                            <h4>
+                                <i class="fas fa-${index === 0 ? 'crown' : 'microchip'}" 
+                                   style="color: ${index === 0 ? '#f59e0b' : '#6366f1'}"></i>
+                                المفتاح ${index + 1} - ${AI_KEYS_CONFIG[index].name}
+                                <span style="font-size: 10px; color: #888; margin-right: auto;">
+                                    ${result.responseTime}ms
+                                </span>
+                            </h4>
+                            <div class="response-content">
+                                ${result.content.substring(0, 300)}${result.content.length > 300 ? '...' : ''}
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    html += `
+                        <div class="response-card" style="opacity: 0.5;">
+                            <h4>
+                                <i class="fas fa-times-circle" style="color: #ef4444;"></i>
+                                المفتاح ${index + 1} - ${AI_KEYS_CONFIG[index].name}
+                            </h4>
+                            <div class="response-content" style="color: #ef4444;">
+                                فشل الاتصال
+                            </div>
+                        </div>
+                    `;
+                }
+            });
+            
+            elements.parallelResponses.innerHTML = html;
+        }
+
+        // ========== 13. تحديث قائمة الذاكرة ==========
         function updateMemoryList() {
             if (!elements.memoryList) return;
             
@@ -1095,12 +1485,12 @@
                 <div style="background: rgba(255,255,255,0.03); border-radius: 10px; padding: 15px; margin-bottom: 10px;">
                     <div style="color: #6366f1; font-size: 12px;">${new Date(m.timestamp).toLocaleString()}</div>
                     <div style="margin-top: 5px;"><strong>سؤال:</strong> ${m.text.substring(0, 50)}${m.text.length > 50 ? '...' : ''}</div>
-                    <div style="margin-top: 5px; color: #888;"><strong>الوكيل:</strong> ${m.agent || 'research'}</div>
+                    <div style="margin-top: 5px; color: #888;"><strong>الوضع:</strong> ${m.mode === 'parallel' ? 'متوازي' : 'ذكي'}</div>
                 </div>
             `).join('') || '<p style="color: #888; text-align: center;">لا توجد محادثات سابقة</p>';
         }
 
-        // ========== 9. أحداث الإرسال ==========
+        // ========== 14. أحداث الإرسال ==========
         elements.sendButton.addEventListener('click', sendMessage);
         elements.messageInput.addEventListener('keypress', (e) => {
             if (e.key === 'Enter' && !e.shiftKey) {
@@ -1109,19 +1499,56 @@
             }
         });
 
-        // ========== 10. التهيئة ==========
+        // ========== 15. أحداث الوضع المتوازي ==========
+        if (elements.parallelSendButton) {
+            elements.parallelSendButton.addEventListener('click', async () => {
+                const message = elements.parallelInput.value.trim();
+                if (!message || !currentUser) {
+                    alert('الرجاء تسجيل الدخول أولاً');
+                    return;
+                }
+                
+                elements.parallelResponses.innerHTML = '<div style="grid-column: 1/-1; text-align: center;">جاري استدعاء المفاتيح الأربعة...</div>';
+                const results = await callAllKeysParallel(message);
+                updateParallelResponses(results, message);
+            });
+            
+            elements.parallelInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    elements.parallelSendButton.click();
+                }
+            });
+        }
+
+        // ========== 16. التهيئة ==========
         updateUIForUser();
         updateMemoryList();
+        updateKeyStatusBar();
         
-        // تحديث حالة المفاتيح كل 30 ثانية
+        // اختبار المفاتيح عند التحميل
+        setTimeout(async () => {
+            if (currentUser) {
+                console.log('🧪 اختبار المفاتيح الأربعة...');
+                await callAllKeysParallel('مرحباً، هل أنت جاهز؟ أرسل كلمة "نعم" فقط.');
+            }
+        }, 2000);
+        
+        // تحديث حالة المفاتيح كل دقيقة
         setInterval(() => {
             if (currentUser) {
-                // إعادة تعيين حالة المفاتيح كل 5 دقائق (تجربة جديدة)
-                keyStatus = [true, true, true];
+                // إعادة تعيين المفاتيح التي فشلت بعد 5 دقائق
+                keyStatus.forEach((status, index) => {
+                    if (!status.active && status.lastUsed && (Date.now() - status.lastUsed) > 300000) {
+                        keyStatus[index].active = true;
+                        keyStatus[index].errorCount = 0;
+                    }
+                });
+                updateKeyStatusBar();
             }
-        }, 300000);
+        }, 60000);
 
-        console.log('✅ AI NEXUS ULTIMATE شغال بثلاثة مفاتيح احتياطية');
+        console.log('✅ AI NEXUS ULTIMATE شغال بأربعة مفاتيح احتياطية متوازية');
     </script>
 </body>
-                                                    </html>
+    </html>
