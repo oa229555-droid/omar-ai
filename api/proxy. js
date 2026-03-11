@@ -1,4 +1,3 @@
-// هذا الملف يحل مشكلة CORS والمفاتيح في Vercel
 export default async function handler(req, res) {
   // السماح بالطلبات من أي مصدر (CORS)
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -13,7 +12,12 @@ export default async function handler(req, res) {
   // استقبال الطلب
   if (req.method === 'POST') {
     try {
-      const { prompt, keyIndex } = req.body;
+      const { prompt, keyIndex, allKeys, smartMode, test } = req.body;
+      
+      // للاختبار فقط
+      if (test) {
+        return res.status(200).json({ success: true, message: 'Proxy is working' });
+      }
       
       // المفاتيح الأربعة (مخزنة بأمان على السيرفر مش في المتصفح)
       const AI_KEYS = [
@@ -21,63 +25,161 @@ export default async function handler(req, res) {
           name: 'OpenAI',
           key: process.env.OPENAI_KEY || 'sk-443779874ed2417d9c9f0bf2b60f34ed',
           url: 'https://api.openai.com/v1/chat/completions',
-          model: 'gpt-4'
+          model: 'gpt-4',
+          type: 'openai'
         },
         { 
           name: 'OpenRouter',
           key: process.env.OPENROUTER_KEY || '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',
           url: 'https://openrouter.ai/api/v1/chat/completions',
-          model: 'openai/gpt-4o-mini'
+          model: 'openai/gpt-4o-mini',
+          type: 'openrouter'
         },
         { 
           name: 'Groq',
           key: process.env.GROQ_KEY || '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',
           url: 'https://api.groq.com/openai/v1/chat/completions',
-          model: 'mixtral-8x7b-32768'
+          model: 'mixtral-8x7b-32768',
+          type: 'groq'
         },
         { 
           name: 'DeepSeek',
           key: process.env.DEEPSEEK_KEY || 'uVK0GgeWuuuK7fT2MXOpxensk9rKY6ST',
           url: 'https://api.deepseek.com/v1/chat/completions',
-          model: 'deepseek-chat'
+          model: 'deepseek-chat',
+          type: 'deepseek'
         }
       ];
 
-      // نجرب كل المفاتيح
-      const results = [];
-      
-      for (let i = 0; i < AI_KEYS.length; i++) {
-        const config = AI_KEYS[i];
+      // إذا طلب مفتاح واحد فقط
+      if (keyIndex !== undefined && !allKeys && !smartMode) {
+        const config = AI_KEYS[keyIndex];
+        if (!config) {
+          return res.status(400).json({ success: false, error: 'Invalid key index' });
+        }
+
+        const startTime = Date.now();
+        
         try {
+          const headers = {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${config.key}`
+          };
+          
+          if (config.type === 'openrouter') {
+            headers['HTTP-Referer'] = 'https://omar-ai-seven.vercel.app';
+          }
+          
           const response = await fetch(config.url, {
             method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${config.key}`,
-              ...(config.name === 'OpenRouter' ? { 'HTTP-Referer': 'https://omar-ai-seven.vercel.app' } : {})
-            },
+            headers: headers,
             body: JSON.stringify({
               model: config.model,
               messages: [{ role: 'user', content: prompt }],
               temperature: 0.7,
-              max_tokens: 500
+              max_tokens: 1000
             })
           });
 
+          const responseTime = Date.now() - startTime;
+
           if (response.ok) {
             const data = await response.json();
+            const content = data.choices[0].message.content;
+            
+            const results = new Array(AI_KEYS.length).fill(null);
+            results[keyIndex] = {
+              success: true,
+              keyIndex: keyIndex,
+              keyName: config.name,
+              content: content,
+              responseTime: responseTime
+            };
+            
+            return res.status(200).json({ 
+              success: true, 
+              results: results
+            });
+          } else {
+            const error = await response.text();
+            const results = new Array(AI_KEYS.length).fill(null);
+            results[keyIndex] = {
+              success: false,
+              keyIndex: keyIndex,
+              keyName: config.name,
+              error: `API Error: ${response.status}`,
+              responseTime: responseTime
+            };
+            
+            return res.status(200).json({ 
+              success: true, 
+              results: results
+            });
+          }
+        } catch (error) {
+          const results = new Array(AI_KEYS.length).fill(null);
+          results[keyIndex] = {
+            success: false,
+            keyIndex: keyIndex,
+            keyName: config.name,
+            error: error.message
+          };
+          
+          return res.status(200).json({ 
+            success: true, 
+            results: results
+          });
+        }
+      }
+      
+      // استدعاء كل المفاتيح (للحصول على كل الردود)
+      const results = [];
+      
+      for (let i = 0; i < AI_KEYS.length; i++) {
+        const config = AI_KEYS[i];
+        const startTime = Date.now();
+        
+        try {
+          const headers = {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${config.key}`
+          };
+          
+          if (config.type === 'openrouter') {
+            headers['HTTP-Referer'] = 'https://omar-ai-seven.vercel.app';
+          }
+          
+          const response = await fetch(config.url, {
+            method: 'POST',
+            headers: headers,
+            body: JSON.stringify({
+              model: config.model,
+              messages: [{ role: 'user', content: prompt }],
+              temperature: 0.7,
+              max_tokens: 1000
+            })
+          });
+
+          const responseTime = Date.now() - startTime;
+
+          if (response.ok) {
+            const data = await response.json();
+            const content = data.choices[0].message.content;
+            
             results.push({
               success: true,
               keyIndex: i,
               keyName: config.name,
-              content: data.choices[0].message.content
+              content: content,
+              responseTime: responseTime
             });
           } else {
             results.push({
               success: false,
               keyIndex: i,
               keyName: config.name,
-              error: 'فشل الاتصال'
+              error: `API Error: ${response.status}`,
+              responseTime: responseTime
             });
           }
         } catch (error) {
