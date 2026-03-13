@@ -1,0 +1,357 @@
+<!-- frontend/chat.html -->
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TITAN-OMEGA™ - المحادثة الذكية</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Highlight.js للكود -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    
+    <style>
+        body { font-family: 'Cairo', sans-serif; background: #0f172a; }
+        .chat-container { height: calc(100vh - 80px); }
+        .messages-container { height: calc(100vh - 200px); overflow-y: auto; }
+    </style>
+</head>
+<body class="text-white">
+    
+    <!-- شريط التنقل -->
+    <nav class="bg-gray-900/50 backdrop-blur-lg border-b border-gray-800">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-4">
+                    <button onclick="window.location.href='index.html'" class="text-2xl">
+                        <i class="fas fa-arrow-right"></i>
+                    </button>
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-gradient-to-r from-purple-600 to-blue-600 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-brain"></i>
+                        </div>
+                        <span class="text-xl font-bold gradient-text">TITAN-OMEGA™</span>
+                    </div>
+                </div>
+                
+                <div class="flex items-center gap-4">
+                    <!-- اختيار النموذج -->
+                    <select class="bg-gray-800 border border-gray-700 rounded-lg px-4 py-2" id="modelSelect">
+                        <option value="gpt4">GPT-4 Turbo</option>
+                        <option value="claude">Claude 3</option>
+                        <option value="gemini">Gemini Pro</option>
+                        <option value="mixtral">Mixtral 8x7B</option>
+                    </select>
+                    
+                    <!-- صورة المستخدم -->
+                    <div class="w-10 h-10 bg-purple-600 rounded-full flex items-center justify-center">
+                        <i class="fas fa-user"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- منطقة المحادثة -->
+    <div class="chat-container container mx-auto px-6 py-8">
+        <div class="flex gap-6 h-full">
+            <!-- الشريط الجانبي -->
+            <div class="w-80 bg-gray-800/50 rounded-2xl p-4 hidden lg:block">
+                <div class="mb-6">
+                    <h3 class="font-bold mb-3">محادثات حديثة</h3>
+                    <div class="space-y-2">
+                        <div class="bg-gray-700/50 rounded-lg p-3 cursor-pointer hover:bg-gray-700 transition">
+                            <div class="flex justify-between items-center">
+                                <span class="font-medium">تطوير موقع</span>
+                                <span class="text-xs text-gray-400">قبل ساعة</span>
+                            </div>
+                            <p class="text-sm text-gray-400 truncate">كيف يمكنني بناء موقع مثل...</p>
+                        </div>
+                        
+                        <div class="bg-gray-700/50 rounded-lg p-3 cursor-pointer hover:bg-gray-700 transition">
+                            <div class="flex justify-between items-center">
+                                <span class="font-medium">تحليل بيانات</span>
+                                <span class="text-xs text-gray-400">أمس</span>
+                            </div>
+                            <p class="text-sm text-gray-400 truncate">أريد تحليل ملف Excel...</p>
+                        </div>
+                        
+                        <div class="bg-gray-700/50 rounded-lg p-3 cursor-pointer hover:bg-gray-700 transition">
+                            <div class="flex justify-between items-center">
+                                <span class="font-medium">ترجمة مستند</span>
+                                <span class="text-xs text-gray-400">أمس</span>
+                            </div>
+                            <p class="text-sm text-gray-400 truncate">ترجم هذا النص للعربية...</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="font-bold mb-3">أدوات سريعة</h3>
+                    <div class="space-y-2">
+                        <button class="w-full bg-gray-700/50 rounded-lg p-3 text-right hover:bg-gray-700 transition flex items-center gap-3">
+                            <i class="fas fa-file-pdf text-red-400"></i>
+                            <span>تحميل PDF</span>
+                        </button>
+                        <button class="w-full bg-gray-700/50 rounded-lg p-3 text-right hover:bg-gray-700 transition flex items-center gap-3">
+                            <i class="fas fa-microphone text-green-400"></i>
+                            <span>إدخال صوتي</span>
+                        </button>
+                        <button class="w-full bg-gray-700/50 rounded-lg p-3 text-right hover:bg-gray-700 transition flex items-center gap-3">
+                            <i class="fas fa-image text-blue-400"></i>
+                            <span>توليد صورة</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- منطقة المحادثة الرئيسية -->
+            <div class="flex-1 flex flex-col">
+                <!-- الرسائل -->
+                <div class="messages-container space-y-6 pr-4" id="messagesContainer">
+                    <!-- رسالة الترحيب -->
+                    <div class="flex gap-4 message-enter">
+                        <div class="w-10 h-10 bg-gradient-to-r from-purple-600 to-blue-600 rounded-full flex items-center justify-center flex-shrink-0">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <div class="flex-1">
+                            <div class="bg-gray-800 rounded-2xl rounded-tr-none p-4 max-w-3xl">
+                                <p class="mb-2">مرحباً! أنا TITAN-OMEGA، الذكاء الاصطناعي الأكثر تطوراً. كيف يمكنني مساعدتك اليوم؟</p>
+                                <p class="text-sm text-gray-400">نموذج GPT-4 Turbo • 128K سياق</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- مثال لرسالة مستخدم -->
+                    <div class="flex gap-4 justify-end message-enter">
+                        <div class="flex-1 flex justify-end">
+                            <div class="bg-purple-600 rounded-2xl rounded-tl-none p-4 max-w-3xl">
+                                <p>اكتب لي كود آلة حاسبة بلغة Python</p>
+                            </div>
+                        </div>
+                        <div class="w-10 h-10 bg-gray-600 rounded-full flex items-center justify-center flex-shrink-0">
+                            <i class="fas fa-user"></i>
+                        </div>
+                    </div>
+                    
+                    <!-- مثال لرد AI مع كود -->
+                    <div class="flex gap-4 message-enter">
+                        <div class="w-10 h-10 bg-gradient-to-r from-purple-600 to-blue-600 rounded-full flex items-center justify-center flex-shrink-0">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <div class="flex-1">
+                            <div class="bg-gray-800 rounded-2xl rounded-tr-none p-4 max-w-3xl">
+                                <p class="mb-4">تفضل آلة حاسبة بسيطة بلغة Python:</p>
+                                
+                                <div class="code-block">
+                                    <button class="copy-button" onclick="copyCode(this)">
+                                        <i class="fas fa-copy"></i>
+                                    </button>
+                                    <pre><code class="language-python"># آلة حاسبة بسيطة
+def calculator():
+    while True:
+        print("\n1. جمع")
+        print("2. طرح")
+        print("3. ضرب")
+        print("4. قسمة")
+        print("5. خروج")
+        
+        choice = input("اختر العملية: ")
+        
+        if choice == '5':
+            break
+            
+        num1 = float(input("الرقم الأول: "))
+        num2 = float(input("الرقم الثاني: "))
+        
+        if choice == '1':
+            print(f"النتيجة: {num1 + num2}")
+        elif choice == '2':
+            print(f"النتيجة: {num1 - num2}")
+        elif choice == '3':
+            print(f"النتيجة: {num1 * num2}")
+        elif choice == '4':
+            if num2 != 0:
+                print(f"النتيجة: {num1 / num2}")
+            else:
+                print("خطأ: القسمة على صفر")
+
+if __name__ == "__main__":
+    calculator()</code></pre>
+                                </div>
+                                
+                                <p class="mt-4 text-sm text-gray-400">هل تريد شرح الكود أو تعديله؟</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- منطقة الإدخال -->
+                <div class="mt-6">
+                    <div class="bg-gray-800 rounded-2xl p-2 flex items-end gap-2">
+                        <button class="p-3 hover:bg-gray-700 rounded-xl transition">
+                            <i class="fas fa-paperclip text-gray-400"></i>
+                        </button>
+                        
+                        <textarea class="flex-1 bg-transparent border-0 outline-none resize-none max-h-32 p-3" 
+                                  rows="1" 
+                                  placeholder="اكتب رسالتك هنا..." 
+                                  id="messageInput"
+                                  oninput="autoResize(this)"></textarea>
+                        
+                        <button class="p-3 hover:bg-gray-700 rounded-xl transition">
+                            <i class="fas fa-microphone text-gray-400"></i>
+                        </button>
+                        
+                        <button class="p-3 bg-gradient-to-r from-purple-600 to-blue-600 rounded-xl hover:opacity-90 transition" onclick="sendMessage()">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                    
+                    <!-- اقتراحات سريعة -->
+                    <div class="flex gap-2 mt-4 flex-wrap">
+                        <button class="px-4 py-2 bg-gray-800 rounded-full text-sm hover:bg-gray-700 transition" onclick="setSuggestion('اكتب كود')">
+                            <i class="fas fa-code ml-1"></i> اكتب كود
+                        </button>
+                        <button class="px-4 py-2 bg-gray-800 rounded-full text-sm hover:bg-gray-700 transition" onclick="setSuggestion('ترجم')">
+                            <i class="fas fa-language ml-1"></i> ترجم
+                        </button>
+                        <button class="px-4 py-2 bg-gray-800 rounded-full text-sm hover:bg-gray-700 transition" onclick="setSuggestion('لخص')">
+                            <i class="fas fa-compress ml-1"></i> لخص
+                        </button>
+                        <button class="px-4 py-2 bg-gray-800 rounded-full text-sm hover:bg-gray-700 transition" onclick="setSuggestion('شرح')">
+                            <i class="fas fa-chalkboard-teacher ml-1"></i> شرح
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Highlight.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script>hljs.highlightAll();</script>
+    
+    <script>
+        // تكبير مساحة النص تلقائياً
+        function autoResize(textarea) {
+            textarea.style.height = 'auto';
+            textarea.style.height = (textarea.scrollHeight) + 'px';
+        }
+        
+        // نسخ الكود
+        function copyCode(button) {
+            const code = button.parentElement.querySelector('code').innerText;
+            navigator.clipboard.writeText(code);
+            
+            // تغيير الأيقونة مؤقتاً
+            const icon = button.querySelector('i');
+            icon.className = 'fas fa-check';
+            setTimeout(() => {
+                icon.className = 'fas fa-copy';
+            }, 2000);
+        }
+        
+        // إرسال رسالة
+        function sendMessage() {
+            const input = document.getElementById('messageInput');
+            const message = input.value.trim();
+            
+            if (!message) return;
+            
+            // إضافة رسالة المستخدم
+            addMessage(message, 'user');
+            input.value = '';
+            input.style.height = 'auto';
+            
+            // إظهار مؤشر الكتابة
+            showTypingIndicator();
+            
+            // محاكاة رد الذكاء الاصطناعي (يتم استبداله بـ API حقيقي)
+            setTimeout(() => {
+                hideTypingIndicator();
+                addMessage('تم استلام رسالتك! جاري المعالجة... هذا رد تجريبي.', 'ai');
+            }, 2000);
+        }
+        
+        function addMessage(text, sender) {
+            const container = document.getElementById('messagesContainer');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `flex gap-4 ${sender === 'user' ? 'justify-end' : ''} message-enter`;
+            
+            if (sender === 'user') {
+                messageDiv.innerHTML = `
+                    <div class="flex-1 flex justify-end">
+                        <div class="bg-purple-600 rounded-2xl rounded-tl-none p-4 max-w-3xl">
+                            <p>${text}</p>
+                        </div>
+                    </div>
+                    <div class="w-10 h-10 bg-gray-600 rounded-full flex items-center justify-center flex-shrink-0">
+                        <i class="fas fa-user"></i>
+                    </div>
+                `;
+            } else {
+                messageDiv.innerHTML = `
+                    <div class="w-10 h-10 bg-gradient-to-r from-purple-600 to-blue-600 rounded-full flex items-center justify-center flex-shrink-0">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <div class="flex-1">
+                        <div class="bg-gray-800 rounded-2xl rounded-tr-none p-4 max-w-3xl">
+                            <p>${text}</p>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            container.appendChild(messageDiv);
+            container.scrollTop = container.scrollHeight;
+        }
+        
+        function showTypingIndicator() {
+            const container = document.getElementById('messagesContainer');
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'flex gap-4';
+            typingDiv.id = 'typingIndicator';
+            typingDiv.innerHTML = `
+                <div class="w-10 h-10 bg-gradient-to-r from-purple-600 to-blue-600 rounded-full flex items-center justify-center flex-shrink-0">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <div class="flex-1">
+                    <div class="bg-gray-800 rounded-2xl rounded-tr-none p-4">
+                        <div class="typing-indicator">
+                            <div class="typing-dots">
+                                <span>.</span><span>.</span><span>.</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            container.appendChild(typingDiv);
+            container.scrollTop = container.scrollHeight;
+        }
+        
+        function hideTypingIndicator() {
+            const indicator = document.getElementById('typingIndicator');
+            if (indicator) indicator.remove();
+        }
+        
+        function setSuggestion(type) {
+            const suggestions = {
+                'اكتب كود': 'اكتب لي كود برنامج لإدارة المهام باستخدام React',
+                'ترجم': 'ترجم هذه الجملة إلى الإنجليزية: "مرحباً، كيف حالك؟"',
+                'لخص': 'لخص لي هذا النص: [الصق النص هنا]',
+                'شرح': 'اشرح لي كيف يعمل الذكاء الاصطناعي'
+            };
+            document.getElementById('messageInput').value = suggestions[type] || '';
+        }
+    </script>
+</body>
+  </html>
