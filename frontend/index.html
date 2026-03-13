@@ -1,0 +1,321 @@
+<!-- frontend/index.html -->
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TITAN-OMEGA™ - أقوى ذكاء اصطناعي في العالم</title>
+    
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="css/titan-style.css">
+    <link rel="stylesheet" href="css/animations.css">
+    
+    <!-- Three.js للخلفية ثلاثية الأبعاد -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+</head>
+<body>
+    <!-- خلفية ثلاثية الأبعاد متحركة -->
+    <canvas id="bg-canvas"></canvas>
+    
+    <!-- شريط التحميل -->
+    <div class="loading-bar" id="loadingBar"></div>
+    
+    <!-- شريط التنقل -->
+    <nav class="navbar glass-effect">
+        <div class="nav-container">
+            <div class="logo">
+                <img src="assets/logo.svg" alt="TITAN-OMEGA">
+                <span class="logo-text">TITAN-<span class="accent">OMEGA</span></span>
+            </div>
+            
+            <div class="nav-links">
+                <a href="#home" class="active"><i class="fas fa-home"></i> الرئيسية</a>
+                <a href="#dashboard"><i class="fas fa-chart-line"></i> لوحة التحكم</a>
+                <a href="#chat"><i class="fas fa-comment-dots"></i> المحادثة</a>
+                <a href="#training"><i class="fas fa-brain"></i> التدريب</a>
+                <a href="#models"><i class="fas fa-cubes"></i> النماذج</a>
+            </div>
+            
+            <div class="nav-actions">
+                <button class="btn-glow" onclick="toggleTheme()">
+                    <i class="fas fa-moon"></i>
+                </button>
+                <button class="btn-primary" onclick="showLoginModal()">
+                    <i class="fas fa-user-shield"></i> دخول
+                </button>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- الهيدر الرئيسي -->
+    <header id="home" class="hero">
+        <div class="hero-content">
+            <h1 class="glitch" data-text="TITAN-OMEGA™">TITAN-OMEGA™</h1>
+            <p class="hero-subtitle">أقوى محرك ذكاء اصطناعي في العالم</p>
+            
+            <div class="stats-container">
+                <div class="stat-card glass-effect">
+                    <div class="stat-value" id="modelSize">2048</div>
+                    <div class="stat-label">أبعاد النموذج</div>
+                </div>
+                <div class="stat-card glass-effect">
+                    <div class="stat-value" id="parameters">7B</div>
+                    <div class="stat-label">معامل</div>
+                </div>
+                <div class="stat-card glass-effect">
+                    <div class="stat-value" id="accuracy">99.9%</div>
+                    <div class="stat-label">دقة</div>
+                </div>
+                <div class="stat-card glass-effect">
+                    <div class="stat-value" id="uptime">24/7</div>
+                    <div class="stat-label">توفر</div>
+                </div>
+            </div>
+            
+            <div class="cta-buttons">
+                <button class="btn-cta-primary" onclick="startChat()">
+                    <i class="fas fa-robot"></i> جرب المحادثة
+                </button>
+                <button class="btn-cta-secondary" onclick="viewTraining()">
+                    <i class="fas fa-cogs"></i> شاهد التدريب
+                </button>
+            </div>
+        </div>
+    </header>
+    
+    <!-- قسم التدريب المباشر -->
+    <section id="training" class="training-section">
+        <h2 class="section-title">التدريب <span class="accent">المباشر</span></h2>
+        
+        <div class="training-container">
+            <div class="training-stats glass-effect">
+                <div class="stat-row">
+                    <span>حالة التدريب:</span>
+                    <span class="status-badge success" id="trainingStatus">نشط</span>
+                </div>
+                <div class="stat-row">
+                    <span>التقدم:</span>
+                    <span id="trainingProgress">78%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 78%"></div>
+                </div>
+                
+                <div class="stat-row">
+                    <span>الخسارة الحالية:</span>
+                    <span id="currentLoss">0.0234</span>
+                </div>
+                <div class="stat-row">
+                    <span>أفضل دقة:</span>
+                    <span id="bestAccuracy">98.7%</span>
+                </div>
+                <div class="stat-row">
+                    <span>وقت التدريب:</span>
+                    <span id="trainingTime">47:23</span>
+                </div>
+            </div>
+            
+            <div class="training-chart glass-effect">
+                <canvas id="lossChart"></canvas>
+            </div>
+            
+            <div class="training-logs glass-effect">
+                <h3>سجل التدريب</h3>
+                <div class="logs-container" id="trainingLogs">
+                    <div class="log-entry info">[12:34:56] بدء التدريب التلقائي</div>
+                    <div class="log-entry success">[12:35:10] تم تحميل 10,234 عينة</div>
+                    <div class="log-entry warning">[12:36:22] استخدام GPU: 85%</div>
+                    <div class="log-entry success">[12:40:15] اكتمال Epoch 1 - الخسارة: 0.234</div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- قسم المحادثة الذكية -->
+    <section id="chat" class="chat-section">
+        <h2 class="section-title">محادثة <span class="accent">ذكية</span></h2>
+        
+        <div class="chat-container glass-effect">
+            <div class="chat-messages" id="chatMessages">
+                <div class="message ai">
+                    <div class="message-content">
+                        <i class="fas fa-robot"></i>
+                        <p>مرحباً! أنا TITAN-OMEGA، أقوى ذكاء اصطناعي في العالم. كيف يمكنني مساعدتك؟</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="chat-input-area">
+                <button class="voice-btn" onclick="startVoiceInput()">
+                    <i class="fas fa-microphone"></i>
+                </button>
+                
+                <textarea id="chatInput" placeholder="اكتب رسالتك هنا..." rows="1"></textarea>
+                
+                <button class="send-btn" onclick="sendMessage()">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+                
+                <button class="code-btn" onclick="openCodeGenerator()">
+                    <i class="fas fa-code"></i>
+                </button>
+            </div>
+            
+            <div class="chat-suggestions">
+                <span>اقتراحات:</span>
+                <button onclick="setSuggestion('اكتب لي برنامج آلة حاسبة')">آلة حاسبة</button>
+                <button onclick="setSuggestion('حلل هذه الصورة')">تحليل صورة</button>
+                <button onclick="setSuggestion('أخبرني عن الذكاء الاصطناعي')">معلومات عن AI</button>
+                <button onclick="setSuggestion('دربني على البرمجة')">تعلم البرمجة</button>
+            </div>
+        </div>
+    </section>
+    
+    <!-- قسم النماذج -->
+    <section id="models" class="models-section">
+        <h2 class="section-title">النماذج <span class="accent">المتاحة</span></h2>
+        
+        <div class="models-grid">
+            <div class="model-card glass-effect active">
+                <div class="model-header">
+                    <i class="fas fa-crown crown-icon"></i>
+                    <h3>TITAN-OMEGA v9.0</h3>
+                </div>
+                <div class="model-body">
+                    <p>النموذج الرئيسي - الأقوى</p>
+                    <div class="model-stats">
+                        <span><i class="fas fa-cube"></i> 2048 dim</span>
+                        <span><i class="fas fa-layer-group"></i> 24 layers</span>
+                        <span><i class="fas fa-head-side-brain"></i> 16 heads</span>
+                    </div>
+                    <div class="model-metrics">
+                        <div class="metric">
+                            <span>الدقة</span>
+                            <span class="value">99.9%</span>
+                        </div>
+                        <div class="metric">
+                            <span>السرعة</span>
+                            <span class="value">32K tokens/s</span>
+                        </div>
+                    </div>
+                </div>
+                <button class="btn-model active">نشط</button>
+            </div>
+            
+            <div class="model-card glass-effect">
+                <h3>TITAN-Light</h3>
+                <p>نسخة خفيفة للهواتف</p>
+                <div class="model-stats">
+                    <span><i class="fas fa-cube"></i> 512 dim</span>
+                    <span><i class="fas fa-layer-group"></i> 12 layers</span>
+                </div>
+                <button class="btn-model" onclick="switchModel('light')">تفعيل</button>
+            </div>
+            
+            <div class="model-card glass-effect">
+                <h3>TITAN-Vision</h3>
+                <p>متخصص في تحليل الصور</p>
+                <div class="model-stats">
+                    <span><i class="fas fa-cube"></i> 1024 dim</span>
+                    <span><i class="fas fa-image"></i> Vision transformer</span>
+                </div>
+                <button class="btn-model" onclick="switchModel('vision')">تفعيل</button>
+            </div>
+            
+            <div class="model-card glass-effect">
+                <h3>TITAN-Code</h3>
+                <p>متخصص في البرمجة</p>
+                <div class="model-stats">
+                    <span><i class="fas fa-cube"></i> 1536 dim</span>
+                    <span><i class="fas fa-code"></i> 50+ لغات</span>
+                </div>
+                <button class="btn-model" onclick="switchModel('code')">تفعيل</button>
+            </div>
+        </div>
+    </section>
+    
+    <!-- الفوتر -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="developer-info glass-effect">
+                <i class="fas fa-user-astronaut"></i>
+                <h3>Omar Abdo</h3>
+                <p class="phone"><i class="fas fa-phone"></i> 01289411976</p>
+                <p class="role">المطور الرئيسي - Architect</p>
+            </div>
+            
+            <div class="footer-links">
+                <a href="#"><i class="fab fa-github"></i></a>
+                <a href="#"><i class="fab fa-linkedin"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-discord"></i></a>
+            </div>
+            
+            <p class="copyright">© 2026 TITAN-OMEGA™ - جميع الحقوق محفوظة</p>
+        </div>
+    </footer>
+    
+    <!-- مودال الدخول -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content glass-effect">
+            <span class="close" onclick="hideLoginModal()">&times;</span>
+            <h2><i class="fas fa-shield-alt"></i> دخول آمن</h2>
+            
+            <div class="auth-tabs">
+                <button class="tab-btn active" onclick="switchAuthTab('login')">تسجيل دخول</button>
+                <button class="tab-btn" onclick="switchAuthTab('register')">حساب جديد</button>
+                <button class="tab-btn" onclick="switchAuthTab('mfa')">MFA</button>
+            </div>
+            
+            <form id="loginForm" onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label><i class="fas fa-user"></i> اسم المستخدم</label>
+                    <input type="text" placeholder="أدخل اسم المستخدم">
+                </div>
+                
+                <div class="form-group">
+                    <label><i class="fas fa-lock"></i> كلمة المرور</label>
+                    <input type="password" placeholder="أدخل كلمة المرور">
+                </div>
+                
+                <div class="form-group">
+                    <label><i class="fas fa-qrcode"></i> رمز MFA</label>
+                    <input type="text" placeholder="رمز المصادقة الثنائية">
+                </div>
+                
+                <button type="submit" class="btn-submit">
+                    <i class="fas fa-sign-in-alt"></i> دخول
+                </button>
+            </form>
+            
+            <div class="auth-info">
+                <i class="fas fa-shield"></i>
+                <span>محمي بتشفير عسكري AES-256-GCM</span>
+            </div>
+        </div>
+    </div>
+    
+    <!-- JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="js/titan-core.js"></script>
+    <script src="js/websocket.js"></script>
+    <script src="js/charts.js"></script>
+    <script>
+        // تهيئة الخلفية ثلاثية الأبعاد
+        initBackground();
+        
+        // تهيئة WebSocket
+        initWebSocket();
+        
+        // بدء تحديث الإحصائيات
+        setInterval(updateStats, 5000);
+        
+        // بدء تحديث التدريب
+        setInterval(updateTraining, 2000);
+    </script>
+</body>
+                  </html>
