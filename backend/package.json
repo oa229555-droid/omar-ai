@@ -1,34 +1,37 @@
 {
-  "name": "omnia-ai-frontend",
+  "name": "omnia-ai-backend",
   "version": "10.0.0",
-  "type": "module",
+  "description": "OMNIA AI Platform Backend",
+  "main": "src/server.js",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview"
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js",
+    "prod": "NODE_ENV=production node src/server.js"
   },
   "dependencies": {
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-router-dom": "^6.14.0",
+    "express": "^4.18.2",
+    "mongoose": "^7.4.0",
+    "bcryptjs": "^2.4.3",
+    "jsonwebtoken": "^9.0.1",
+    "dotenv": "^16.3.1",
+    "cors": "^2.8.5",
+    "helmet": "^7.0.0",
+    "express-rate-limit": "^6.9.0",
+    "express-validator": "^7.0.1",
     "axios": "^1.4.0",
-    "socket.io-client": "^4.6.0",
-    "react-markdown": "^8.0.7",
-    "react-syntax-highlighter": "^15.5.0",
-    "react-hot-toast": "^2.4.1",
-    "framer-motion": "^10.12.0",
-    "zustand": "^4.3.0",
-    "date-fns": "^2.30.0",
-    "recharts": "^2.7.0",
-    "react-dropzone": "^14.2.3"
+    "socket.io": "^4.6.2",
+    "winston": "^3.10.0",
+    "multer": "^1.4.5-lts.1",
+    "redis": "^4.6.7",
+    "morgan": "^1.10.0",
+    "compression": "^1.7.4",
+    "express-mongo-sanitize": "^2.2.0",
+    "xss": "^1.0.14",
+    "pdf-parse": "^1.1.1",
+    "mammoth": "^1.6.0",
+    "node-fetch": "^2.6.12"
   },
   "devDependencies": {
-    "@types/react": "^18.2.0",
-    "@types/react-dom": "^18.2.0",
-    "@vitejs/plugin-react": "^4.0.0",
-    "autoprefixer": "^10.4.14",
-    "postcss": "^8.4.24",
-    "tailwindcss": "^3.3.2",
-    "vite": "^4.3.0"
+    "nodemon": "^3.0.1"
   }
 }
