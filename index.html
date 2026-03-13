@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>Omar AI Pro - الذكاء الاصطناعي الخارق</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/responsive.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- شريط التحميل المتحرك -->
+    <div class="loading-bar" id="loadingBar"></div>
+
+    <!-- شريط التنقل العلوي -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%234f46e5'/%3E%3Ctext x='50' y='70' font-size='50' text-anchor='middle' fill='white' font-family='Arial'%3EO%3C/text%3E%3C/svg%3E" alt="Omar AI" style="width: 40px; height: 40px; border-radius: 50%;">
+                <span class="logo-text">Omar <span class="highlight">AI Pro</span></span>
+            </div>
+            <div class="nav-links" id="navLinks">
+                <a href="index.html" class="active"><i class="fas fa-home"></i> الرئيسية</a>
+                <a href="chat.html"><i class="fas fa-comment"></i> المحادثة</a>
+                <a href="code-generator.html"><i class="fas fa-code"></i> توليد الأكواد</a>
+                <a href="#" onclick="toggleDarkMode()"><i class="fas fa-moon"></i> الوضع الليلي</a>
+            </div>
+            <div class="menu-btn" onclick="toggleMenu()">
+                <i class="fas fa-bars"></i>
+            </div>
+        </div>
+    </nav>
+
+    <!-- مطور المشروع - شريط ثابت -->
+    <div class="developer-bar">
+        <div class="developer-info">
+            <i class="fas fa-user-cog"></i>
+            <span>المطور: <strong>Omar Abdo</strong></span>
+            <i class="fas fa-phone-alt"></i>
+            <span dir="ltr"><strong>01289411976</strong></span>
+        </div>
+    </div>
+
+    <!-- الهيدر الرئيسي -->
+    <header class="hero">
+        <div class="hero-content">
+            <h1 class="glitch-text">الذكاء الاصطناعي <span>الخارق</span></h1>
+            <p class="hero-subtitle">بدون قيود • بدون حدود • فائق الذكاء</p>
+            <div class="hero-stats">
+                <div class="stat-item">
+                    <span class="stat-number" id="stat1">+50</span>
+                    <span class="stat-label">نموذج ذكاء</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number" id="stat2">100%</span>
+                    <span class="stat-label">دقة عالية</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number" id="stat3">24/7</span>
+                    <span class="stat-label">متوفر دائماً</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- قسم المميزات -->
+    <section class="features">
+        <h2 class="section-title">✨ مميزات <span>خارقة</span></h2>
+        <div class="features-grid">
+            <div class="feature-card" onclick="window.location.href='chat.html'">
+                <div class="feature-icon">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <h3>محادثة ذكية</h3>
+                <p>يتكلم معاك بذكاء فائق ويفهم كل شيء</p>
+                <span class="feature-badge">جديد</span>
+            </div>
+
+            <div class="feature-card" onclick="window.location.href='code-generator.html'">
+                <div class="feature-icon">
+                    <i class="fas fa-laptop-code"></i>
+                </div>
+                <h3>توليد الأكواد</h3>
+                <p>يكتبلك أي كود برمجي تطلبه ويجربه</p>
+            </div>
+
+            <div class="feature-card" onclick="analyzeImage()">
+                <div class="feature-icon">
+                    <i class="fas fa-image"></i>
+                </div>
+                <h3>تحليل الصور</h3>
+                <p>يحلل الصور ويستخرج منها معلومات</p>
+            </div>
+
+            <div class="feature-card" onclick="analyzeVideo()">
+                <div class="feature-icon">
+                    <i class="fas fa-video"></i>
+                </div>
+                <h3>تحليل الفيديو</h3>
+                <p>يحلل الفيديوهات ويتعرف على المحتوى</p>
+            </div>
+
+            <div class="feature-card" onclick="window.location.href='#'">
+                <div class="feature-icon">
+                    <i class="fas fa-globe"></i>
+                </div>
+                <h3>بحث متقدم</h3>
+                <p>يبحث في الإنترنت ويجيب على كل أسئلتك</p>
+            </div>
+
+            <div class="feature-card" onclick="window.location.href='#'">
+                <div class="feature-icon">
+                    <i class="fas fa-brain"></i>
+                </div>
+                <h3>تعلم عميق</h3>
+                <p>يتعلم منك ويتطور مع الوقت</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- قسم المحادثة المباشرة -->
+    <section class="quick-chat">
+        <h2 class="section-title">💬 محادثة <span>فورية</span></h2>
+        <div class="chat-container" id="quickChat">
+            <div class="chat-messages" id="chatMessages">
+                <div class="message ai">
+                    <div class="message-content">
+                        <i class="fas fa-robot"></i>
+                        <p>مرحباً! أنا Omar AI، كيف يمكنني مساعدتك اليوم؟</p>
+                    </div>
+                </div>
+            </div>
+            <div class="chat-input-container">
+                <textarea id="chatInput" placeholder="اكتب رسالتك هنا..." rows="1"></textarea>
+                <button onclick="sendQuickMessage()" id="sendBtn">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+                <button onclick="startVoiceInput()" class="voice-btn">
+                    <i class="fas fa-microphone"></i>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- قسم توليد الأكواد -->
+    <section class="code-section">
+        <h2 class="section-title">🔧 توليد <span>الأكواد</span></h2>
+        <div class="code-container">
+            <textarea id="codePrompt" placeholder="اكتب ما تريد أن يبرمجه الذكاء الاصطناعي..." rows="3"></textarea>
+            <button onclick="generateCode()" class="generate-btn">
+                <i class="fas fa-magic"></i> توليد الكود
+            </button>
+            <div class="code-output" id="codeOutput">
+                <pre><code id="generatedCode">// الكود سوف يظهر هنا</code></pre>
+                <button onclick="copyCode()" class="copy-btn">
+                    <i class="fas fa-copy"></i> نسخ
+                </button>
+                <button onclick="runCode()" class="run-btn">
+                    <i class="fas fa-play"></i> تشغيل
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- قسم تحميل الصور -->
+    <section class="image-section">
+        <h2 class="section-title">🖼️ تحليل <span>الصور</span></h2>
+        <div class="image-container">
+            <div class="upload-area" onclick="document.getElementById('imageInput').click()">
+                <i class="fas fa-cloud-upload-alt"></i>
+                <p>اضغط لتحميل صورة أو اسحبها هنا</p>
+                <input type="file" id="imageInput" accept="image/*" style="display: none;" onchange="analyzeUploadedImage(this)">
+            </div>
+            <div class="image-preview" id="imagePreview"></div>
+            <div class="analysis-result" id="imageResult"></div>
+        </div>
+    </section>
+
+    <!-- الفوتر -->
+    <footer>
+        <div class="footer-content">
+            <div class="developer-details">
+                <h3>Omar Abdo</h3>
+                <p><i class="fas fa-phone"></i> 01289411976</p>
+                <p><i class="fas fa-envelope"></i> omar@omar-ai.com</p>
+            </div>
+            <div class="social-links">
+                <a href="#"><i class="fab fa-github"></i></a>
+                <a href="#"><i class="fab fa-linkedin"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-facebook"></i></a>
+            </div>
+            <p class="copyright">© 2026 Omar AI Pro - جميع الحقوق محفوظة</p>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+    <script src="js/api.js"></script>
+</body>
+                  </html>
