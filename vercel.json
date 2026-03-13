@@ -1,20 +1,20 @@
 {
-  "name": "titan-omega-ai",
+  "name": "titan-omega-platform",
   "version": 2,
   "builds": [
     {
-      "src": "frontend/**",
-      "use": "@vercel/static"
+      "src": "backend/server.js",
+      "use": "@vercel/node"
     },
     {
-      "src": "backend/api/**/*.py",
-      "use": "@vercel/python"
+      "src": "frontend/**",
+      "use": "@vercel/static"
     }
   ],
   "routes": [
     {
       "src": "/api/(.*)",
-      "dest": "/backend/api/routes.py"
+      "dest": "/backend/server.js"
     },
     {
       "src": "/(.*)",
@@ -22,8 +22,8 @@
     }
   ],
   "env": {
-    "TITAN_VERSION": "9.0.0",
-    "DEPLOYMENT_TIER": "SOVEREIGN"
+    "NODE_ENV": "production",
+    "TITAN_VERSION": "9.0.0"
   },
   "headers": [
     {
@@ -42,8 +42,8 @@
           "value": "1; mode=block"
         },
         {
-          "key": "Strict-Transport-Security",
-          "value": "max-age=31536000; includeSubDomains"
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
         }
       ]
     }
