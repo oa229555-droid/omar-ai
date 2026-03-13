@@ -1,0 +1,21 @@
+{
+  "name": "omnia-ai-platform",
+  "version": "10.0.0",
+  "description": "OMNIA AI Platform - أشمل منصة ذكاء اصطناعي في العالم",
+  "main": "backend/src/server.js",
+  "scripts": {
+    "start": "node backend/src/server.js",
+    "dev": "nodemon backend/src/server.js",
+    "build": "cd frontend && npm run build",
+    "install-all": "npm install && cd frontend && npm install && cd ../backend && npm install",
+    "docker:up": "docker-compose -f docker/docker-compose.yml up -d",
+    "docker:down": "docker-compose -f docker/docker-compose.yml down",
+    "docker:logs": "docker-compose -f docker/docker-compose.yml logs -f"
+  },
+  "author": "Omar Abdo",
+  "license": "PROPRIETARY",
+  "private": true,
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  }
+}
