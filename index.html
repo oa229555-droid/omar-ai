@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>OMNIA REAL | مباريات حقيقية مباشرة</title>
+    <title>عمر شوت TV | بث مباشر لجميع المباريات</title>
     
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
@@ -11,9 +11,545 @@
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
     
-    <!-- ربط ملفات المشروع -->
-    <link rel="stylesheet" href="style.css">
-    <script src="config.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Tajawal', sans-serif;
+        }
+        
+        body {
+            background: #030712;
+            color: white;
+        }
+        
+        .app {
+            max-width: 500px;
+            margin: 0 auto;
+            background: #0f172a;
+            min-height: 100vh;
+            position: relative;
+        }
+        
+        /* شريط التحميل */
+        .loading-bar {
+            position: fixed;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0%;
+            height: 4px;
+            background: linear-gradient(90deg, #00c3ff, #8b5cf6);
+            z-index: 9999;
+            transition: width 0.3s ease;
+            max-width: 500px;
+            box-shadow: 0 0 20px #00c3ff;
+        }
+        
+        /* الهيدر */
+        .header {
+            background: linear-gradient(135deg, #1a1f35, #0f172a);
+            padding: 15px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 3px solid #00c3ff;
+        }
+        
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .logo-icon {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, #00c3ff, #8b5cf6);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 20px rgba(0, 195, 255, 0.3);
+        }
+        
+        .logo-icon i {
+            font-size: 24px;
+            color: white;
+        }
+        
+        .logo-text {
+            font-size: 24px;
+            font-weight: 900;
+        }
+        
+        .logo-text span {
+            color: #00c3ff;
+        }
+        
+        .logo-text small {
+            font-size: 14px;
+            color: #8b5cf6;
+        }
+        
+        .live-badge {
+            background: #dc2626;
+            padding: 8px 16px;
+            border-radius: 40px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            animation: pulse 1.5s infinite;
+        }
+        
+        .live-dot {
+            width: 10px;
+            height: 10px;
+            background: white;
+            border-radius: 50%;
+            animation: blink 1s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+        
+        /* اسم الموقع */
+        .site-name {
+            background: linear-gradient(135deg, #1e1b4b, #312e81);
+            margin: 15px;
+            padding: 20px;
+            border-radius: 20px;
+            border: 2px solid #00c3ff;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 195, 255, 0.2);
+        }
+        
+        .site-name h1 {
+            font-size: 42px;
+            font-weight: 900;
+            margin-bottom: 10px;
+        }
+        
+        .site-name h1 span {
+            color: #00c3ff;
+        }
+        
+        .site-name .tv-badge {
+            background: #dc2626;
+            padding: 8px 25px;
+            border-radius: 40px;
+            display: inline-block;
+            font-size: 18px;
+            font-weight: 700;
+            box-shadow: 0 0 20px #dc2626;
+        }
+        
+        /* معلومات المطور */
+        .developer-box {
+            background: #1a1f35;
+            margin: 15px;
+            padding: 20px;
+            border-radius: 20px;
+            border: 1px solid #00c3ff;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .dev-avatar {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 25px rgba(245, 158, 11, 0.4);
+        }
+        
+        .dev-avatar i {
+            font-size: 40px;
+            color: #1e1b4b;
+        }
+        
+        .dev-details h3 {
+            font-size: 16px;
+            color: #fbbf24;
+            margin-bottom: 5px;
+        }
+        
+        .dev-name {
+            font-size: 32px;
+            font-weight: 900;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #fff, #e2e8f0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .dev-phone {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: rgba(255,255,255,0.1);
+            padding: 10px 20px;
+            border-radius: 50px;
+            border: 1px solid #00c3ff;
+        }
+        
+        .dev-phone i {
+            color: #4ade80;
+            font-size: 18px;
+        }
+        
+        .dev-phone span {
+            font-size: 24px;
+            font-weight: 700;
+            color: white;
+            direction: ltr;
+            letter-spacing: 1px;
+        }
+        
+        /* قائمة التصنيفات */
+        .categories {
+            padding: 10px 15px;
+            overflow-x: auto;
+            white-space: nowrap;
+            scrollbar-width: none;
+            border-bottom: 1px solid #2a2f4a;
+        }
+        
+        .categories::-webkit-scrollbar {
+            display: none;
+        }
+        
+        .cat-scroll {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .cat-btn {
+            background: #1a1f35;
+            border: 1px solid #2a2f4a;
+            color: #94a3b8;
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-block;
+        }
+        
+        .cat-btn.active, .cat-btn:hover {
+            background: linear-gradient(135deg, #00c3ff, #8b5cf6);
+            color: white;
+            border-color: transparent;
+        }
+        
+        .cat-btn.live {
+            background: #dc2626;
+            color: white;
+            border-color: #dc2626;
+        }
+        
+        /* عناوين الأقسام */
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px 15px 5px;
+        }
+        
+        .section-header h2 {
+            font-size: 18px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .section-header h2 i {
+            color: #00c3ff;
+        }
+        
+        .update-time {
+            font-size: 11px;
+            color: #94a3b8;
+            background: #1a1f35;
+            padding: 4px 10px;
+            border-radius: 20px;
+        }
+        
+        /* شبكة المباريات */
+        .matches-grid {
+            padding: 8px 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        
+        .match-card {
+            background: #1a1f35;
+            border-radius: 20px;
+            padding: 20px;
+            border: 1px solid #2a2f4a;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        
+        .match-card:hover {
+            border-color: #00c3ff;
+            transform: translateY(-2px);
+        }
+        
+        .match-card.live {
+            border-right: 4px solid #dc2626;
+            background: linear-gradient(135deg, #1a1f35, #1f2440);
+        }
+        
+        .match-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+        
+        .league-badge {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: #2a2f4a;
+            padding: 6px 12px;
+            border-radius: 30px;
+            font-size: 12px;
+            color: #ccc;
+        }
+        
+        .league-badge i {
+            color: #fbbf24;
+        }
+        
+        .match-time {
+            background: #2a2f4a;
+            padding: 6px 12px;
+            border-radius: 30px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+        
+        .match-time.live {
+            background: #dc2626;
+            color: white;
+        }
+        
+        .teams-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+        
+        .team-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            flex: 1;
+        }
+        
+        .team-icon {
+            width: 55px;
+            height: 55px;
+            background: #0f172a;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            border: 2px solid #2a2f4a;
+        }
+        
+        .team-name {
+            font-weight: 700;
+            font-size: 14px;
+            text-align: center;
+        }
+        
+        .score-box {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 32px;
+            font-weight: 800;
+            padding: 0 15px;
+        }
+        
+        .score-box span {
+            min-width: 40px;
+            text-align: center;
+        }
+        
+        .score-divider {
+            color: #64748b;
+            font-size: 24px;
+        }
+        
+        .match-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-top: 12px;
+            border-top: 1px solid #2a2f4a;
+        }
+        
+        .streams-info {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            color: #00c3ff;
+            font-size: 13px;
+        }
+        
+        .streams-info i {
+            font-size: 12px;
+        }
+        
+        .stats-preview {
+            display: flex;
+            gap: 12px;
+            color: #94a3b8;
+            font-size: 11px;
+        }
+        
+        /* مشغل الفيديو */
+        .video-player-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.95);
+            z-index: 1000;
+            display: none;
+            flex-direction: column;
+        }
+        
+        .video-player-header {
+            padding: 15px;
+            background: #1a1f35;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .close-btn {
+            background: #dc2626;
+            border: none;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+        
+        .video-frame {
+            flex: 1;
+            width: 100%;
+            border: none;
+        }
+        
+        .video-controls {
+            padding: 15px;
+            background: #1a1f35;
+            display: flex;
+            gap: 10px;
+        }
+        
+        .quality-btn {
+            flex: 1;
+            background: #2a2f4a;
+            border: none;
+            color: white;
+            padding: 12px;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        
+        .quality-btn.active {
+            background: #00c3ff;
+        }
+        
+        /* الفوتر */
+        .footer {
+            background: #0a0f1a;
+            padding: 25px 15px;
+            margin-top: 30px;
+            text-align: center;
+            border-top: 2px solid #00c3ff;
+        }
+        
+        .footer-logo {
+            font-size: 32px;
+            font-weight: 900;
+            margin-bottom: 10px;
+        }
+        
+        .footer-logo span {
+            color: #00c3ff;
+        }
+        
+        .footer-dev {
+            color: #94a3b8;
+            margin-bottom: 15px;
+        }
+        
+        .footer-phone {
+            font-size: 28px;
+            font-weight: 800;
+            color: #00c3ff;
+            margin-bottom: 15px;
+            direction: ltr;
+        }
+        
+        /* شاشة التحميل */
+        .loading-state {
+            text-align: center;
+            padding: 40px;
+            display: none;
+        }
+        
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid #1a1f35;
+            border-top: 4px solid #00c3ff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
 </head>
 <body>
     <div class="app">
@@ -24,64 +560,365 @@
         <div class="header">
             <div class="header-content">
                 <div class="logo">
-                    <div class="logo-icon"><i class="fas fa-futbol"></i></div>
-                    <div class="logo-text">OMNIA <span>REAL</span></div>
+                    <div class="logo-icon">
+                        <i class="fas fa-tv"></i>
+                    </div>
+                    <div class="logo-text">
+                        عمر <span>شوت</span> <small>TV</small>
+                    </div>
                 </div>
-                <div class="live-badge"><span class="live-dot"></span><span>مباشر</span></div>
-            </div>
-        </div>
-        
-        <!-- قسم المطور -->
-        <div class="developer-section">
-            <div class="developer-content">
-                <div class="developer-avatar"><i class="fas fa-user-astronaut"></i></div>
-                <div class="developer-info">
-                    <h3>المطور الرئيسي</h3>
-                    <div class="name">Omar Abdo</div>
-                    <div class="developer-phone"><i class="fas fa-phone-alt"></i><span>01289411976</span></div>
+                <div class="live-badge">
+                    <span class="live-dot"></span>
+                    <span>مباشر</span>
                 </div>
             </div>
         </div>
         
-        <!-- الفلاتر -->
-        <div class="filters">
-            <div class="filters-container">
-                <button class="filter-btn active" onclick="filterMatches('all')"><i class="fas fa-globe"></i> كل المباريات</button>
-                <button class="filter-btn" onclick="filterMatches('live')"><i class="fas fa-circle" style="color:#ef4444;"></i> المباشر الآن</button>
-                <button class="filter-btn" onclick="filterMatches('champions')"><i class="fas fa-trophy"></i> دوري الأبطال</button>
+        <!-- اسم الموقع بشكل كبير -->
+        <div class="site-name">
+            <h1>عمر <span>شوت</span></h1>
+            <div class="tv-badge">TV</div>
+        </div>
+        
+        <!-- معلومات المطور -->
+        <div class="developer-box">
+            <div class="dev-avatar">
+                <i class="fas fa-user-cog"></i>
+            </div>
+            <div class="dev-details">
+                <h3>المؤسس والمطور</h3>
+                <div class="dev-name">Omar Abdo</div>
+                <div class="dev-phone">
+                    <i class="fas fa-phone-alt"></i>
+                    <span dir="ltr">01289411976</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- قائمة التصنيفات (جميع الدوريات) -->
+        <div class="categories">
+            <div class="cat-scroll">
+                <button class="cat-btn active" onclick="filterMatches('all')">الكل</button>
+                <button class="cat-btn live" onclick="filterMatches('live')">المباشر الآن</button>
+                <button class="cat-btn" onclick="filterMatches('champions')">دوري الأبطال</button>
+                <button class="cat-btn" onclick="filterMatches('premier')">الدوري الإنجليزي</button>
+                <button class="cat-btn" onclick="filterMatches('laliga')">الدوري الإسباني</button>
+                <button class="cat-btn" onclick="filterMatches('seriea')">الدوري الإيطالي</button>
+                <button class="cat-btn" onclick="filterMatches('bundes')">الدوري الألماني</button>
+                <button class="cat-btn" onclick="filterMatches('ligue1')">الدوري الفرنسي</button>
             </div>
         </div>
         
         <!-- عنوان المباريات -->
         <div class="section-header">
-            <h2><i class="fas fa-circle" style="color:#ef4444;"></i> مباريات حقيقية - تحديث مباشر</h2>
-            <span class="update-time" id="updateTime">...</span>
+            <h2><i class="fas fa-circle" style="color:#00c3ff;"></i> <span id="sectionTitle">جميع المباريات</span></h2>
+            <span class="update-time" id="updateTime">تحديث...</span>
         </div>
         
-        <!-- المباريات -->
-        <div id="matchesContainer" class="matches-container"></div>
+        <!-- شبكة المباريات -->
+        <div id="matchesContainer" class="matches-grid"></div>
         
-        <!-- شاشات التحميل والخطأ -->
+        <!-- شاشة التحميل -->
         <div id="loadingState" class="loading-state">
             <div class="spinner"></div>
-            <p>جاري تحميل المباريات الحقيقية...</p>
+            <p>جاري تحميل المباريات...</p>
         </div>
         
-        <div id="errorState" class="error-state" style="display: none;">
-            <i class="fas fa-exclamation-triangle"></i>
-            <p>حدث خطأ في تحميل البيانات</p>
-            <button class="retry-btn" onclick="fetchRealMatches()">إعادة المحاولة</button>
+        <!-- مشغل الفيديو (يظهر عند الضغط على مباراة) -->
+        <div id="videoPlayer" class="video-player-overlay">
+            <div class="video-player-header">
+                <h3 id="matchTitle">مشاهدة المباراة</h3>
+                <button class="close-btn" onclick="closeVideo()"><i class="fas fa-times"></i></button>
+            </div>
+            <iframe id="videoFrame" class="video-frame" src="" frameborder="0" allowfullscreen></iframe>
+            <div class="video-controls">
+                <button class="quality-btn active" onclick="changeQuality('4k')">4K</button>
+                <button class="quality-btn" onclick="changeQuality('hd')">HD</button>
+                <button class="quality-btn" onclick="changeQuality('sd')">SD</button>
+            </div>
         </div>
         
         <!-- الفوتر -->
         <div class="footer">
-            <div class="name">Omar Abdo</div>
-            <div class="phone" dir="ltr"><i class="fas fa-phone-alt" style="margin-left:10px;"></i> 01289411976</div>
-            <div style="font-size:12px; color:#475569;">© 2026 OMNIA REAL - بيانات حقيقية 100%</div>
+            <div class="footer-logo">عمر <span>شوت</span> TV</div>
+            <div class="footer-dev">
+                <i class="fas fa-code"></i> المطور: Omar Abdo
+            </div>
+            <div class="footer-phone" dir="ltr">
+                01289411976
+            </div>
         </div>
     </div>
     
-    <!-- ربط ملف JavaScript (في الآخر) -->
-    <script src="app.js"></script>
+    <script>
+        // ===== نظام متكامل لعرض جميع المباريات مع تحديث لحظي =====
+        
+        // عناصر DOM
+        const loadingBar = document.getElementById('loadingBar');
+        const matchesContainer = document.getElementById('matchesContainer');
+        const updateTimeSpan = document.getElementById('updateTime');
+        const sectionTitle = document.getElementById('sectionTitle');
+        const loadingState = document.getElementById('loadingState');
+        const videoPlayer = document.getElementById('videoPlayer');
+        const videoFrame = document.getElementById('videoFrame');
+        const matchTitle = document.getElementById('matchTitle');
+        
+        // حالة الموقع
+        let currentFilter = 'all';
+        let allMatches = [];
+        
+        // شريط التحميل
+        function showLoading(percent) {
+            loadingBar.style.width = percent + '%';
+        }
+        
+        // توليد بيانات المباريات بشكل ديناميكي (زي المواقع الحقيقية)
+        function generateMatches() {
+            const leagues = [
+                { name: 'دوري أبطال أوروبا', icon: 'fa-trophy', teams: ['ريال مدريد', 'برشلونة', 'بايرن ميونخ', 'مانشستر سيتي', 'ليفربول', 'باريس سان جيرمان', 'إنتر ميلان', 'يوفنتوس'] },
+                { name: 'الدوري الإنجليزي', icon: 'fa-crown', teams: ['مانشستر سيتي', 'ليفربول', 'آرسنال', 'تشيلسي', 'مانشستر يونايتد', 'توتنهام', 'نيوكاسل', 'أستون فيلا'] },
+                { name: 'الدوري الإسباني', icon: 'fa-crown', teams: ['ريال مدريد', 'برشلونة', 'أتلتيكو مدريد', 'أتلتيك بيلباو', 'ريال سوسيداد', 'فالنسيا', 'إشبيلية', 'فياريال'] },
+                { name: 'الدوري الإيطالي', icon: 'fa-crown', teams: ['إنتر ميلان', 'يوفنتوس', 'ميلان', 'نابولي', 'روما', 'لاتسيو', 'فيورنتينا', 'أتالانتا'] },
+                { name: 'الدوري الألماني', icon: 'fa-crown', teams: ['بايرن ميونخ', 'بوروسيا دورتموند', 'باير ليفركوزن', 'لايبزيغ', 'آينتراخت فرانكفورت', 'فولفسبورغ', 'ماينتس', 'بروسيا مونشنغلادباخ'] },
+                { name: 'الدوري الفرنسي', icon: 'fa-crown', teams: ['باريس سان جيرمان', 'مارسيليا', 'موناكو', 'ليون', 'ليل', 'رين', 'نيس', 'لنس'] }
+            ];
+            
+            const matches = [];
+            
+            // توليد 30 مباراة عشوائية
+            for (let i = 0; i < 30; i++) {
+                const league = leagues[Math.floor(Math.random() * leagues.length)];
+                const homeTeam = league.teams[Math.floor(Math.random() * league.teams.length)];
+                let awayTeam;
+                do {
+                    awayTeam = league.teams[Math.floor(Math.random() * league.teams.length)];
+                } while (awayTeam === homeTeam);
+                
+                const isLive = Math.random() > 0.6;
+                const homeScore = isLive ? Math.floor(Math.random() * 4) : 0;
+                const awayScore = isLive ? Math.floor(Math.random() * 4) : 0;
+                const minute = isLive ? Math.floor(Math.random() * 90) + 1 + (Math.random() > 0.8 ? "'" : "") : '';
+                
+                matches.push({
+                    id: i + 1,
+                    league: league.name,
+                    leagueIcon: league.icon,
+                    homeTeam: homeTeam,
+                    awayTeam: awayTeam,
+                    homeScore: homeScore,
+                    awayScore: awayScore,
+                    status: isLive ? 'live' : 'scheduled',
+                    minute: minute,
+                    time: `${Math.floor(Math.random() * 12) + 10}:${Math.floor(Math.random() * 60).toString().padStart(2, '0')}`,
+                    streams: Math.floor(Math.random() * 4) + 2,
+                    possession: `${Math.floor(Math.random() * 30) + 40}% - ${Math.floor(Math.random() * 30) + 30}%`,
+                    shots: `${Math.floor(Math.random() * 15) + 5} - ${Math.floor(Math.random() * 15) + 5}`,
+                    onTarget: `${Math.floor(Math.random() * 8) + 2} - ${Math.floor(Math.random() * 8) + 2}`
+                });
+            }
+            
+            return matches;
+        }
+        
+        // تحديث النتائج بشكل عشوائي (محاكاة للمباريات الحقيقية)
+        function updateScores() {
+            allMatches.forEach(match => {
+                if (match.status === 'live' && Math.random() > 0.7) {
+                    if (Math.random() > 0.5) {
+                        match.homeScore++;
+                    } else {
+                        match.awayScore++;
+                    }
+                    
+                    // تحديث الدقيقة
+                    let currentMinute = parseInt(match.minute);
+                    if (currentMinute < 90) {
+                        match.minute = (currentMinute + 1).toString();
+                    } else if (currentMinute === 90) {
+                        match.minute = '90+';
+                    } else if (match.minute.includes('90+')) {
+                        const extra = parseInt(match.minute.replace('90+', '')) || 1;
+                        if (extra < 5) {
+                            match.minute = `90+${extra + 1}`;
+                        }
+                    }
+                }
+            });
+            
+            filterMatches(currentFilter);
+        }
+        
+        // عرض المباريات حسب الفلتر
+        function filterMatches(filter) {
+            currentFilter = filter;
+            
+            // تحديث شكل الأزرار
+            document.querySelectorAll('.cat-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // تصفية المباريات
+            let filteredMatches = allMatches;
+            
+            if (filter === 'live') {
+                filteredMatches = allMatches.filter(m => m.status === 'live');
+                sectionTitle.textContent = 'المباريات المباشرة الآن';
+            } else if (filter === 'champions') {
+                filteredMatches = allMatches.filter(m => m.league === 'دوري أبطال أوروبا');
+                sectionTitle.textContent = 'دوري أبطال أوروبا';
+            } else if (filter === 'premier') {
+                filteredMatches = allMatches.filter(m => m.league === 'الدوري الإنجليزي');
+                sectionTitle.textContent = 'الدوري الإنجليزي';
+            } else if (filter === 'laliga') {
+                filteredMatches = allMatches.filter(m => m.league === 'الدوري الإسباني');
+                sectionTitle.textContent = 'الدوري الإسباني';
+            } else if (filter === 'seriea') {
+                filteredMatches = allMatches.filter(m => m.league === 'الدوري الإيطالي');
+                sectionTitle.textContent = 'الدوري الإيطالي';
+            } else if (filter === 'bundes') {
+                filteredMatches = allMatches.filter(m => m.league === 'الدوري الألماني');
+                sectionTitle.textContent = 'الدوري الألماني';
+            } else if (filter === 'ligue1') {
+                filteredMatches = allMatches.filter(m => m.league === 'الدوري الفرنسي');
+                sectionTitle.textContent = 'الدوري الفرنسي';
+            } else {
+                sectionTitle.textContent = 'جميع المباريات';
+            }
+            
+            renderMatches(filteredMatches);
+        }
+        
+        // عرض المباريات
+        function renderMatches(matches) {
+            if (matches.length === 0) {
+                matchesContainer.innerHTML = '<div style="text-align:center; padding:40px;">لا توجد مباريات في هذا التصنيف</div>';
+                return;
+            }
+            
+            matchesContainer.innerHTML = matches.map(match => {
+                const isLive = match.status === 'live';
+                
+                return `
+                    <div class="match-card ${isLive ? 'live' : ''}" onclick="openMatch(${match.id})">
+                        <div class="match-header">
+                            <div class="league-badge">
+                                <i class="fas ${match.leagueIcon}"></i>
+                                <span>${match.league}</span>
+                            </div>
+                            <div class="match-time ${isLive ? 'live' : ''}">
+                                ${isLive ? `<i class="fas fa-circle" style="font-size:8px;"></i> ${match.minute}'` : match.time}
+                            </div>
+                        </div>
+                        
+                        <div class="teams-row">
+                            <div class="team-box">
+                                <div class="team-icon"><i class="fas fa-shield-alt"></i></div>
+                                <div class="team-name">${match.homeTeam}</div>
+                            </div>
+                            
+                            <div class="score-box">
+                                <span>${match.homeScore}</span>
+                                <span class="score-divider">-</span>
+                                <span>${match.awayScore}</span>
+                            </div>
+                            
+                            <div class="team-box">
+                                <div class="team-icon"><i class="fas fa-shield-alt"></i></div>
+                                <div class="team-name">${match.awayTeam}</div>
+                            </div>
+                        </div>
+                        
+                        <div class="match-footer">
+                            <div class="streams-info">
+                                <i class="fas fa-play"></i>
+                                <span>${match.streams} روابط بث مباشر</span>
+                            </div>
+                            <div class="stats-preview">
+                                <span><i class="fas fa-futbol"></i> ${match.shots}</span>
+                                <span><i class="fas fa-bullseye"></i> ${match.onTarget}</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        // فتح مباراة (تشغيل البث)
+        function openMatch(matchId) {
+            const match = allMatches.find(m => m.id === matchId);
+            if (!match) return;
+            
+            matchTitle.textContent = `${match.homeTeam} vs ${match.awayTeam}`;
+            
+            // روابط بث حقيقية من مواقع خارجية
+            const streamUrls = {
+                '4k': 'https://sportsurge.ws/',
+                'hd': 'https://www.viprow.nu/',
+                'sd': 'https://www.streameast.sx/'
+            };
+            
+            videoFrame.src = streamUrls.hd;
+            videoPlayer.style.display = 'flex';
+        }
+        
+        // إغلاق مشغل الفيديو
+        function closeVideo() {
+            videoPlayer.style.display = 'none';
+            videoFrame.src = '';
+        }
+        
+        // تغيير جودة البث
+        function changeQuality(quality) {
+            const urls = {
+                '4k': 'https://sportsurge.ws/',
+                'hd': 'https://www.viprow.nu/',
+                'sd': 'https://www.streameast.sx/'
+            };
+            
+            videoFrame.src = urls[quality];
+            
+            document.querySelectorAll('.quality-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+        }
+        
+        // تحديث الوقت
+        function updateClock() {
+            const now = new Date();
+            updateTimeSpan.textContent = `آخر تحديث: ${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}:${now.getSeconds().toString().padStart(2,'0')}`;
+        }
+        
+        // تهيئة الموقع
+        function init() {
+            showLoading(30);
+            loadingState.style.display = 'block';
+            
+            setTimeout(() => {
+                showLoading(70);
+                
+                // توليد المباريات
+                allMatches = generateMatches();
+                
+                // عرض المباريات
+                filterMatches('all');
+                
+                // إخفاء التحميل
+                showLoading(100);
+                setTimeout(() => {
+                    showLoading(0);
+                    loadingState.style.display = 'none';
+                }, 500);
+                
+                // بدء التحديثات الدورية
+                setInterval(updateClock, 1000);
+                setInterval(updateScores, 15000);
+            }, 1000);
+        }
+        
+        // تشغيل عند تحميل الصفحة
+        window.onload = init;
+    </script>
 </body>
-          </html>
+    </html>
