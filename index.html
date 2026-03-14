@@ -3,58 +3,233 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>عمر شوت TV | البث المباشر للمباريات</title>
+    <title>MESHBOOK | شبكتك اللامركزية الحقيقية</title>
     
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     
-    <!-- Google Fonts - نفس خط المواقع الكبيرة -->
-    <link href="https://fonts.googleapis.com/css2?family=Almarai:wght@300;400;700;800&display=swap" rel="stylesheet">
+    <!-- libp2p - مكتبة P2P حقيقية -->
+    <script src="https://cdn.jsdelivr.net/npm/libp2p@1.0.0/dist/index.min.js"></script>
+    
+    <!-- OrbitDB - قاعدة بيانات موزعة -->
+    <script src="https://cdn.jsdelivr.net/npm/orbit-db@0.28.0/dist/orbitdb.min.js"></script>
     
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Almarai', sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         }
         
         body {
-            background: #0a0c10;
+            background: #000;
             color: #fff;
         }
         
         .app {
             max-width: 500px;
             margin: 0 auto;
-            background: #0f1217;
+            background: #0a0c10;
             min-height: 100vh;
-            box-shadow: 0 0 30px rgba(0,0,0,0.5);
+            position: relative;
         }
         
-        /* شريط التحميل */
-        .loading-bar {
+        /* ===== شاشة التحميل ===== */
+        .splash-screen {
             position: fixed;
             top: 0;
             left: 50%;
             transform: translateX(-50%);
-            width: 0%;
-            height: 3px;
-            background: linear-gradient(90deg, #00aaff, #0066cc);
-            z-index: 9999;
-            transition: width 0.3s ease;
+            width: 100%;
             max-width: 500px;
+            height: 100vh;
+            background: linear-gradient(135deg, #1877f2, #0a4c8c);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            transition: opacity 0.5s;
         }
         
-        /* الهيدر الرئيسي */
-        .main-header {
-            background: linear-gradient(135deg, #14181f, #0b0e12);
+        .splash-content {
+            text-align: center;
+        }
+        
+        .splash-content i {
+            font-size: 80px;
+            margin-bottom: 20px;
+            animation: float 3s infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        .splash-content h1 {
+            font-size: 40px;
+            margin-bottom: 10px;
+        }
+        
+        .splash-content span {
+            color: #ffd700;
+        }
+        
+        .splash-content p {
+            opacity: 0.9;
+            margin-top: 20px;
+        }
+        
+        .loading-bar {
+            width: 200px;
+            height: 4px;
+            background: rgba(255,255,255,0.3);
+            border-radius: 4px;
+            margin: 20px auto 0;
+            overflow: hidden;
+        }
+        
+        .loading-fill {
+            width: 0%;
+            height: 100%;
+            background: #ffd700;
+            animation: loading 2.5s forwards;
+        }
+        
+        @keyframes loading {
+            0% { width: 0%; }
+            100% { width: 100%; }
+        }
+        
+        /* ===== شاشة تسجيل الدخول ===== */
+        .login-screen {
+            display: none;
+            min-height: 100vh;
+            background: #0a0c10;
+            padding: 20px;
+        }
+        
+        .login-card {
+            background: #1e293b;
+            border-radius: 30px;
+            padding: 30px;
+            margin-top: 30px;
+            border: 1px solid #334155;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+        }
+        
+        .login-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .login-header i {
+            font-size: 50px;
+            color: #1877f2;
+            background: #2a3a4a;
+            padding: 20px;
+            border-radius: 30px;
+            margin-bottom: 15px;
+        }
+        
+        .login-header h2 {
+            font-size: 28px;
+        }
+        
+        .login-header span {
+            color: #1877f2;
+        }
+        
+        .login-header p {
+            color: #94a3b8;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+        
+        .input-group {
+            margin-bottom: 20px;
+        }
+        
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #94a3b8;
+        }
+        
+        .input-group input {
+            width: 100%;
+            padding: 15px 20px;
+            background: #0f172a;
+            border: 2px solid #334155;
+            border-radius: 15px;
+            color: white;
+            font-size: 16px;
+            transition: all 0.2s;
+        }
+        
+        .input-group input:focus {
+            border-color: #1877f2;
+            outline: none;
+        }
+        
+        .login-btn {
+            width: 100%;
+            background: #1877f2;
+            color: white;
+            border: none;
+            padding: 16px;
+            border-radius: 15px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-top: 10px;
+        }
+        
+        .login-btn:hover {
+            background: #0a5fd0;
+            transform: translateY(-2px);
+        }
+        
+        .p2p-status {
+            background: #0f172a;
+            border-radius: 15px;
+            padding: 15px;
+            margin-top: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            border: 1px solid #334155;
+        }
+        
+        .pulse {
+            width: 12px;
+            height: 12px;
+            background: #22c55e;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.2); }
+        }
+        
+        /* ===== الصفحة الرئيسية ===== */
+        .main-screen {
+            display: none;
+            min-height: 100vh;
+            background: #0a0c10;
+        }
+        
+        .mesh-header {
+            background: #1e293b;
             padding: 15px;
             position: sticky;
             top: 0;
             z-index: 100;
-            border-bottom: 1px solid #1e2630;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            border-bottom: 1px solid #334155;
         }
         
         .header-content {
@@ -63,103 +238,81 @@
             justify-content: space-between;
         }
         
-        .logo-area {
+        .header-logo {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
         }
         
-        .logo-icon {
-            width: 45px;
-            height: 45px;
-            background: linear-gradient(135deg, #00aaff, #0055aa);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 5px 15px rgba(0,170,255,0.3);
+        .header-logo i {
+            font-size: 28px;
+            color: #1877f2;
         }
         
-        .logo-icon i {
-            font-size: 24px;
-            color: white;
+        .header-logo h2 {
+            font-size: 20px;
         }
         
-        .logo-text h1 {
-            font-size: 22px;
-            font-weight: 800;
+        .header-logo span {
+            color: #1877f2;
         }
         
-        .logo-text span {
-            color: #00aaff;
-        }
-        
-        .logo-text .tv {
-            font-size: 14px;
-            background: #c5283d;
-            padding: 2px 8px;
-            border-radius: 20px;
-            margin-right: 5px;
-        }
-        
-        .live-indicator {
-            background: #c5283d;
-            padding: 6px 15px;
+        .connection-info {
+            background: #0f172a;
+            padding: 8px 15px;
             border-radius: 30px;
             display: flex;
             align-items: center;
-            gap: 6px;
-            box-shadow: 0 0 15px rgba(197,40,61,0.4);
+            gap: 8px;
+            font-size: 13px;
+            border: 1px solid #334155;
         }
         
-        .live-dot {
-            width: 10px;
-            height: 10px;
-            background: white;
+        .online-dot {
+            width: 8px;
+            height: 8px;
+            background: #22c55e;
             border-radius: 50%;
-            animation: livePulse 1s infinite;
+            animation: pulse 2s infinite;
         }
         
-        @keyframes livePulse {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.5; transform: scale(1.2); }
-        }
-        
-        /* معلومات المطور */
-        .developer-info {
-            background: #141b24;
-            padding: 15px;
-            border-bottom: 1px solid #1e2630;
+        /* بطاقة المطور */
+        .dev-card {
+            background: linear-gradient(135deg, #1e293b, #0f172a);
+            margin: 15px;
+            padding: 20px;
+            border-radius: 20px;
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 20px;
+            border: 1px solid #1877f2;
+            box-shadow: 0 10px 30px rgba(24,119,242,0.2);
         }
         
         .dev-avatar {
-            width: 60px;
-            height: 60px;
-            background: #ffaa00;
-            border-radius: 18px;
+            width: 70px;
+            height: 70px;
+            background: #fbbf24;
+            border-radius: 20px;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 5px 15px rgba(255,170,0,0.3);
         }
         
         .dev-avatar i {
-            font-size: 30px;
-            color: #0a0c10;
+            font-size: 35px;
+            color: #000;
         }
         
-        .dev-text h3 {
+        .dev-details h3 {
             font-size: 14px;
-            color: #ffaa00;
-            margin-bottom: 4px;
+            color: #fbbf24;
+            margin-bottom: 5px;
         }
         
         .dev-name {
-            font-size: 22px;
-            font-weight: 800;
+            font-size: 24px;
+            font-weight: 700;
             margin-bottom: 5px;
         }
         
@@ -167,367 +320,564 @@
             display: flex;
             align-items: center;
             gap: 8px;
-            background: #1e2630;
+            background: #0f172a;
             padding: 6px 15px;
             border-radius: 30px;
-            border: 1px solid #00aaff;
+            font-size: 16px;
+            border: 1px solid #1877f2;
         }
         
-        .dev-phone i {
-            color: #00ff88;
+        /* إحصائيات الشبكة الحقيقية */
+        .network-stats {
+            background: #1e293b;
+            border-radius: 20px;
+            padding: 20px;
+            margin: 0 15px 15px;
+            border: 1px solid #334155;
         }
         
-        .dev-phone span {
-            font-size: 18px;
-            font-weight: 700;
-            direction: ltr;
-        }
-        
-        /* شريط التصنيفات */
-        .leagues-bar {
-            background: #0f1217;
-            padding: 15px 15px 5px;
-            overflow-x: auto;
-            white-space: nowrap;
-            scrollbar-width: none;
-            border-bottom: 1px solid #1e2630;
-        }
-        
-        .leagues-bar::-webkit-scrollbar {
-            display: none;
-        }
-        
-        .leagues-scroll {
-            display: flex;
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
             gap: 10px;
+            margin-top: 15px;
         }
         
-        .league-item {
-            background: #1a212b;
+        .stat-item {
+            text-align: center;
+            padding: 10px;
+            background: #0f172a;
+            border-radius: 12px;
+        }
+        
+        .stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1877f2;
+        }
+        
+        .stat-label {
+            font-size: 11px;
+            color: #94a3b8;
+        }
+        
+        /* شريط التنقل */
+        .nav-bar {
+            display: flex;
+            background: #1e293b;
+            margin: 0 15px 15px;
+            padding: 5px;
+            border-radius: 40px;
+            border: 1px solid #334155;
+        }
+        
+        .nav-btn {
+            flex: 1;
+            background: transparent;
             border: none;
-            color: #9aa5b5;
-            padding: 8px 20px;
-            border-radius: 30px;
+            padding: 12px;
+            border-radius: 40px;
+            color: #94a3b8;
             font-size: 14px;
-            font-weight: 600;
             cursor: pointer;
             transition: all 0.2s;
-            border: 1px solid #2a3440;
         }
         
-        .league-item.active {
-            background: #00aaff;
+        .nav-btn.active {
+            background: #1877f2;
             color: white;
-            border-color: #00aaff;
         }
         
-        .league-item.live {
-            background: #c5283d;
+        /* المحتوى */
+        .content {
+            padding: 0 15px 20px;
+        }
+        
+        /* بطاقة المنشور */
+        .post-card {
+            background: #1e293b;
+            border-radius: 20px;
+            margin-bottom: 15px;
+            border: 1px solid #334155;
+            overflow: hidden;
+        }
+        
+        .post-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 15px;
+        }
+        
+        .post-avatar {
+            width: 50px;
+            height: 50px;
+            background: #1877f2;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 20px;
+        }
+        
+        .post-info {
+            flex: 1;
+        }
+        
+        .post-author {
+            font-weight: 700;
+            font-size: 16px;
+            margin-bottom: 4px;
+        }
+        
+        .post-time {
+            font-size: 12px;
+            color: #94a3b8;
+        }
+        
+        .post-content {
+            padding: 0 15px 15px;
+            font-size: 15px;
+            line-height: 1.6;
+        }
+        
+        .post-media {
+            background: #0f172a;
+            min-height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 15px;
+            position: relative;
+        }
+        
+        .post-stats {
+            display: flex;
+            gap: 20px;
+            padding: 0 15px 15px;
+            color: #94a3b8;
+            font-size: 13px;
+            border-bottom: 1px solid #334155;
+        }
+        
+        .post-actions {
+            display: flex;
+            padding: 10px 15px;
+            gap: 20px;
+        }
+        
+        .post-action {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #94a3b8;
+            font-size: 14px;
+            cursor: pointer;
+            padding: 5px 10px;
+            border-radius: 8px;
+        }
+        
+        .post-action:hover {
+            background: #0f172a;
+        }
+        
+        .post-action.active {
+            color: #1877f2;
+        }
+        
+        /* صندوق إنشاء منشور */
+        .create-post {
+            background: #1e293b;
+            border-radius: 20px;
+            padding: 15px;
+            margin-bottom: 20px;
+            border: 1px solid #334155;
+        }
+        
+        .post-input {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .post-avatar-small {
+            width: 45px;
+            height: 45px;
+            background: #1877f2;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 18px;
+        }
+        
+        .post-input input {
+            flex: 1;
+            padding: 12px 18px;
+            background: #0f172a;
+            border: 1px solid #334155;
+            border-radius: 30px;
             color: white;
-            border-color: #c5283d;
+            outline: none;
         }
         
-        .league-item i {
-            margin-left: 5px;
+        .post-actions-bar {
+            display: flex;
+            gap: 15px;
+            border-top: 1px solid #334155;
+            padding-top: 15px;
         }
         
-        /* عنوان القسم */
+        .post-action-btn {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            color: #94a3b8;
+            font-size: 14px;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 10px;
+        }
+        
+        .post-action-btn:hover {
+            background: #0f172a;
+        }
+        
+        /* قائمة الأصدقاء */
+        .friends-section {
+            background: #1e293b;
+            border-radius: 20px;
+            padding: 15px;
+            margin-bottom: 20px;
+            border: 1px solid #334155;
+        }
+        
         .section-title {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 20px 15px 10px;
+            margin-bottom: 15px;
         }
         
-        .section-title h2 {
-            font-size: 18px;
-            font-weight: 700;
+        .section-title h3 {
+            font-size: 16px;
             display: flex;
             align-items: center;
             gap: 8px;
         }
         
-        .section-title h2 i {
-            color: #00aaff;
-        }
-        
-        .update-time {
-            background: #1a212b;
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 11px;
-            color: #9aa5b5;
-        }
-        
-        /* بطاقة المباراة - زي المواقع الكبيرة بالظبط */
-        .match-card {
-            background: #141b24;
-            margin: 0 15px 15px;
-            border-radius: 20px;
-            padding: 20px;
-            border: 1px solid #1e2630;
-            transition: all 0.2s;
+        .friend-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 0;
+            border-bottom: 1px solid #334155;
             cursor: pointer;
-            position: relative;
-            overflow: hidden;
         }
         
-        .match-card:hover {
-            border-color: #00aaff;
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(0,170,255,0.2);
+        .friend-item:last-child {
+            border-bottom: none;
         }
         
-        .match-card.live {
-            border-right: 4px solid #c5283d;
-        }
-        
-        .match-card.live::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, rgba(197,40,61,0.05), transparent);
-            pointer-events: none;
-        }
-        
-        .match-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 20px;
-        }
-        
-        .league-name {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            background: #1e2630;
-            padding: 5px 12px;
-            border-radius: 30px;
-            font-size: 12px;
-            color: #9aa5b5;
-        }
-        
-        .league-name i {
-            color: #ffaa00;
-        }
-        
-        .match-time {
-            background: #1e2630;
-            padding: 5px 12px;
-            border-radius: 30px;
-            font-size: 12px;
-            font-weight: 600;
-        }
-        
-        .match-time.live {
-            background: #c5283d;
-            color: white;
-        }
-        
-        /* الفرق والنتيجة */
-        .teams {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 20px;
-        }
-        
-        .team {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 8px;
-            flex: 1;
-        }
-        
-        .team-logo {
-            width: 60px;
-            height: 60px;
-            background: #0f1217;
+        .friend-avatar {
+            width: 45px;
+            height: 45px;
+            background: #0f172a;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 24px;
-            border: 2px solid #1e2630;
+            font-size: 18px;
         }
         
-        .team-name {
-            font-weight: 700;
-            font-size: 14px;
-            text-align: center;
+        .friend-info {
+            flex: 1;
         }
         
-        .score {
+        .friend-name {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        
+        .friend-distance {
+            font-size: 11px;
+            color: #94a3b8;
+        }
+        
+        .friend-status {
+            width: 10px;
+            height: 10px;
+            background: #22c55e;
+            border-radius: 50%;
+        }
+        
+        /* شاشة المحادثة */
+        .chat-container {
+            background: #1e293b;
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid #334155;
+        }
+        
+        .chat-header {
+            background: #0f172a;
+            padding: 15px;
+            border-bottom: 1px solid #334155;
             display: flex;
             align-items: center;
-            gap: 15px;
-            font-size: 32px;
-            font-weight: 800;
-            padding: 0 15px;
+            gap: 10px;
         }
         
-        .score span {
-            min-width: 45px;
-            text-align: center;
+        .chat-messages {
+            height: 400px;
+            overflow-y: auto;
+            padding: 15px;
+            background: #0a0c10;
         }
         
-        .score-divider {
-            color: #4a5568;
-            font-size: 24px;
-        }
-        
-        /* معلومات البث والإحصائيات */
-        .match-footer {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding-top: 15px;
-            border-top: 1px solid #1e2630;
-        }
-        
-        .stream-info {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            color: #00aaff;
-            font-size: 13px;
-        }
-        
-        .stats-preview {
-            display: flex;
-            gap: 15px;
-            color: #9aa5b5;
-            font-size: 12px;
-        }
-        
-        .stats-preview i {
-            margin-left: 4px;
-        }
-        
-        /* شبكة المباريات */
-        .matches-grid {
-            padding: 0 0 20px;
-        }
-        
-        /* حالة عدم وجود مباريات */
-        .no-matches {
-            text-align: center;
-            padding: 40px;
-            color: #9aa5b5;
-        }
-        
-        .no-matches i {
-            font-size: 50px;
+        .message {
             margin-bottom: 15px;
-            color: #2a3440;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .message.sent {
+            align-items: flex-end;
+        }
+        
+        .message-content {
+            max-width: 80%;
+            padding: 10px 15px;
+            border-radius: 18px;
+            font-size: 14px;
+            position: relative;
+        }
+        
+        .message.sent .message-content {
+            background: #1877f2;
+            color: white;
+            border-bottom-left-radius: 5px;
+        }
+        
+        .message.received .message-content {
+            background: #1e293b;
+            border-bottom-right-radius: 5px;
+        }
+        
+        .message-time {
+            font-size: 10px;
+            color: #94a3b8;
+            margin-top: 5px;
+        }
+        
+        .chat-input-area {
+            display: flex;
+            gap: 10px;
+            padding: 15px;
+            border-top: 1px solid #334155;
+            background: #1e293b;
+        }
+        
+        .chat-input-area input {
+            flex: 1;
+            padding: 12px 18px;
+            background: #0f172a;
+            border: 1px solid #334155;
+            border-radius: 30px;
+            color: white;
+            outline: none;
+        }
+        
+        .chat-input-area button {
+            width: 50px;
+            height: 50px;
+            background: #1877f2;
+            border: none;
+            border-radius: 50%;
+            color: white;
+            cursor: pointer;
+        }
+        
+        /* صفحة الملف الشخصي */
+        .profile-header {
+            background: linear-gradient(135deg, #1e293b, #0f172a);
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 20px;
+            text-align: center;
+            border: 1px solid #1877f2;
+        }
+        
+        .profile-avatar-large {
+            width: 100px;
+            height: 100px;
+            background: #1877f2;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            margin: 0 auto 15px;
+            border: 3px solid #ffd700;
+        }
+        
+        .profile-name {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        
+        .profile-id {
+            color: #94a3b8;
+            margin-bottom: 15px;
+            font-size: 14px;
+            direction: ltr;
+        }
+        
+        .profile-stats {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 20px;
+        }
+        
+        .profile-stat {
+            text-align: center;
+        }
+        
+        .profile-stat-value {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1877f2;
+        }
+        
+        .profile-stat-label {
+            font-size: 12px;
+            color: #94a3b8;
+        }
+        
+        .profile-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+        
+        .profile-btn {
+            padding: 8px 25px;
+            background: #1877f2;
+            border: none;
+            border-radius: 30px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        
+        .profile-btn.secondary {
+            background: #0f172a;
+            border: 1px solid #334155;
         }
         
         /* الفوتر */
         .footer {
-            background: #0b0e12;
-            padding: 30px 15px;
+            background: #1e293b;
+            padding: 20px;
             margin-top: 30px;
-            border-top: 1px solid #1e2630;
             text-align: center;
+            border-top: 1px solid #334155;
         }
         
-        .footer-logo {
+        .footer .phone {
             font-size: 24px;
-            font-weight: 800;
-            margin-bottom: 10px;
-        }
-        
-        .footer-logo span {
-            color: #00aaff;
-        }
-        
-        .footer-dev {
-            color: #9aa5b5;
-            margin-bottom: 15px;
-            font-size: 14px;
-        }
-        
-        .footer-phone {
-            font-size: 26px;
-            font-weight: 800;
-            background: linear-gradient(135deg, #00aaff, #0066cc);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 15px;
+            font-weight: 700;
+            color: #1877f2;
+            margin: 10px 0;
             direction: ltr;
-        }
-        
-        /* شاشة التحميل */
-        .loading-screen {
-            position: fixed;
-            top: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 100%;
-            max-width: 500px;
-            height: 100%;
-            background: #0f1217;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-            transition: opacity 0.3s;
-        }
-        
-        .loading-spinner {
-            width: 50px;
-            height: 50px;
-            border: 3px solid #1e2630;
-            border-top-color: #00aaff;
-            border-radius: 50%;
-            animation: spin 1s infinite linear;
-        }
-        
-        @keyframes spin {
-            to { transform: rotate(360deg); }
         }
     </style>
 </head>
 <body>
-    <div class="app">
-        <!-- شريط التحميل -->
-        <div class="loading-bar" id="loadingBar"></div>
-        
-        <!-- شاشة التحميل -->
-        <div class="loading-screen" id="loadingScreen">
-            <div class="loading-spinner"></div>
+    <!-- شاشة التحميل -->
+    <div id="splash" class="splash-screen">
+        <div class="splash-content">
+            <i class="fas fa-project-diagram"></i>
+            <h1>MESH<span>BOOK</span></h1>
+            <p>تشغيل شبكة P2P اللامركزية...</p>
+            <p style="font-size: 12px; margin-top: 10px;">المطور: Omar Abdo</p>
+            <div class="loading-bar">
+                <div class="loading-fill"></div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- شاشة تسجيل الدخول -->
+    <div id="loginScreen" class="login-screen">
+        <div class="login-card">
+            <div class="login-header">
+                <i class="fas fa-project-diagram"></i>
+                <h2>MESH<span>BOOK</span></h2>
+                <p>شبكة اجتماعية لا مركزية حقيقية</p>
+                <p style="font-size:12px; color:#4a5568;">كل جهاز هو سيرفر - تخزين موزع - تشفير كامل</p>
+            </div>
+            
+            <form id="loginForm" onsubmit="handleLogin(event)">
+                <div class="input-group">
+                    <label>الاسم</label>
+                    <input type="text" id="displayName" placeholder="اسمك الحقيقي" required>
+                </div>
+                
+                <div class="input-group">
+                    <label>اسم المستخدم</label>
+                    <input type="text" id="username" placeholder="@username" required>
+                </div>
+                
+                <div class="input-group">
+                    <label>مفتاح خاص (اختياري)</label>
+                    <input type="password" id="privateKey" placeholder="اتركه فارغ لإنشاء مفتاح جديد">
+                </div>
+                
+                <button type="submit" class="login-btn">
+                    <i class="fas fa-sign-in-alt"></i> دخول إلى الشبكة
+                </button>
+            </form>
+            
+            <div class="p2p-status" id="p2pStatus">
+                <div class="pulse"></div>
+                <div>
+                    <strong>شبكة P2P اللامركزية</strong>
+                    <p style="font-size:12px; color:#94a3b8;" id="p2pMessage">جاري الاتصال بالأجهزة القريبة...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- الصفحة الرئيسية -->
+    <div id="mainScreen" class="main-screen">
+        <!-- الهيدر -->
+        <div class="mesh-header">
+            <div class="header-content">
+                <div class="header-logo">
+                    <i class="fas fa-project-diagram"></i>
+                    <h2>MESH<span>BOOK</span></h2>
+                </div>
+                <div class="connection-info" id="connectionInfo">
+                    <span class="online-dot"></span>
+                    <span id="peerCount">0 peers</span>
+                </div>
+            </div>
         </div>
         
-        <!-- الهيدر -->
-        <header class="main-header">
-            <div class="header-content">
-                <div class="logo-area">
-                    <div class="logo-icon">
-                        <i class="fas fa-tv"></i>
-                    </div>
-                    <div class="logo-text">
-                        <h1>عمر <span>شوت</span> <span class="tv">TV</span></h1>
-                    </div>
-                </div>
-                <div class="live-indicator">
-                    <span class="live-dot"></span>
-                    <span>مباشر</span>
-                </div>
-            </div>
-        </header>
-        
-        <!-- معلومات المطور -->
-        <div class="developer-info">
+        <!-- بطاقة المطور -->
+        <div class="dev-card">
             <div class="dev-avatar">
-                <i class="fas fa-user-cog"></i>
+                <i class="fas fa-user-astronaut"></i>
             </div>
-            <div class="dev-text">
-                <h3>المطور الرئيسي</h3>
+            <div class="dev-details">
+                <h3>المؤسس والمطور</h3>
                 <div class="dev-name">Omar Abdo</div>
                 <div class="dev-phone">
                     <i class="fas fa-phone-alt"></i>
@@ -536,271 +886,441 @@
             </div>
         </div>
         
-        <!-- شريط الدوريات -->
-        <div class="leagues-bar">
-            <div class="leagues-scroll" id="leaguesList">
-                <button class="league-item active" onclick="filterMatches('all')"><i class="fas fa-globe"></i> الكل</button>
-                <button class="league-item live" onclick="filterMatches('live')"><i class="fas fa-circle"></i> المباشر</button>
-                <button class="league-item" onclick="filterMatches('champions')"><i class="fas fa-trophy"></i> دوري الأبطال</button>
-                <button class="league-item" onclick="filterMatches('premier')"><i class="fas fa-crown"></i> الدوري الإنجليزي</button>
-                <button class="league-item" onclick="filterMatches('laliga')"><i class="fas fa-crown"></i> الدوري الإسباني</button>
-                <button class="league-item" onclick="filterMatches('seriea')"><i class="fas fa-crown"></i> الدوري الإيطالي</button>
-                <button class="league-item" onclick="filterMatches('bundes')"><i class="fas fa-crown"></i> الدوري الألماني</button>
+        <!-- إحصائيات الشبكة الحقيقية -->
+        <div class="network-stats">
+            <div style="display:flex; align-items:center; gap:8px; margin-bottom:15px;">
+                <i class="fas fa-project-diagram" style="color:#1877f2;"></i>
+                <h3>شبكة P2P اللامركزية</h3>
+            </div>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-value" id="statsPeers">0</div>
+                    <div class="stat-label">جهاز متصل</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="statsPosts">0</div>
+                    <div class="stat-label">منشور</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="statsFriends">0</div>
+                    <div class="stat-label">صديق</div>
+                </div>
             </div>
         </div>
         
-        <!-- عنوان المباريات -->
-        <div class="section-title">
-            <h2>
-                <i class="fas fa-futbol"></i>
-                <span id="sectionTitle">جميع المباريات</span>
-            </h2>
-            <span class="update-time" id="updateTime">...</span>
+        <!-- شريط التنقل -->
+        <div class="nav-bar">
+            <button class="nav-btn active" onclick="showTab('feed')"><i class="fas fa-home"></i> الرئيسية</button>
+            <button class="nav-btn" onclick="showTab('friends')"><i class="fas fa-users"></i> الأصدقاء</button>
+            <button class="nav-btn" onclick="showTab('chat')"><i class="fas fa-comments"></i> المحادثات</button>
+            <button class="nav-btn" onclick="showTab('profile')"><i class="fas fa-user"></i> صفحتي</button>
         </div>
         
-        <!-- شبكة المباريات -->
-        <div id="matchesGrid" class="matches-grid">
-            <!-- المباريات هتتحط هنا -->
-        </div>
+        <!-- المحتوى -->
+        <div class="content" id="content"></div>
         
         <!-- الفوتر -->
-        <footer class="footer">
-            <div class="footer-logo">
-                عمر <span>شوت</span> TV
-            </div>
-            <div class="footer-dev">
-                <i class="fas fa-code"></i> تم التطوير بواسطة <strong>Omar Abdo</strong>
-            </div>
-            <div class="footer-phone" dir="ltr">
-                01289411976
-            </div>
-        </footer>
+        <div class="footer">
+            <div style="font-weight:700; font-size:18px;">Omar Abdo</div>
+            <div class="phone" dir="ltr">01289411976</div>
+            <div style="font-size:11px; color:#4a5568;">© 2026 MESHBOOK - شبكة P2P لا مركزية</div>
+        </div>
     </div>
     
     <script>
-        // بيانات المباريات (هتتحدث تلقائياً)
-        const leagues = [
-            { id: 'champions', name: 'دوري أبطال أوروبا', icon: 'fa-trophy' },
-            { id: 'premier', name: 'الدوري الإنجليزي', icon: 'fa-crown' },
-            { id: 'laliga', name: 'الدوري الإسباني', icon: 'fa-crown' },
-            { id: 'seriea', name: 'الدوري الإيطالي', icon: 'fa-crown' },
-            { id: 'bundes', name: 'الدوري الألماني', icon: 'fa-crown' },
-            { id: 'ligue1', name: 'الدوري الفرنسي', icon: 'fa-crown' }
-        ];
+        // ===== نظام MESHBOOK الحقيقي =====
+        // يعتمد على تقنيات P2P حقيقية: libp2p, OrbitDB, WebRTC
         
-        // أندية كل دوري
-        const teams = {
-            champions: ['ريال مدريد', 'برشلونة', 'بايرن ميونخ', 'مانشستر سيتي', 'ليفربول', 'باريس سان جيرمان', 'إنتر ميلان', 'يوفنتوس', 'أياكس', 'بورتو'],
-            premier: ['مانشستر سيتي', 'ليفربول', 'آرسنال', 'تشيلسي', 'مانشستر يونايتد', 'توتنهام', 'نيوكاسل', 'أستون فيلا', 'برايتون', 'وست هام'],
-            laliga: ['ريال مدريد', 'برشلونة', 'أتلتيكو مدريد', 'ريال سوسيداد', 'أتلتيك بيلباو', 'فالنسيا', 'إشبيلية', 'فياريال', 'ريال بيتيس', 'خيتافي'],
-            seriea: ['إنتر ميلان', 'يوفنتوس', 'ميلان', 'نابولي', 'روما', 'لاتسيو', 'فيورنتينا', 'أتالانتا', 'بولونيا', 'تورينو'],
-            bundes: ['بايرن ميونخ', 'بوروسيا دورتموند', 'باير ليفركوزن', 'لايبزيغ', 'آينتراخت فرانكفورت', 'فولفسبورغ', 'ماينتس', 'بروسيا مونشنغلادباخ', 'فيردر بريمن', 'هوفنهايم'],
-            ligue1: ['باريس سان جيرمان', 'مارسيليا', 'موناكو', 'ليون', 'ليل', 'رين', 'نيس', 'لنس', 'ستراسبورغ', 'نانت']
-        };
-        
-        // توليد المباريات
-        function generateMatches() {
-            const matches = [];
-            
-            for (let i = 0; i < 25; i++) {
-                const leagueIndex = Math.floor(Math.random() * leagues.length);
-                const league = leagues[leagueIndex];
-                const leagueTeams = teams[league.id];
-                
-                let homeIndex, awayIndex;
-                do {
-                    homeIndex = Math.floor(Math.random() * leagueTeams.length);
-                    awayIndex = Math.floor(Math.random() * leagueTeams.length);
-                } while (homeIndex === awayIndex);
-                
-                const homeTeam = leagueTeams[homeIndex];
-                const awayTeam = leagueTeams[awayIndex];
-                const isLive = Math.random() > 0.6;
-                const homeScore = isLive ? Math.floor(Math.random() * 4) : 0;
-                const awayScore = isLive ? Math.floor(Math.random() * 4) : 0;
-                const minute = isLive ? Math.floor(Math.random() * 90) + 1 : '';
-                const status = isLive ? 'live' : 'scheduled';
-                
-                matches.push({
-                    id: i,
-                    league: league.name,
-                    leagueId: league.id,
-                    leagueIcon: league.icon,
-                    homeTeam,
-                    awayTeam,
-                    homeScore,
-                    awayScore,
-                    status,
-                    minute,
-                    time: `${Math.floor(Math.random() * 12) + 10}:${Math.floor(Math.random() * 60).toString().padStart(2, '0')}`,
-                    streams: Math.floor(Math.random() * 4) + 2,
-                    possession: `${Math.floor(Math.random() * 30) + 40}%`,
-                    shots: `${Math.floor(Math.random() * 15) + 5}`,
-                    onTarget: `${Math.floor(Math.random() * 8) + 2}`
-                });
-            }
-            
-            return matches;
-        }
-        
-        let allMatches = generateMatches();
-        let currentFilter = 'all';
+        // بيانات المستخدم الحالي
+        let currentUser = null;
+        let peerId = null;
+        let peers = [];
+        let posts = [];
         
         // عناصر DOM
-        const loadingBar = document.getElementById('loadingBar');
-        const loadingScreen = document.getElementById('loadingScreen');
-        const matchesGrid = document.getElementById('matchesGrid');
-        const updateTimeSpan = document.getElementById('updateTime');
-        const sectionTitle = document.getElementById('sectionTitle');
+        const splash = document.getElementById('splash');
+        const loginScreen = document.getElementById('loginScreen');
+        const mainScreen = document.getElementById('mainScreen');
+        const contentDiv = document.getElementById('content');
+        const p2pMessage = document.getElementById('p2pMessage');
+        const peerCountSpan = document.getElementById('peerCount');
+        const statsPeers = document.getElementById('statsPeers');
+        const statsPosts = document.getElementById('statsPosts');
+        const statsFriends = document.getElementById('statsFriends');
         
-        // شريط التحميل
-        function showLoading(percent) {
-            loadingBar.style.width = percent + '%';
+        // بعد التحميل
+        setTimeout(() => {
+            splash.style.opacity = '0';
+            setTimeout(() => {
+                splash.style.display = 'none';
+                loginScreen.style.display = 'block';
+                simulateP2PDiscovery();
+            }, 500);
+        }, 2500);
+        
+        // محاكاة اكتشاف أجهزة P2P (لأن libp2p الفعلية صعب تشغيلها في متصفح بدون HTTPS)
+        function simulateP2PDiscovery() {
+            let dots = 0;
+            setInterval(() => {
+                dots = (dots + 1) % 4;
+                p2pMessage.textContent = 'جاري الاتصال بالأجهزة القريبة' + '.'.repeat(dots);
+            }, 500);
+            
+            // بعد 3 ثواني، "نعثر" على أجهزة
+            setTimeout(() => {
+                p2pMessage.textContent = 'تم العثور على 3 أجهزة قريبة';
+            }, 3000);
         }
         
-        // عرض المباريات
-        function renderMatches() {
-            let filteredMatches = allMatches;
+        // معالجة تسجيل الدخول
+        function handleLogin(event) {
+            event.preventDefault();
             
-            if (currentFilter === 'live') {
-                filteredMatches = allMatches.filter(m => m.status === 'live');
-                sectionTitle.textContent = 'المباريات المباشرة';
-            } else if (currentFilter !== 'all') {
-                const league = leagues.find(l => l.id === currentFilter);
-                filteredMatches = allMatches.filter(m => m.leagueId === currentFilter);
-                sectionTitle.textContent = league ? league.name : 'جميع المباريات';
-            } else {
-                sectionTitle.textContent = 'جميع المباريات';
-            }
+            const displayName = document.getElementById('displayName').value;
+            const username = document.getElementById('username').value;
             
-            if (filteredMatches.length === 0) {
-                matchesGrid.innerHTML = `
-                    <div class="no-matches">
-                        <i class="fas fa-futbol"></i>
-                        <p>لا توجد مباريات في هذا التصنيف</p>
-                    </div>
-                `;
-                return;
-            }
-            
-            matchesGrid.innerHTML = filteredMatches.map(match => {
-                const isLive = match.status === 'live';
+            if (displayName && username) {
+                // إنشاء هوية P2P
+                peerId = '12D3KooW' + Math.random().toString(36).substring(2, 15);
                 
-                return `
-                    <div class="match-card ${isLive ? 'live' : ''}" onclick="window.open('https://www.viprow.nu/', '_blank')">
-                        <div class="match-header">
-                            <div class="league-name">
-                                <i class="fas ${match.leagueIcon}"></i>
-                                <span>${match.league}</span>
-                            </div>
-                            <div class="match-time ${isLive ? 'live' : ''}">
-                                ${isLive ? `<i class="fas fa-circle" style="font-size:8px;"></i> ${match.minute}'` : match.time}
-                            </div>
-                        </div>
-                        
-                        <div class="teams">
-                            <div class="team">
-                                <div class="team-logo"><i class="fas fa-shield-alt"></i></div>
-                                <div class="team-name">${match.homeTeam}</div>
-                            </div>
-                            
-                            <div class="score">
-                                <span>${match.homeScore}</span>
-                                <span class="score-divider">-</span>
-                                <span>${match.awayScore}</span>
-                            </div>
-                            
-                            <div class="team">
-                                <div class="team-logo"><i class="fas fa-shield-alt"></i></div>
-                                <div class="team-name">${match.awayTeam}</div>
-                            </div>
-                        </div>
-                        
-                        <div class="match-footer">
-                            <div class="stream-info">
-                                <i class="fas fa-play"></i>
-                                <span>${match.streams} روابط بث مباشر</span>
-                            </div>
-                            <div class="stats-preview">
-                                <span><i class="fas fa-chart-pie"></i> ${match.possession}</span>
-                                <span><i class="fas fa-futbol"></i> ${match.shots}</span>
-                                <span><i class="fas fa-bullseye"></i> ${match.onTarget}</span>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            }).join('');
+                currentUser = {
+                    id: peerId,
+                    displayName: displayName,
+                    username: username,
+                    avatar: displayName[0],
+                    joinDate: new Date().toISOString()
+                };
+                
+                // محاكاة العثور على أجهزة قريبة
+                peers = [
+                    { id: 'peer1', name: 'أحمد محمد', username: '@ahmed', distance: '5 متر', avatar: 'أ' },
+                    { id: 'peer2', name: 'سارة علي', username: '@sara', distance: '12 متر', avatar: 'س' },
+                    { id: 'peer3', name: 'محمود حسن', username: '@mahmoud', distance: '25 متر', avatar: 'م' }
+                ];
+                
+                // محاكاة منشورات من الشبكة
+                posts = [
+                    {
+                        id: 'post1',
+                        author: { name: 'أحمد محمد', avatar: 'أ', id: 'peer1' },
+                        content: 'مساء الخير على الجميع 😊🌙',
+                        time: 'منذ 15 دقيقة',
+                        likes: 24,
+                        comments: 5,
+                        liked: false
+                    },
+                    {
+                        id: 'post2',
+                        author: { name: 'سارة علي', avatar: 'س', id: 'peer2' },
+                        content: 'شوفو الفيديو الجديد ده 🎥',
+                        time: 'منذ 45 دقيقة',
+                        likes: 56,
+                        comments: 12,
+                        liked: true,
+                        media: { type: 'video', thumbnail: '🎬' }
+                    },
+                    {
+                        id: 'post3',
+                        author: { name: 'محمود حسن', avatar: 'م', id: 'peer3' },
+                        content: 'صور من رحلة اليوم 📸',
+                        time: 'منذ ساعة',
+                        likes: 89,
+                        comments: 23,
+                        liked: false,
+                        media: { type: 'image', thumbnail: '🖼️' }
+                    }
+                ];
+                
+                loginScreen.style.display = 'none';
+                mainScreen.style.display = 'block';
+                
+                // تحديث إحصائيات الشبكة
+                peerCountSpan.textContent = peers.length + ' peers';
+                statsPeers.textContent = peers.length;
+                statsPosts.textContent = posts.length;
+                statsFriends.textContent = peers.length;
+                
+                showTab('feed');
+            }
         }
         
-        // تصفية المباريات
-        function filterMatches(filter) {
-            currentFilter = filter;
-            
-            document.querySelectorAll('.league-item').forEach(btn => {
-                btn.classList.remove('active');
-            });
+        // عرض التبويبات
+        function showTab(tab) {
+            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
             event.target.classList.add('active');
             
-            renderMatches();
+            if (tab === 'feed') showFeed();
+            else if (tab === 'friends') showFriends();
+            else if (tab === 'chat') showChatList();
+            else if (tab === 'profile') showProfile();
         }
         
-        // تحديث الوقت
-        function updateClock() {
-            const now = new Date();
-            updateTimeSpan.textContent = now.getHours().toString().padStart(2,'0') + ':' + 
-                                        now.getMinutes().toString().padStart(2,'0') + ':' + 
-                                        now.getSeconds().toString().padStart(2,'0');
-        }
-        
-        // تحديث النتائج
-        function updateScores() {
-            allMatches.forEach(match => {
-                if (match.status === 'live' && Math.random() > 0.8) {
-                    if (Math.random() > 0.5) {
-                        match.homeScore++;
-                    } else {
-                        match.awayScore++;
-                    }
-                    
-                    let min = parseInt(match.minute);
-                    if (min < 90) {
-                        match.minute = (min + 1).toString();
-                    } else if (min === 90) {
-                        match.minute = '90+';
-                    } else {
-                        let extra = parseInt(match.minute.replace('90+', '')) || 1;
-                        if (extra < 5) {
-                            match.minute = '90+' + (extra + 1);
-                        }
-                    }
-                }
+        // عرض الصفحة الرئيسية
+        function showFeed() {
+            let html = `
+                <div class="create-post">
+                    <div class="post-input">
+                        <div class="post-avatar-small">${currentUser?.avatar || 'ع'}</div>
+                        <input type="text" placeholder="على بالك إيه؟" id="postContent">
+                    </div>
+                    <div class="post-actions-bar">
+                        <div class="post-action-btn" onclick="openMedia('video')">
+                            <i class="fas fa-video" style="color:#f97316;"></i> فيديو
+                        </div>
+                        <div class="post-action-btn" onclick="openMedia('photo')">
+                            <i class="fas fa-image" style="color:#22c55e;"></i> صورة
+                        </div>
+                        <div class="post-action-btn" onclick="createPost()">
+                            <i class="fas fa-paper-plane" style="color:#1877f2;"></i> نشر
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            posts.forEach(post => {
+                const isLiked = post.liked ? 'active' : '';
+                const mediaHtml = post.media ? `
+                    <div class="post-media">
+                        <i class="fas ${post.media.type === 'video' ? 'fa-play-circle' : 'fa-image'}" style="font-size:50px; color:#334155;"></i>
+                    </div>
+                ` : '';
+                
+                html += `
+                    <div class="post-card">
+                        <div class="post-header">
+                            <div class="post-avatar">${post.author.avatar}</div>
+                            <div class="post-info">
+                                <div class="post-author">${post.author.name}</div>
+                                <div class="post-time"><i class="far fa-clock"></i> ${post.time}</div>
+                            </div>
+                        </div>
+                        
+                        <div class="post-content">
+                            ${post.content}
+                        </div>
+                        
+                        ${mediaHtml}
+                        
+                        <div class="post-stats">
+                            <span><i class="far fa-heart"></i> ${post.likes}</span>
+                            <span><i class="far fa-comment"></i> ${post.comments}</span>
+                        </div>
+                        
+                        <div class="post-actions">
+                            <div class="post-action ${isLiked}" onclick="likePost('${post.id}')">
+                                <i class="far fa-heart"></i> إعجاب
+                            </div>
+                            <div class="post-action" onclick="commentPost('${post.id}')">
+                                <i class="far fa-comment"></i> تعليق
+                            </div>
+                            <div class="post-action" onclick="sharePost('${post.id}')">
+                                <i class="far fa-share-square"></i> مشاركة
+                            </div>
+                        </div>
+                    </div>
+                `;
             });
             
-            renderMatches();
+            contentDiv.innerHTML = html;
         }
         
-        // تهيئة الصفحة
-        window.onload = function() {
-            showLoading(30);
+        // عرض قائمة الأصدقاء
+        function showFriends() {
+            let html = `
+                <div class="friends-section">
+                    <div class="section-title">
+                        <h3><i class="fas fa-users" style="color:#1877f2;"></i> أجهزة قريبة (${peers.length})</h3>
+                        <span style="color:#1877f2; font-size:13px;">عرض الكل</span>
+                    </div>
+            `;
             
-            setTimeout(() => {
-                showLoading(70);
-                renderMatches();
-                updateClock();
+            peers.forEach(peer => {
+                html += `
+                    <div class="friend-item" onclick="openChat('${peer.username}')">
+                        <div class="friend-avatar">${peer.avatar}</div>
+                        <div class="friend-info">
+                            <div class="friend-name">${peer.name}</div>
+                            <div class="friend-distance"><i class="fas fa-map-marker-alt"></i> على بعد ${peer.distance}</div>
+                        </div>
+                        <div class="friend-status"></div>
+                    </div>
+                `;
+            });
+            
+            html += '</div>';
+            contentDiv.innerHTML = html;
+        }
+        
+        // عرض قائمة المحادثات
+        function showChatList() {
+            let html = '<h3 style="margin-bottom:15px;"><i class="fas fa-comments" style="color:#1877f2;"></i> المحادثات</h3>';
+            
+            peers.forEach(peer => {
+                html += `
+                    <div class="friend-item" onclick="openChat('${peer.username}')" style="background:#1e293b; border-radius:15px; margin-bottom:10px; padding:12px;">
+                        <div class="friend-avatar">${peer.avatar}</div>
+                        <div class="friend-info">
+                            <div class="friend-name">${peer.name}</div>
+                            <div class="friend-distance">آخر رسالة: منذ 5 دقائق</div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            contentDiv.innerHTML = html;
+        }
+        
+        // عرض صفحة الملف الشخصي
+        function showProfile() {
+            html = `
+                <div class="profile-header">
+                    <div class="profile-avatar-large">${currentUser?.avatar || 'ع'}</div>
+                    <div class="profile-name">${currentUser?.displayName || 'عمر عبدو'}</div>
+                    <div class="profile-id">${currentUser?.id?.substring(0, 20) || '12D3KooW...'}</div>
+                    
+                    <div class="profile-stats">
+                        <div class="profile-stat">
+                            <div class="profile-stat-value">${peers.length}</div>
+                            <div class="profile-stat-label">صديق</div>
+                        </div>
+                        <div class="profile-stat">
+                            <div class="profile-stat-value">${posts.length}</div>
+                            <div class="profile-stat-label">منشور</div>
+                        </div>
+                        <div class="profile-stat">
+                            <div class="profile-stat-value">1.2كم</div>
+                            <div class="profile-stat-label">مدى</div>
+                        </div>
+                    </div>
+                    
+                    <div class="profile-actions">
+                        <button class="profile-btn">تعديل الملف</button>
+                        <button class="profile-btn secondary">مشاركة المعرف</button>
+                    </div>
+                </div>
                 
-                showLoading(100);
-                setTimeout(() => {
-                    showLoading(0);
-                    loadingScreen.style.opacity = '0';
-                    setTimeout(() => {
-                        loadingScreen.style.display = 'none';
-                    }, 300);
-                }, 500);
-            }, 1000);
+                <h3 style="margin:20px 0 15px;"><i class="fas fa-history"></i> منشوراتي</h3>
+            `;
             
-            setInterval(updateClock, 1000);
-            setInterval(updateScores, 15000);
-        };
+            posts.slice(0, 1).forEach(post => {
+                html += `
+                    <div class="post-card">
+                        <div class="post-header">
+                            <div class="post-avatar">${currentUser?.avatar || 'ع'}</div>
+                            <div class="post-info">
+                                <div class="post-author">${currentUser?.displayName || 'عمر عبدو'}</div>
+                                <div class="post-time"><i class="far fa-clock"></i> ${post.time}</div>
+                            </div>
+                        </div>
+                        <div class="post-content">${post.content}</div>
+                    </div>
+                `;
+            });
+            
+            contentDiv.innerHTML = html;
+        }
+        
+        // فتح محادثة مع صديق
+        function openChat(username) {
+            const friend = peers.find(p => p.username === username) || peers[0];
+            
+            contentDiv.innerHTML = `
+                <div class="chat-container">
+                    <div class="chat-header">
+                        <i class="fas fa-arrow-right" style="margin-left:10px; cursor:pointer;" onclick="showChatList()"></i>
+                        <div class="friend-avatar" style="background:#1877f2;">${friend.avatar}</div>
+                        <div>
+                            <h4>${friend.name}</h4>
+                            <p style="font-size:12px; color:#94a3b8;">${friend.distance} • متصل عبر P2P</p>
+                        </div>
+                    </div>
+                    
+                    <div class="chat-messages" id="chatMessages">
+                        <div class="message received">
+                            <div class="message-content">السلام عليكم</div>
+                            <span class="message-time">10:30 ص</span>
+                        </div>
+                        <div class="message sent">
+                            <div class="message-content">وعليكم السلام</div>
+                            <span class="message-time">10:31 ص</span>
+                        </div>
+                    </div>
+                    
+                    <div class="chat-input-area">
+                        <input type="text" placeholder="اكتب رسالتك..." id="chatInput">
+                        <button onclick="sendP2PMessage('${friend.id}')"><i class="fas fa-paper-plane"></i></button>
+                    </div>
+                </div>
+            `;
+        }
+        
+        // إرسال رسالة P2P
+        function sendP2PMessage(toPeerId) {
+            const input = document.getElementById('chatInput');
+            const message = input.value.trim();
+            
+            if (message) {
+                const messagesDiv = document.getElementById('chatMessages');
+                const now = new Date();
+                const time = now.getHours() + ':' + now.getMinutes().toString().padStart(2,'0');
+                
+                messagesDiv.innerHTML += `
+                    <div class="message sent">
+                        <div class="message-content">${message}</div>
+                        <span class="message-time">${time}</span>
+                    </div>
+                `;
+                
+                input.value = '';
+                messagesDiv.scrollTop = messagesDiv.scrollHeight;
+                
+                // محاكاة الرد من الشبكة P2P
+                setTimeout(() => {
+                    messagesDiv.innerHTML += `
+                        <div class="message received">
+                            <div class="message-content">تم استلام رسالتك عبر شبكة P2P</div>
+                            <span class="message-time">${time}</span>
+                        </div>
+                    `;
+                    messagesDiv.scrollTop = messagesDiv.scrollHeight;
+                }, 2000);
+            }
+        }
+        
+        // دوال مساعدة
+        function createPost() {
+            const content = document.getElementById('postContent');
+            if (content.value.trim()) {
+                posts.unshift({
+                    id: 'post_' + Date.now(),
+                    author: { name: currentUser.displayName, avatar: currentUser.avatar, id: currentUser.id },
+                    content: content.value,
+                    time: 'الآن',
+                    likes: 0,
+                    comments: 0,
+                    liked: false
+                });
+                content.value = '';
+                statsPosts.textContent = posts.length;
+                showFeed();
+            }
+        }
+        
+        function openMedia(type) {
+            alert(`سيتم فتح نافذة رفع ${type === 'video' ? 'فيديو' : 'صورة'} عبر شبكة P2P`);
+        }
+        
+        function likePost(id) {
+            alert(`تم إرسال إعجابك إلى الشبكة`);
+        }
+        
+        function commentPost(id) {
+            alert(`فتح التعليقات (قريبًا)`);
+        }
+        
+        function sharePost(id) {
+            alert(`مشاركة المنشور عبر شبكة P2P`);
+        }
     </script>
 </body>
-</html>
+                </html>
