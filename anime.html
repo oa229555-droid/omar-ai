@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title id="pageTitle">تفاصيل الأنمي — أنمي فلكس</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@600;800&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="navbar">
+  <div class="navbar-inner">
+    <a href="index.html" class="logo">🍥 أنمي<span>فلكس</span></a>
+    <nav class="nav-links">
+      <a href="index.html">الرئيسية</a>
+      <a href="search.html?sort=trending">🔥 رائج</a>
+      <a href="search.html?sort=today">📅 اليوم</a>
+      <a href="search.html?sort=top">⭐ الأعلى تقييمًا</a>
+      <a href="search.html?sort=latest">🆕 أحدث الإضافات</a>
+    </nav>
+    <form class="search-box" id="navSearchForm" role="search">
+      <span>🔍</span>
+      <input id="navSearchInput" type="search" placeholder="ابحث عن أنمي...">
+    </form>
+    <div class="nav-actions">
+      <button class="icon-btn" id="themeToggle" title="تبديل الوضع">🌙</button>
+      <a class="icon-btn" href="profile.html?tab=notifications" title="الإشعارات">🔔</a>
+      <div id="authArea"></div>
+    </div>
+  </div>
+</header>
+
+<div id="notFound" class="empty-state" style="display:none">
+  <div class="icon">😕</div>
+  لم يتم العثور على هذا الأنمي.
+  <br><a class="btn btn-accent" style="display:inline-block;margin-top:14px" href="index.html">العودة للرئيسية</a>
+</div>
+
+<div id="detailRoot" style="display:none">
+  <div class="detail-banner"><img id="bannerImg" src="" alt=""></div>
+  <div class="container">
+    <div class="detail-head">
+      <div class="detail-cover"><img id="coverImg" src="" alt=""></div>
+      <div class="detail-info">
+        <h1 id="titleAr"></h1>
+        <div class="en" id="titleEn"></div>
+        <div class="detail-stats">
+          <span class="pill gold" id="ratingPill"></span>
+          <span class="pill" id="statusPill"></span>
+          <span class="pill" id="episodesPill"></span>
+          <span class="pill" id="yearPill"></span>
+        </div>
+        <div class="detail-stats" style="margin-top:14px">
+          <button class="btn btn-accent" id="watchBtn">▶ شاهد الحلقة الأولى</button>
+          <button class="btn btn-ghost" id="favBtn">🤍 المفضلة</button>
+          <button class="btn btn-ghost" id="watchlistBtn">➕ قائمة المشاهدة</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="overview">نظرة عامة</button>
+      <button class="tab-btn" data-tab="episodes">الحلقات</button>
+      <button class="tab-btn" data-tab="seasons">المواسم</button>
+      <button class="tab-btn" data-tab="comments">التعليقات</button>
+    </div>
+
+    <div id="tab-overview">
+      <p id="synopsis" style="max-width:70ch;color:var(--muted)"></p>
+      <div class="chip-row" id="genreChips" style="margin-top:16px"></div>
+      <p style="margin-top:16px;color:var(--muted);font-size:14px">الاستوديو: <b id="studioName" style="color:var(--text)"></b></p>
+    </div>
+
+    <div id="tab-episodes" style="display:none"></div>
+
+    <div id="tab-seasons" style="display:none"></div>
+
+    <div id="tab-comments" style="display:none">
+      <div class="field">
+        <label>أضف تعليقًا وتقييمًا</label>
+        <textarea id="commentInput" rows="3" placeholder="رأيك في العمل..." style="width:100%;padding:12px;border-radius:10px;border:1px solid var(--border);background:var(--surface-2);color:var(--text);font-family:var(--font-body)"></textarea>
+      </div>
+      <button class="btn btn-accent" id="postCommentBtn">نشر التعليق</button>
+      <div id="commentsList" style="margin-top:20px"></div>
+    </div>
+
+    <div class="section">
+      <div class="section-head"><h3>أعمال مشابهة</h3></div>
+      <div class="row-scroll" id="rowSimilar"></div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="container footer-inner">
+    <span>© 2026 أنمي فلكس — موقع تجريبي للعرض فقط.</span>
+  </div>
+</footer>
+
+<nav class="mobile-tabbar">
+  <a href="index.html">🏠<span>الرئيسية</span></a>
+  <a href="search.html">🔍<span>بحث</span></a>
+  <a href="profile.html?tab=watchlist">📺<span>قائمتي</span></a>
+  <a href="profile.html?tab=favorites">❤️<span>المفضلة</span></a>
+  <a href="profile.html">👤<span>حسابي</span></a>
+</nav>
+
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+<script>
+  const params = new URLSearchParams(location.search);
+  const anime = getById(params.get("id"));
+
+  if (!anime) {
+    document.getElementById("notFound").style.display = "block";
+  } else {
+    document.getElementById("detailRoot").style.display = "block";
+    document.getElementById("pageTitle").textContent = anime.title + " — أنمي فلكس";
+    document.getElementById("bannerImg").src = anime.banner;
+    document.getElementById("coverImg").src = anime.cover;
+    document.getElementById("titleAr").textContent = anime.title;
+    document.getElementById("titleEn").textContent = anime.titleEn;
+    document.getElementById("ratingPill").textContent = "⭐ " + anime.rating;
+    document.getElementById("statusPill").textContent = anime.status;
+    document.getElementById("episodesPill").textContent = anime.episodesCount + " حلقة";
+    document.getElementById("yearPill").textContent = anime.year;
+    document.getElementById("synopsis").textContent = anime.synopsis;
+    document.getElementById("studioName").textContent = anime.studio;
+    document.getElementById("genreChips").innerHTML = anime.genres.map(g => `<span class="chip">${g}</span>`).join("");
+
+    // الحلقات
+    document.getElementById("tab-episodes").innerHTML = anime.episodeList.map(ep => `
+      <div class="ep-item">
+        <div class="ep-num">${ep.num}</div>
+        <div class="ep-title">
+          <div>${ep.title}</div>
+          <div class="ep-date">${ep.date}</div>
+        </div>
+        <button class="btn btn-accent watch-ep" data-num="${ep.num}">▶ شاهد</button>
+      </div>`).join("");
+
+    // المواسم
+    document.getElementById("tab-seasons").innerHTML = anime.seasons.map(s => `
+      <div class="ep-item"><div class="ep-title"><div>${s.name}</div><div class="ep-date">${s.episodes} حلقة</div></div></div>
+    `).join("");
+
+    // تبديل التبويبات
+    document.querySelectorAll(".tab-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        ["overview","episodes","seasons","comments"].forEach(t => {
+          document.getElementById("tab-" + t).style.display = (t === btn.dataset.tab) ? "block" : "none";
+        });
+      });
+    });
+
+    // المفضلة وقائمة المشاهدة
+    function refreshButtons() {
+      document.getElementById("favBtn").textContent = isInList(STORAGE_KEYS.favorites, anime.id) ? "❤️ في المفضلة" : "🤍 المفضلة";
+      document.getElementById("watchlistBtn").textContent = isInList(STORAGE_KEYS.watchlist, anime.id) ? "✅ في قائمتي" : "➕ قائمة المشاهدة";
+    }
+    document.getElementById("favBtn").addEventListener("click", () => { toggleInList(STORAGE_KEYS.favorites, anime.id); refreshButtons(); });
+    document.getElementById("watchlistBtn").addEventListener("click", () => { toggleInList(STORAGE_KEYS.watchlist, anime.id); refreshButtons(); });
+    refreshButtons();
+
+    document.getElementById("watchBtn").addEventListener("click", () => { pushHistory(anime.id); alert("▶ جارِ تشغيل الحلقة الأولى من " + anime.title + " (تجريبي)"); });
+    document.querySelectorAll(".watch-ep").forEach(b => b.addEventListener("click", () => { pushHistory(anime.id); alert("▶ جارِ تشغيل الحلقة " + b.dataset.num + " (تجريبي)"); }));
+
+    // التعليقات (محلية فقط)
+    const commentsKey = "af_comments_" + anime.id;
+    function loadComments() { return JSON.parse(localStorage.getItem(commentsKey) || "[]"); }
+    function renderComments() {
+      const list = loadComments();
+      document.getElementById("commentsList").innerHTML = list.length
+        ? list.map(c => `<div class="ep-item"><div class="ep-title"><div>${c.text}</div><div class="ep-date">${c.date}</div></div></div>`).join("")
+        : `<div class="empty-state">كن أول من يعلّق على هذا العمل 💬</div>`;
+    }
+    document.getElementById("postCommentBtn").addEventListener("click", () => {
+      const input = document.getElementById("commentInput");
+      if (!input.value.trim()) return;
+      const list = loadComments();
+      list.unshift({ text: input.value.trim(), date: new Date().toLocaleDateString("ar-EG") });
+      localStorage.setItem(commentsKey, JSON.stringify(list));
+      input.value = "";
+      renderComments();
+    });
+    renderComments();
+
+    // أعمال مشابهة
+    const similar = ANIME_DB.filter(a => a.id !== anime.id && a.genres.some(g => anime.genres.includes(g))).slice(0, 6);
+    renderRow("rowSimilar", similar.length ? similar : ANIME_DB.filter(a => a.id !== anime.id).slice(0, 6));
+  }
+</script>
+</body>
+</html>

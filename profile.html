@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>حسابي — أنمي فلكس</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@600;800&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="navbar">
+  <div class="navbar-inner">
+    <a href="index.html" class="logo">🍥 أنمي<span>فلكس</span></a>
+    <nav class="nav-links">
+      <a href="index.html">الرئيسية</a>
+      <a href="search.html?sort=trending">🔥 رائج</a>
+      <a href="search.html?sort=today">📅 اليوم</a>
+      <a href="search.html?sort=top">⭐ الأعلى تقييمًا</a>
+    </nav>
+    <div style="flex:1"></div>
+    <div class="nav-actions">
+      <button class="icon-btn" id="themeToggle" title="تبديل الوضع">🌙</button>
+      <div id="authArea"></div>
+    </div>
+  </div>
+</header>
+
+<div id="guestBlock" class="empty-state" style="display:none">
+  <div class="icon">🔒</div>
+  سجّل الدخول لعرض حسابك، قائمة المشاهدة، والمفضلة.
+  <br><a class="btn btn-accent" style="display:inline-block;margin-top:14px" href="login.html">تسجيل الدخول</a>
+</div>
+
+<main class="container" id="profileRoot" style="display:none">
+  <div style="display:flex;align-items:center;gap:14px;margin:24px 0">
+    <div style="width:60px;height:60px;border-radius:999px;background:var(--accent-dim);display:flex;align-items:center;justify-content:center;font-size:26px">👤</div>
+    <div>
+      <h2 id="userName" style="font-size:20px"></h2>
+      <div id="userEmail" style="color:var(--muted);font-size:13px"></div>
+    </div>
+    <div style="flex:1"></div>
+    <button class="btn btn-ghost" id="logoutBtn">تسجيل الخروج</button>
+  </div>
+
+  <div class="profile-tabs">
+    <button class="chip active" data-ptab="watchlist">📺 قائمة المشاهدة</button>
+    <button class="chip" data-ptab="favorites">❤️ المفضلة</button>
+    <button class="chip" data-ptab="history">🕘 سجل المشاهدة</button>
+    <button class="chip" data-ptab="notifications">🔔 الإشعارات</button>
+  </div>
+
+  <div class="grid" id="ptabContent"></div>
+</main>
+
+<footer>
+  <div class="container footer-inner"><span>© 2026 أنمي فلكس — موقع تجريبي للعرض فقط.</span></div>
+</footer>
+
+<nav class="mobile-tabbar">
+  <a href="index.html">🏠<span>الرئيسية</span></a>
+  <a href="search.html">🔍<span>بحث</span></a>
+  <a href="profile.html?tab=watchlist">📺<span>قائمتي</span></a>
+  <a href="profile.html?tab=favorites">❤️<span>المفضلة</span></a>
+  <a href="profile.html" class="active">👤<span>حسابي</span></a>
+</nav>
+
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+<script>
+  const user = getUser();
+  if (!user) {
+    document.getElementById("guestBlock").style.display = "block";
+  } else {
+    document.getElementById("profileRoot").style.display = "block";
+    document.getElementById("userName").textContent = user.name;
+    document.getElementById("userEmail").textContent = user.email;
+    document.getElementById("logoutBtn").addEventListener("click", logout);
+
+    function renderTab(tab) {
+      document.querySelectorAll("[data-ptab]").forEach(b => b.classList.toggle("active", b.dataset.ptab === tab));
+      const content = document.getElementById("ptabContent");
+
+      if (tab === "notifications") {
+        content.outerHTML = `<div id="ptabContent"><div class="empty-state"><div class="icon">🔔</div>
+          لا توجد إشعارات جديدة الآن. فعّل المتابعة من صفحة أي أنمي لتصلك تنبيهات الحلقات الجديدة.</div></div>`;
+        return;
+      }
+
+      let ids = [];
+      if (tab === "watchlist") ids = getList(STORAGE_KEYS.watchlist);
+      if (tab === "favorites") ids = getList(STORAGE_KEYS.favorites);
+      if (tab === "history") ids = getList(STORAGE_KEYS.history);
+
+      const list = ids.map(getById).filter(Boolean);
+      if (!list.length) {
+        content.outerHTML = `<div id="ptabContent"><div class="empty-state"><div class="icon">📭</div>لا يوجد شيء هنا بعد.</div></div>`;
+        return;
+      }
+      content.outerHTML = `<div class="grid" id="ptabContent">${list.map(animeCard).join("")}</div>`;
+    }
+
+    document.querySelectorAll("[data-ptab]").forEach(btn => {
+      btn.addEventListener("click", () => renderTab(btn.dataset.ptab));
+    });
+
+    const initialTab = new URLSearchParams(location.search).get("tab") || "watchlist";
+    renderTab(initialTab);
+  }
+</script>
+</body>
+</html>

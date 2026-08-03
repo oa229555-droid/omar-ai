@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>البحث — أنمي فلكس</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@600;800&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="navbar">
+  <div class="navbar-inner">
+    <a href="index.html" class="logo">🍥 أنمي<span>فلكس</span></a>
+    <nav class="nav-links">
+      <a href="index.html">الرئيسية</a>
+      <a href="search.html?sort=trending">🔥 رائج</a>
+      <a href="search.html?sort=today">📅 اليوم</a>
+      <a href="search.html?sort=top">⭐ الأعلى تقييمًا</a>
+      <a href="search.html?sort=latest">🆕 أحدث الإضافات</a>
+    </nav>
+    <form class="search-box" id="navSearchForm" role="search">
+      <span>🔍</span>
+      <input id="navSearchInput" type="search" placeholder="ابحث عن أنمي...">
+    </form>
+    <div class="nav-actions">
+      <button class="icon-btn" id="themeToggle" title="تبديل الوضع">🌙</button>
+      <a class="icon-btn" href="profile.html?tab=notifications" title="الإشعارات">🔔</a>
+      <div id="authArea"></div>
+    </div>
+  </div>
+</header>
+
+<main class="container">
+  <section class="section">
+    <h3 id="resultsTitle">نتائج البحث</h3>
+
+    <div class="field" style="max-width:420px;margin-top:16px">
+      <label>ابحث بالاسم</label>
+      <input type="search" id="qInput" placeholder="اكتب اسم الأنمي...">
+    </div>
+
+    <div style="margin-top:10px">
+      <label style="font-size:13px;color:var(--muted);display:block;margin-bottom:8px">التصنيف</label>
+      <div class="chip-row" id="genreFilters"></div>
+    </div>
+
+    <div style="display:flex;gap:20px;flex-wrap:wrap;margin-top:16px">
+      <div class="field" style="min-width:160px">
+        <label>السنة</label>
+        <select id="yearFilter"><option value="الكل">كل السنوات</option></select>
+      </div>
+      <div class="field" style="min-width:200px">
+        <label>الاستوديو</label>
+        <select id="studioFilter"><option value="الكل">كل الاستوديوهات</option></select>
+      </div>
+    </div>
+
+    <div class="grid" id="results" style="margin-top:20px"></div>
+  </section>
+</main>
+
+<footer>
+  <div class="container footer-inner"><span>© 2026 أنمي فلكس — موقع تجريبي للعرض فقط.</span></div>
+</footer>
+
+<nav class="mobile-tabbar">
+  <a href="index.html">🏠<span>الرئيسية</span></a>
+  <a href="search.html" class="active">🔍<span>بحث</span></a>
+  <a href="profile.html?tab=watchlist">📺<span>قائمتي</span></a>
+  <a href="profile.html?tab=favorites">❤️<span>المفضلة</span></a>
+  <a href="profile.html">👤<span>حسابي</span></a>
+</nav>
+
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+<script>
+  const params = new URLSearchParams(location.search);
+  let activeGenre = "الكل";
+
+  // تعبئة فلاتر السنة والاستوديو
+  const years = [...new Set(ANIME_DB.map(a => a.year))].sort((a,b) => b-a);
+  document.getElementById("yearFilter").innerHTML += years.map(y => `<option value="${y}">${y}</option>`).join("");
+  document.getElementById("studioFilter").innerHTML += getAllStudios().map(s => `<option value="${s}">${s}</option>`).join("");
+
+  const genres = ["الكل", ...getAllGenres()];
+  document.getElementById("genreFilters").innerHTML = genres.map(g =>
+    `<button type="button" class="chip ${g==='الكل'?'active':''}" data-genre="${g}">${g}</button>`
+  ).join("");
+
+  function applyFilters() {
+    const q = document.getElementById("qInput").value;
+    const year = document.getElementById("yearFilter").value;
+    const studio = document.getElementById("studioFilter").value;
+    let list = runSearch(q, activeGenre, year, studio);
+
+    const sort = params.get("sort");
+    if (sort === "trending") { list = getTrending(); document.getElementById("resultsTitle").textContent = "🔥 الأنميات الرائجة"; }
+    else if (sort === "today") { list = getEpisodesToday(); document.getElementById("resultsTitle").textContent = "📅 حلقات نزلت اليوم"; }
+    else if (sort === "top") { list = getTopRated(); document.getElementById("resultsTitle").textContent = "⭐ أعلى تقييمًا"; }
+    else if (sort === "latest") { list = getLatestAdded(); document.getElementById("resultsTitle").textContent = "🆕 أحدث الإضافات"; }
+    else if (q || activeGenre !== "الكل" || year !== "الكل" || studio !== "الكل") {
+      document.getElementById("resultsTitle").textContent = `نتائج البحث (${list.length})`;
+    } else {
+      document.getElementById("resultsTitle").textContent = "كل الأنميات";
+    }
+    renderRow("results", list);
+  }
+
+  document.getElementById("qInput").value = params.get("q") || "";
+  document.getElementById("qInput").addEventListener("input", () => { removeSortParam(); applyFilters(); });
+  document.getElementById("yearFilter").addEventListener("change", () => { removeSortParam(); applyFilters(); });
+  document.getElementById("studioFilter").addEventListener("change", () => { removeSortParam(); applyFilters(); });
+  document.querySelectorAll("[data-genre]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      activeGenre = btn.dataset.genre;
+      document.querySelectorAll("[data-genre]").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      removeSortParam();
+      applyFilters();
+    });
+  });
+  function removeSortParam() { params.delete("sort"); }
+
+  applyFilters();
+</script>
+</body>
+</html>
